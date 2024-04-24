@@ -48,7 +48,7 @@ function Flow() {
   );
 
   return (
-    <div class="react-flow-container">
+    <div className="react-flow-container">
       <ReactFlow
         nodes={nodes}
         edges={edges}
