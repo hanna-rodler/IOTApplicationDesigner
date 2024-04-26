@@ -1,16 +1,10 @@
 import {useCallback, useState} from 'react';
-import ReactFlow, {
-    addEdge,
-    applyEdgeChanges,
-    applyNodeChanges,
-    Background,
-    Controls,
-    NodeTypes,
-} from 'reactflow';
+import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Background, Controls, NodeTypes,} from 'reactflow';
 import 'reactflow/dist/style.css';
 import TextUpdaterNode from './nodes/TextUpdaterNode.tsx';
 import './styles/text-updater-node.css'
-
+import MultiplePropNode from "./nodes/MultiplePropNode.tsx";
+import EdgeInput from "./edges/EdgeInput.tsx";
 
 
 const initialNodes = [
@@ -28,21 +22,39 @@ const initialNodes = [
     {
         id: 'node-1',
         type: 'custom',
-        position: {x: 200, y: 200},
+        position: {x: 200, y: 300},
         data: {value: 123}
     },
+    {
+        id: 'multiple_Node',
+        type: 'multiple',
+        position: {x: 200, y: 200},
+    }
 
 ];
 
 const initialEdges = [
-    {id: '1-2', source: '1', target: '2', label: 'to the', type: 'step'},
-    // {id: '1-2', source: '2', target: 'node-1', label: 'to the', type: 'step'},
+    {id: '1-2', source: '1', target: '2', label: 'to the', type: 'step', },
+    {id: 'test', type:'edge-input', source: '2', target: 'multiple_Node', data: '10', label: 10},
+    {id: 'test2', source: 'node-1', target: 'multiple_Node', targetHandle: "temperatureFridge", sourceHandle:"b"},
+
 
 ];
 
+// const nodeProp = [{
+//     name: "Fridge", inputs:[{id:"Switch"},{id:"TempFridge"}], outputs: [{id:"TempFridge"}]
+// }
+// ]
+
 const nodeTypes: NodeTypes = {
     custom: TextUpdaterNode,
+    multiple: MultiplePropNode
 };
+
+const edgeTypes = {
+    'edge-input': EdgeInput,
+};
+
 
 function App() {
     const [nodes, setNodes] = useState(initialNodes);
@@ -69,8 +81,10 @@ function App() {
                 edges={edges}
                 onEdgesChange={onEdgesChange}
                 nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
                 onConnect={onConnect}
                 fitView
+                edgesUpdatable={true}
             >
                 <Background/>
                 <Controls/>
