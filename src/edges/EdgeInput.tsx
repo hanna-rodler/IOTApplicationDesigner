@@ -1,7 +1,10 @@
 import {BaseEdge, EdgeLabelRenderer, getStraightPath, useReactFlow,} from 'reactflow';
 import {useCallback} from "react";
+import {useDispatch} from "react-redux";
+import {setEdgeData} from "../redux/reducer/edgeSlice.ts";
+import {store} from "../redux/store.ts";
 
-export default function EdgeInput({id, sourceX, sourceY, targetX, targetY, data}) {
+export default function EdgeInput({id, sourceX, sourceY, targetX, targetY}) {
     const {setEdges} = useReactFlow();
     const [edgePath, labelX, labelY] = getStraightPath({
         sourceX,
@@ -9,14 +12,17 @@ export default function EdgeInput({id, sourceX, sourceY, targetX, targetY, data}
         targetX,
         targetY,
     });
+    const dispatch = useDispatch();
 
     const onChange = useCallback((evt) => {
-        console.log(evt.target.value);
+        const edgeInfos = [id, evt.target.value]
+        dispatch(setEdgeData(edgeInfos))
+        setEdges(store.getState().edgeStore.edges);
     }, []);
 
     return (
         <>
-            <BaseEdge id={id} path={edgePath} data={data}/>
+            <BaseEdge id={id} path={edgePath}/>
             <EdgeLabelRenderer>
                     <div
                         style={{
@@ -26,7 +32,7 @@ export default function EdgeInput({id, sourceX, sourceY, targetX, targetY, data}
                         }}
                         className="nodrag nopan"
                     >
-                        <input id="edgeVal" value={data} type="number" onChange={onChange} className="nodrag" /></div>
+                        <input id="edgeVal" type="number" onChange={onChange} className="nodrag" /></div>
             </EdgeLabelRenderer>
         </>
     );
