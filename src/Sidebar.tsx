@@ -8,26 +8,26 @@ export default () => {
   };
 
   return (
-    <aside>
+    <aside className="bg-sidebar sidebar">
       <div className="description">
         You can drag these nodes to the pane on the right.
       </div>
       <div
-        className="dndnode"
+        className="nodeBtn"
         onDragStart={(event) => onDragStart(event, "input")}
         draggable
       >
         Fridge
       </div>
       <div
-        className="dndnode"
+        className="nodeBtn"
         onDragStart={(event) => onDragStart(event, "default", "Switch")}
         draggable
       >
         Switch
       </div>
       <div
-        className="dndnode output"
+        className="nodeBtn"
         onDragStart={(event) => onDragStart(event, "output")}
         draggable
       >
