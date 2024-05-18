@@ -17,7 +17,7 @@ export default {
         },
         sidebar: "#F4F4F4",
         appBg: "#F8F9FB",
-        cardBg: "#FEFEFE", // card background
+        cardBg: "#FEFEFE",
         orange: {
           edge: "#F4F4F4",
         },

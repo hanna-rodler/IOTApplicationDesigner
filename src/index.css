@@ -9,6 +9,8 @@ html, body, #root {
   padding: 0;
   box-sizing: border-box;
   font-family: sans-serif;
+  color: '#111113';
+  @apply text-base;
 }
 
 .react-flow__devtools {
@@ -91,11 +93,9 @@ html, body, #root {
 
 .sidebar {
   border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
 }
 
-.dndflow aside .description {
+.description {
   margin-bottom: 10px;
 }
 
@@ -125,8 +125,14 @@ html, body, #root {
     flex-direction: row;
   }
 
-  .dndflow aside {
+  /*.dndflow aside {
     width: 20%;
     max-width: 250px;
-  }
+  }*/
 }
+
+h5 {
+  @apply text-2xl mb-3 pb-0.5;
+  border-bottom: 2px solid #C0C0C0;
+}
+
