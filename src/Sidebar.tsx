@@ -2,8 +2,8 @@ import React from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default () => {
-  const onDragStart = (event, nodeType) => {
-    event.dataTransfer.setData("application/reactflow", nodeType);
+  const onDragStart = (event, nodeType, label) => {
+    event.dataTransfer.setData("application/reactflow", nodeType, label);
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -21,7 +21,7 @@ export default () => {
       </div>
       <div
         className="dndnode"
-        onDragStart={(event) => onDragStart(event, "default")}
+        onDragStart={(event) => onDragStart(event, "default", "Switch")}
         draggable
       >
         Switch

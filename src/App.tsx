@@ -51,6 +51,8 @@ const DnDFlow = () => {
         return;
       }
 
+      console.log("event", event.dataTransfer.getData("application/reactflow"));
+
       // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
       // and you don't need to subtract the reactFlowBounds.left/top anymore
       // details: https://reactflow.dev/whats-new/2023-11-10
