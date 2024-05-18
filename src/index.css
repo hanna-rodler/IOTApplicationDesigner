@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html, body, #root {
   width: 100%;
@@ -6,20 +9,6 @@ html, body, #root {
   padding: 0;
   box-sizing: border-box;
   font-family: sans-serif;
-}
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 .react-flow__devtools {
@@ -100,35 +89,26 @@ html, body, #root {
   height: 100%;
 }
 
-.dndflow aside {
+.sidebar {
   border-right: 1px solid #eee;
   padding: 15px 10px;
   font-size: 12px;
-  background: #fcfcfc;
 }
 
 .dndflow aside .description {
   margin-bottom: 10px;
 }
 
-.dndflow .dndnode {
-  height: 20px;
-  padding: 4px;
-  border: 1px solid #1a192b;
-  border-radius: 2px;
-  margin-bottom: 10px;
+.nodeBtn {
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: grab;
-}
-
-.dndflow .dndnode.input {
-  border-color: #0041d0;
-}
-
-.dndflow .dndnode.output {
-  border-color: #ff0072;
+  color: white;
+  @apply bg-secondary rounded-btn;
 }
 
 .dndflow .reactflow-wrapper {
