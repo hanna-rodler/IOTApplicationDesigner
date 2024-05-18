@@ -13,7 +13,7 @@ export default {
         },
         gray: {
           fieldBg: "#F9FAF9",
-          fieldBorder: "#E5E7EB",
+          fieldBorder: "#D1D5DB",
         },
         sidebar: "#F4F4F4",
         appBg: "#F8F9FB",
