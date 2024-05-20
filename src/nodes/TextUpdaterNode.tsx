@@ -11,7 +11,7 @@ function TextUpdaterNode({id, data}: NodeProps) {
         console.log(evt.target.value);
     }, []);
 
-    const onClick = useCallback(() => {
+    const deleteNode = useCallback(() => {
         deleteElements({ nodes: [{ id }] });
     }, [id, deleteElements]);
 
@@ -23,7 +23,7 @@ function TextUpdaterNode({id, data}: NodeProps) {
                     <label htmlFor="text">Text:</label>
                     <input id="text" name="text" onChange={onChange} className="nodrag" />
                 </div>
-                <div className="delete-node" onClick={onClick}>X</div>
+                <div className="delete-node" onClick={deleteNode}>X</div>
             </div>
             <Handle
                 type="source"

@@ -16,7 +16,7 @@ function TextUpdaterNode({id, prop}: NodeProps) {
         console.log(evt.target.value);
     }, []);
 
-    const onClick = useCallback(() => {
+    const deleteNode = useCallback(() => {
         deleteElements({ nodes: [{ id }] });
     }, [id, deleteElements]);
 
@@ -28,7 +28,7 @@ function TextUpdaterNode({id, prop}: NodeProps) {
             <div>
                 <div className="node-header">
                     <div className="node-heading">Fridge</div>
-                    <div className="delete-node" onClick={onClick}>X</div>
+                    <div className="delete-node" onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props">
                     <div>SwitchOnOff</div>
