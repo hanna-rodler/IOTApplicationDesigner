@@ -1,20 +1,29 @@
 import { useCallback } from 'react';
-import { Handle, Position } from 'reactflow';
+import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
 const handleStyle = { left: 10 };
 const isConnectable = true;
 
-function TextUpdaterNode({ data }) {
+function TextUpdaterNode({id, data}: NodeProps) {
+    const { deleteElements } = useReactFlow();
+
     const onChange = useCallback((evt) => {
         console.log(evt.target.value);
     }, []);
 
+    const deleteNode = useCallback(() => {
+        deleteElements({ nodes: [{ id }] });
+    }, [id, deleteElements]);
+
     return (
         <div className="text-updater-node">
             <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
-            <div>
-                <label htmlFor="text">Text:</label>
-                <input id="text" name="text" onChange={onChange} className="nodrag" />
+            <div className="text-updater-node-header">
+                <div>
+                    <label htmlFor="text">Text:</label>
+                    <input id="text" name="text" onChange={onChange} className="nodrag" />
+                </div>
+                <div className="delete-node" onClick={deleteNode}>X</div>
             </div>
             <Handle
                 type="source"

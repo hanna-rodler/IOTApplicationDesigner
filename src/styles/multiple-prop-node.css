@@ -19,15 +19,24 @@
     padding: 3px 10px;
     border-radius: 4px;
     color: #F8F8F8;
+    display: flex;
+    justify-content: space-between;
 }
+
 .node-props{
     padding: 3px 10px;
 }
+
 .node-source-handle{
     background: #025159;
 }
+
 .node-target-handle{
     background: #038C8C;
     top: 38px;
+}
+
+.delete-node {
+
 }
 
