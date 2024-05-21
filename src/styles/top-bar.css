@@ -1,0 +1,36 @@
+.top-bar {
+    background: #025159;
+    font-size: 18px;
+    height: 40px;
+    color: white;
+    font-weight: bolder;
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar-left{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.top-bar-logo {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+}
+
+.top-bar-add {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+}

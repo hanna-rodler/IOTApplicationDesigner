@@ -6,6 +6,7 @@ import EdgeInput from "../edges/EdgeInput.tsx";
 import {useDispatch} from "react-redux";
 import {setEdgesState} from "../redux/reducer/edgeSlice.ts";
 import {store} from "../redux/store.ts";
+import TopBar from "../components/TopBar";
 
 const initialNodes = [
     {
@@ -84,7 +85,7 @@ export const ProjectPage = () => {
                 fitView
                 edgesUpdatable={true}
             >
-                <Background/>
+                <TopBar/>
                 <Controls/>
             </ReactFlow>
         </div>
