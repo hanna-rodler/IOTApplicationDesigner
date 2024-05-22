@@ -1,35 +1,36 @@
 import {useCallback, useEffect, useState} from "react";
 import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Background, Controls, NodeTypes} from "reactflow";
 import TextUpdaterNode from "../nodes/TextUpdaterNode.tsx";
-import MultiplePropNode from "../nodes/MultiplePropNode.tsx";
 import EdgeInput from "../edges/EdgeInput.tsx";
 import {useDispatch} from "react-redux";
 import {setEdgesState} from "../redux/reducer/edgeSlice.ts";
 import {store} from "../redux/store.ts";
 import TopBar from "../components/TopBar";
+import TopicNode from "../nodes/TopicNode.tsx";
 
 const initialNodes = [
+    // {
+    //     id: '1',
+    //     data: {label: 'Hello'},
+    //     position: {x: 0, y: 0},
+    //     type: 'input',
+    // },
+    // {
+    //     id: '2',
+    //     data: {label: 'World'},
+    //     position: {x: 100, y: 100},
+    // },
     {
-        id: '1',
-        data: {label: 'Hello'},
-        position: {x: 0, y: 0},
-        type: 'input',
-    },
-    {
-        id: '2',
-        data: {label: 'World'},
-        position: {x: 100, y: 100},
-    },
-    {
-        id: 'node-1',
-        type: 'custom',
-        position: {x: 200, y: 300},
-        data: {value: 123}
-    },
-    {
-        id: 'multiple_Node',
-        type: 'multiple',
+        id: 'fridgeNode',
+        data: {nodeName: 'Fridge'},
+        type: 'topic',
         position: {x: 200, y: 200},
+    },
+    {
+        id: 'switchNode',
+        data: {nodeName: 'Switch 1'},
+        type: 'topic',
+        position: {x: 250, y: 250},
     }
 
 ];
@@ -43,7 +44,7 @@ const initialEdges = [
 
 const nodeTypes: NodeTypes = {
     custom: TextUpdaterNode,
-    multiple: MultiplePropNode
+    topic: TopicNode
 };
 
 const edgeTypes = {
@@ -57,6 +58,7 @@ export const ProjectPage = () => {
     useEffect(() => {
         dispatch(setEdgesState(edges))
         console.log(store.getState().edgeStore.edges)
+
     },[edges])
 
     const onNodesChange = useCallback(
