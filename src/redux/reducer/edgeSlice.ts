@@ -3,13 +3,13 @@ import {createSlice} from '@reduxjs/toolkit'
 
 export interface EdgeState {
     project: string,
-    edges: object
+    edges: object,
 
 }
 
 const initialState: EdgeState = {
     project: "",
-    edges: []
+    edges: [],
 }
 
 export const edgeSlice = createSlice({
@@ -29,8 +29,10 @@ export const edgeSlice = createSlice({
                     state.edges[i].data = action.payload[1];
                 }
             }
+        },
+        setReportTopic: (state, action: PayloadAction<string>) => {
+
         }
-        ,
     }
 })
 
