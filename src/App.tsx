@@ -8,6 +8,7 @@ import ReactFlow, {
   useEdgesState,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import TopBar from "./components/TopBar";
 
 import DevTools from "./Devtools";
 import "./index.css";
@@ -58,6 +59,7 @@ function Flow() {
         fitView
         fitViewOptions={fitViewOptions}
       >
+        <TopBar />
         <DevTools />
       </ReactFlow>
     </div>
