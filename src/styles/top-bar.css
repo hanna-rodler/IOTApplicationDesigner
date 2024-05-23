@@ -1,7 +1,7 @@
 .top-bar {
     background: #025159;
-    font-size: 18px;
-    height: 40px;
+    font-size: 30px;
+    height: 50px;
     color: white;
     font-weight: bolder;
     position: relative;
@@ -19,15 +19,16 @@
 }
 
 .top-bar-logo {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     margin-left: 10px;
 }
 
 .top-bar-add {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .top-bar-right {
