@@ -1,44 +1,44 @@
-import {useCallback, useEffect, useState} from "react";
-import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Background, Controls, NodeTypes} from "reactflow";
+import { useCallback, useEffect, useState } from "react";
+import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes } from "reactflow";
 import TextUpdaterNode from "../nodes/TextUpdaterNode.tsx";
 import MultiplePropNode from "../nodes/MultiplePropNode.tsx";
 import EdgeInput from "../edges/EdgeInput.tsx";
-import {useDispatch} from "react-redux";
-import {setEdgesState} from "../redux/reducer/edgeSlice.ts";
-import {store} from "../redux/store.ts";
+import { useDispatch } from "react-redux";
+import { setEdgesState } from "../redux/reducer/edgeSlice.ts";
+import { store } from "../redux/store.ts";
 import TopBar from "../components/TopBar";
+import TabNavigation from "../components/TabNavigation";
+import "../styles/project-page.css";
 
 const initialNodes = [
     {
         id: '1',
-        data: {label: 'Hello'},
-        position: {x: 0, y: 0},
+        data: { label: 'Hello' },
+        position: { x: 0, y: 0 },
         type: 'input',
     },
     {
         id: '2',
-        data: {label: 'World'},
-        position: {x: 100, y: 100},
+        data: { label: 'World' },
+        position: { x: 100, y: 100 },
     },
     {
         id: 'node-1',
         type: 'custom',
-        position: {x: 200, y: 300},
-        data: {value: 123}
+        position: { x: 200, y: 300 },
+        data: { value: 123 }
     },
     {
         id: 'multiple_Node',
         type: 'multiple',
-        position: {x: 200, y: 200},
+        position: { x: 200, y: 200 },
     }
-
 ];
 
 const initialEdges = [
-    {id: '1-2', source: '1', target: '2', label: 'to the', type: 'step',},
-    {id: 'test', type: 'edge-input', source: '2', target: 'multiple_Node'},
-    {id: 'test2', source: 'node-1', target: 'multiple_Node', targetHandle: "temperatureFridge", sourceHandle: "b"},
-
+    { id: '1-2', source: '1', target: '2', label: 'to the', type: 'step' },
+    { id: 'test', type: 'edge-input', source: '2', target: 'multiple_Node' },
+    { id: 'test2', source: 'node-1', target: 'multiple_Node', targetHandle: "temperatureFridge", sourceHandle: "b" },
 ];
 
 const nodeTypes: NodeTypes = {
@@ -49,45 +49,101 @@ const nodeTypes: NodeTypes = {
 const edgeTypes = {
     'edge-input': EdgeInput,
 };
+
 export const ProjectPage = () => {
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+    const [tabs, setTabs] = useState([{ name: 'Tab 1', nodes: initialNodes, edges: initialEdges }]);
+    const [activeTab, setActiveTab] = useState(0);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setEdgesState(edges))
-        console.log(store.getState().edgeStore.edges)
-    },[edges])
+        dispatch(setEdgesState(tabs[activeTab].edges));
+        console.log(store.getState().edgeStore.edges);
+    }, [tabs, activeTab, dispatch]);
 
     const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [],
-    );
-    const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [],
-    );
-    const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params, eds)),
-        [],
+        (changes) => setTabs((prevTabs) => {
+            const updatedTabs = [...prevTabs];
+            updatedTabs[activeTab].nodes = applyNodeChanges(changes, prevTabs[activeTab].nodes);
+            return updatedTabs;
+        }),
+        [activeTab],
     );
 
-    return(
-        <div style={{height: '100vh', width: '100vw'}}>
-            <ReactFlow
-                nodes={nodes}
-                onNodesChange={onNodesChange}
-                edges={edges}
-                onEdgesChange={onEdgesChange}
-                nodeTypes={nodeTypes}
-                edgeTypes={edgeTypes}
-                onConnect={onConnect}
-                fitView
-                edgesUpdatable={true}
-            >
-                <TopBar/>
-                <Controls/>
-            </ReactFlow>
+    const onEdgesChange = useCallback(
+        (changes) => setTabs((prevTabs) => {
+            const updatedTabs = [...prevTabs];
+            updatedTabs[activeTab].edges = applyEdgeChanges(changes, prevTabs[activeTab].edges);
+            return updatedTabs;
+        }),
+        [activeTab],
+    );
+
+    const onConnect = useCallback(
+        (params) => setTabs((prevTabs) => {
+            const updatedTabs = [...prevTabs];
+            updatedTabs[activeTab].edges = addEdge(params, prevTabs[activeTab].edges);
+            return updatedTabs;
+        }),
+        [activeTab],
+    );
+
+    const addNewTab = () => {
+        const newTabName = prompt("Enter name for the new Cofiguration-Tab:");
+        if (newTabName) {
+            setTabs((prevTabs) => [...prevTabs, { name: newTabName, nodes: initialNodes, edges: initialEdges }]);
+            setActiveTab(tabs.length);
+        }
+    };
+
+    const deleteTab = (index) => {
+        if (tabs.length === 1) {
+            alert("You must have at least one Configuration-Tab open.");
+            return;
+        }
+        setTabs((prevTabs) => prevTabs.filter((_, i) => i !== index));
+        if (index === activeTab) {
+            setActiveTab(index - 1);
+        } else if (index < activeTab) {
+            setActiveTab((prevActiveTab) => prevActiveTab - 1);
+        }
+    };
+
+    const renameTab = (index) => {
+        const newTabName = prompt("Enter new name for this Configuration-Tab:");
+        if (newTabName) {
+            setTabs((prevTabs) => {
+                const updatedTabs = [...prevTabs];
+                updatedTabs[index].name = newTabName;
+                return updatedTabs;
+            });
+        }
+    };
+
+    return (
+        <div className="project-page-container">
+            <TopBar onAddTab={addNewTab} />
+            <TabNavigation
+                tabs={tabs}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                onDeleteTab={deleteTab}
+                onRenameTab={renameTab}
+            />
+            <div className="react-flow-container">
+                <ReactFlow
+                    nodes={tabs[activeTab].nodes}
+                    onNodesChange={onNodesChange}
+                    edges={tabs[activeTab].edges}
+                    onEdgesChange={onEdgesChange}
+                    nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
+                    onConnect={onConnect}
+                    fitView
+                    edgesUpdatable={true}
+                >
+                    <Controls />
+                </ReactFlow>
+            </div>
         </div>
-    )
+    );
 }
