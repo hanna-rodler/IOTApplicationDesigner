@@ -5,6 +5,8 @@ import {Provider} from "react-redux";
 import {store} from "./redux/store.ts";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {ProjectPage} from "./pages/ProjectPage.tsx";
+import DevTools from "./Devtools";
+import "./index.css";
 
 
 function App() {
