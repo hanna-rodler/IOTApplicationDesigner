@@ -1,0 +1,42 @@
+.node-body {
+    border: 1px solid #1a1a1a;
+    border-radius: 5px;
+    background: #F8F8F8;
+    width: 200px;
+    color: #141414;
+    font-size: 10px;
+}
+
+.text-updater-node label {
+    display: block;
+    color: #777;
+    font-size: 12px;
+}
+
+.node-header{
+    background: #038C8C;
+    font-size: 14px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: #F8F8F8;
+    display: flex;
+    justify-content: space-between;
+}
+
+.node-props{
+    padding: 3px 10px;
+}
+
+.node-source-handle{
+    background: #025159;
+}
+
+.node-target-handle{
+    background: #038C8C;
+    top: 38px;
+}
+
+.delete-node {
+
+}
+

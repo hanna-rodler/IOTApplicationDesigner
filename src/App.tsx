@@ -1,67 +1,29 @@
-import { useCallback } from "react";
-import ReactFlow, {
-  addEdge,
-  Node,
-  Connection,
-  Edge,
-  useNodesState,
-  useEdgesState,
-} from "reactflow";
-import "reactflow/dist/style.css";
-
+import React, {Fragment} from 'react';
+import 'reactflow/dist/style.css';
+import './styles/text-updater-node.css'
+import {Provider} from "react-redux";
+import {store} from "./redux/store.ts";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {ProjectPage} from "./pages/ProjectPage.tsx";
 import DevTools from "./Devtools";
 import "./index.css";
 
-const initNodes: Node[] = [
-  {
-    id: "1a",
-    type: "input",
-    data: { label: "Node 1" },
-    position: { x: 250, y: 5 },
-  },
-  {
-    id: "2a",
-    data: { label: "Node 2" },
-    position: { x: 100, y: 120 },
-  },
-  {
-    id: "3a",
-    data: { label: "Node 3" },
-    position: { x: 400, y: 120 },
-  },
-];
 
-const initEdges: Edge[] = [
-  { id: "e1-2", source: "1a", target: "2a" },
-  { id: "e1-3", source: "1a", target: "3a" },
-];
+function App() {
 
-const fitViewOptions = { padding: 0.5 };
+    return (
+        <Fragment>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" Component={ProjectPage}/>
+                    </Routes>
+                </BrowserRouter>
+            </Provider>
+        </Fragment>
 
-function Flow() {
-  const [nodes, , onNodesChange] = useNodesState(initNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
 
-  const onConnect = useCallback(
-    (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
-
-  return (
-    <div className="react-flow-container">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        fitView
-        fitViewOptions={fitViewOptions}
-      >
-        <DevTools />
-      </ReactFlow>
-    </div>
-  );
+    );
 }
 
-export default Flow;
+export default App;
