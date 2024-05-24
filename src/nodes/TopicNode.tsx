@@ -6,9 +6,8 @@ import {useDispatch} from "react-redux";
 import {setCommandTopic, setReportTopic} from "../redux/reducer/nodeSlice.ts";
 import {store} from "../redux/store.ts";
 
-const handleIndent = {top: 95, left: 5};
-const reportIndent = {top: 60, right: 5};
-const styleTest = {margin: 5};
+const handleIndent = {top: 102};
+const reportIndent = {top: 65};
 
 
 const isConnectable = true;
@@ -33,22 +32,22 @@ function TopicNode({id, data}: NodeProps) {
     }, [id, deleteElements]);
 
     return (
-        <div className="node-body">
-            <Handle className="node-target-handle" type="target" position={Position.Left} style={handleIndent}
+        <div className="node-body w-48 border-primary h-32">
+            <Handle className="node-target-handle p-1 left-1" type="target" position={Position.Left} style={handleIndent}
                     id="commandTopic"/>
             <div>
                 <div className="node-header">
                     <div className="node-heading">{data.nodeName}</div>
                     <div className="delete-node" onClick={deleteNode}>X</div>
                 </div>
-                <div className="node-props" style={styleTest}>
+                <div className="node-props m-2">
                     <div>
                         <label htmlFor="Report Topic">Report Topic:</label>
-                        <input id="reportTopic" name="reportTopic" onChange={onChangeReport} className="nodrag"/>
+                        <input className="nodrag h-5 p-1 w-36" id="reportTopic" name="reportTopic" onChange={onChangeReport} />
                     </div>
                     <div>
                         <label htmlFor="Command Topic">Command Topic:</label>
-                        <input id="commandTopic" name="commandTopic" onChange={onChangeCommand} className="nodrag"/>
+                        <input className="nodrag h-5 p-1 w-36" id="commandTopic" name="commandTopic" onChange={onChangeCommand} />
                     </div>
                     {/*<div>*/}
                     {/*    <input id="commandTopic" name="commandTopic" onChange={onChangeCommand} className="nodrag"/>*/}
@@ -66,7 +65,7 @@ function TopicNode({id, data}: NodeProps) {
                 id="reportTopic"
                 style={reportIndent}
                 isConnectable={isConnectable}
-                className="node-source-handle"
+                className="node-source-handle right-2 p-1"
             />
         </div>
     );
