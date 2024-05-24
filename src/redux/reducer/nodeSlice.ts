@@ -34,7 +34,7 @@ export const nodeSlice = createSlice({
         setCommandTopic: (state, action: PayloadAction<object>) => {
             for (let i = 0; i < state.nodes.length; i++) {
                 if (state.nodes[i].id === action.payload[0].id) {
-                    state.nodes[i].comnmandTopic = action.payload[0].commandTopic;
+                    state.nodes[i].commandTopic = action.payload[0].commandTopic;
                     return;
                 }
             }
