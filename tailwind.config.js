@@ -37,6 +37,7 @@ export default {
         orange: {
           edge: "#F4F4F4",
         },
+        topbar: "#012E40",
       },
       maxHeight: {
         128: "32rem",

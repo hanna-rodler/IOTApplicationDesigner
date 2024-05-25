@@ -6,7 +6,8 @@ export function HomeScreen() {
   return (
     <div className="react-flow-container">
       <TopBar />
-      <div className="lg:h-full -mt-10 flex lg:items-center lg:justify-evenly justify-center lg:w-screen lg:flex-row flex-col">
+      <div className="tab-navigation-bar h-7"></div>
+      <div className="lg:h-full flex lg:items-center lg:justify-evenly justify-center lg:w-screen lg:flex-row flex-col">
         <div className="lg:w-5/12 order-2 lg:order-first lg:mt-0 mt-12  mx-10 sm:mx-14 lg:mx-0">
           <h1 className="text-center lg:text-left">Create your Home</h1>
           <div className="text-center lg:text-left">

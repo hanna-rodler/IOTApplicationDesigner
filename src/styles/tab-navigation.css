@@ -1,6 +1,6 @@
 .tab-navigation-bar {
     display: flex;
-    background-color: #012E40;
+    @apply bg-topbar;
 }
 
 .tab-navigation-button {
