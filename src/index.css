@@ -8,7 +8,20 @@ html, body, #root {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+}
+
+body {
+  @apply text-base;
+}
+
+h1 {
+  @apply mb-7 font-semibold xl:text-5xl text-4xl;
+}
+
+.primaryBtn {
+  border: 1px solid var(--primary);
+  padding: 0.5rem;
+  @apply rounded-btn bg-primary text-white;
 }
 
 .react-flow__devtools {
