@@ -24,6 +24,12 @@ h1 {
   @apply rounded-btn bg-primary text-white;
 }
 
+.secondaryBtn {
+  border: 1px solid var(--primary);
+  padding: 0.5rem;
+  @apply rounded-btn bg-secondary text-white;
+}
+
 .react-flow__devtools {
   --border-radius: 4px;
   --highlight-color: rgba(238, 58, 115, 1);

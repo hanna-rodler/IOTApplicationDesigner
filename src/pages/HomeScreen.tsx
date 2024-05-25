@@ -23,8 +23,8 @@ export function HomeScreen() {
             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
           </div>
           <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
-            <button className="primaryBtn mr-6">Start new project</button>
-            <button className="primaryBtn">Upload Project</button>
+            <button className="secondaryBtn mr-6">Start new project</button>
+            <button className="secondaryBtn">Upload Project</button>
           </div>
         </div>
         <div className="lg:w-1/3 lg:order-2 order-first w-full">
