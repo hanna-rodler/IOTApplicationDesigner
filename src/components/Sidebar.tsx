@@ -13,16 +13,16 @@ const Sidebar = () => {
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
     nodeType: string,
-    label: string
+    nodeName: string
   ) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
-    event.dataTransfer.setData("label", label);
+    event.dataTransfer.setData("nodeName", nodeName);
     event.dataTransfer.effectAllowed = "move";
   };
 
   return (
     <aside
-      className={`bg-sidebar sidebar ${sidebarWidth} ${sidebarPadding} overflow-x-hidden transition-all duration-300`}
+      className={`bg-sidebar sidebar fixed right-0 top-navHeight ${sidebarWidth} ${sidebarPadding} overflow-x-hidden transition-all duration-300`}
     >
       {/* <button
         className="fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-btn mb-10"
@@ -33,14 +33,14 @@ const Sidebar = () => {
 
       {/* Sidebar Content */}
       <div className="">
-        <div className="description">
-          You can drag these nodes to the pane on the right.
+        <div className="text-sm mb-4 hidden">
+          You can drag these nodes to the pannel on the left.
         </div>
 
         <h5>Topics</h5>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "input", "Fridge")}
+          onDragStart={(event) => onDragStart(event, "topic", "New")}
           draggable
         >
           New Topic
@@ -49,21 +49,21 @@ const Sidebar = () => {
         <h5 className="pt-3">Mappings</h5>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "input", "Fridge")}
+          onDragStart={(event) => onDragStart(event, "input", "Static")}
           draggable
         >
           Static Mapping
         </div>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "default", "Switch")}
+          onDragStart={(event) => onDragStart(event, "input", "Value")}
           draggable
         >
           Value Mapping
         </div>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "output", "Light")}
+          onDragStart={(event) => onDragStart(event, "input", "JSON")}
           draggable
         >
           JSON Mapping

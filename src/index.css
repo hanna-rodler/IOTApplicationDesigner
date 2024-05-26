@@ -8,7 +8,20 @@ html, body, #root {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+}
+
+body {
+  @apply text-base;
+}
+
+h1 {
+  @apply mb-7 font-semibold xl:text-5xl text-4xl;
+}
+
+.primaryBtn {
+  border: 1px solid var(--primary);
+  padding: 0.5rem;
+  @apply rounded-btn bg-primary text-white;
   color: '#111113';
   @apply text-base;
 }
@@ -79,20 +92,10 @@ html, body, #root {
   top: 5px;
 }
 
-.react-flow-container {
-  width: 90vw;
-  height: 90vh;
-}
-
-.dndflow {
-  flex-direction: column;
-  display: flex;
-  flex-grow: 1;
-  height: 100%;
-}
 
 .sidebar {
-  border-right: 1px solid #eee;
+  border-left: 1px solid var(--fieldBorder);
+  height: calc(100vh - 4.9rem);
 }
 
 .description {
@@ -111,17 +114,8 @@ html, body, #root {
   @apply bg-secondary rounded-btn;
 }
 
-.dndflow .reactflow-wrapper {
-  flex-grow: 1;
-  height: 100%;
-}
-
-.dndflow .selectall {
-  margin-top: 10px;
-}
-
 @media screen and (min-width: 768px) {
-  .dndflow {
+  .project-page-container {
     flex-direction: row;
   }
 
