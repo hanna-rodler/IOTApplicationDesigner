@@ -25,9 +25,20 @@ h1 {
 }
 
 .secondaryBtn {
-  border: 1px solid var(--primary);
-  padding: 0.5rem;
+  border: 2px solid var(--primary);
+  padding: 0.5rem 0.7rem;
+  display: flex;
   @apply rounded-btn bg-secondary text-white;
+}
+
+.secondaryBtn:hover, 
+.secondaryBtn:focus {
+  box-shadow: 2 2 2 2em var(--topbar);
+  @apply bg-topbar shadow-md;
+}
+
+.iconBtn {
+  @apply flex self-center mr-2
 }
 
 .react-flow__devtools {
@@ -130,22 +141,3 @@ h1 {
   @apply bg-secondary rounded-btn;
 }
 
-.dndflow .reactflow-wrapper {
-  flex-grow: 1;
-  height: 100%;
-}
-
-.dndflow .selectall {
-  margin-top: 10px;
-}
-
-@media screen and (min-width: 768px) {
-  .dndflow {
-    flex-direction: row;
-  }
-
-  .dndflow aside {
-    width: 20%;
-    max-width: 250px;
-  }
-}

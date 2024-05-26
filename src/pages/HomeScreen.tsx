@@ -1,6 +1,9 @@
 import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
+import { MdOutlineFileUpload } from "react-icons/md";
+import { CiSquarePlus } from "react-icons/ci";
+import { GoPlus } from "react-icons/go";
 
 export function HomeScreen() {
   return (
@@ -23,8 +26,13 @@ export function HomeScreen() {
             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
           </div>
           <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
-            <button className="secondaryBtn mr-6">Start new project</button>
-            <button className="secondaryBtn">Upload Project</button>
+            <button className="secondaryBtn mr-6">
+              <GoPlus className="iconBtn" />
+              Start new project
+            </button>
+            <button className="secondaryBtn">
+              <MdOutlineFileUpload className="iconBtn" /> Upload Project
+            </button>
           </div>
         </div>
         <div className="lg:w-1/3 lg:order-2 order-first w-full">
