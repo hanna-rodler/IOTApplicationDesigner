@@ -2,10 +2,16 @@ import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { CiSquarePlus } from "react-icons/ci";
 import { GoPlus } from "react-icons/go";
+import {useNavigate} from "react-router-dom";
 
 export function HomeScreen() {
+  const navigate = useNavigate();
+
+  const handleNewProject = () => {
+    navigate("/setup");
+  }
+
   return (
     <div className="react-flow-container">
       <TopBar />
@@ -27,7 +33,7 @@ export function HomeScreen() {
           </div>
           <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
             <button className="secondaryBtn mr-6">
-              <GoPlus className="iconBtn" />
+              <GoPlus className="iconBtn" onClick={handleNewProject}  />
               Start new project
             </button>
             <button className="secondaryBtn">
