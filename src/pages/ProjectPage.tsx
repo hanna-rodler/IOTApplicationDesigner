@@ -8,7 +8,6 @@ import { store } from "../redux/store.ts";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import TabNavigation from "../components/TabNavigation";
-import "../styles/project-page.css";
 
 const initialNodes = [
     {
@@ -115,7 +114,7 @@ export const ProjectPage = () => {
     };
 
     return (
-        <div className="project-page-container">
+        <div className="flex flex-col h-screen w-screen overflow-hidden">
             <TopBar onAddTab={addNewTab} />
             <TabNavigation
                 tabs={tabs}
@@ -124,7 +123,7 @@ export const ProjectPage = () => {
                 onDeleteTab={deleteTab}
                 onRenameTab={renameTab}
             />
-            <div className="react-flow-container">
+            <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
                 <ReactFlow
                     nodes={tabs[activeTab].nodes}
                     onNodesChange={onNodesChange}
