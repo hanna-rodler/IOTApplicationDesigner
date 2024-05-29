@@ -9,14 +9,15 @@ import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import TabNavigation from "../components/TabNavigation";
 import "../styles/project-page.css";
+import MappingNode from "../nodes/MappingNode.tsx";
 
 const initialNodes = [
-    {
-        id: '1',
-        data: { label: 'Hello' },
-        position: { x: 0, y: 0 },
-        type: 'input',
-    },
+    // {
+    //     id: '1',
+    //     data: { label: 'Hello' },
+    //     position: { x: 0, y: 0 },
+    //     type: 'input',
+    // },
     {
         id: 'fridgeNode',
         data: {nodeName: 'Fridge'},
@@ -28,6 +29,12 @@ const initialNodes = [
         data: {nodeName: 'Switch 1'},
         type: 'topic',
         position: {x: 250, y: 250},
+    },
+    {
+        id: 'staticMapping',
+        data: {nodeType: 'static'},
+        type: 'mapping',
+        position: {x: 100, y: 100},
     }
 
 ];
@@ -39,7 +46,7 @@ const initialEdges = [
 ];
 
 const nodeTypes: NodeTypes = {
-    custom: TextUpdaterNode,
+    mapping: MappingNode,
     topic: TopicNode
 };
 

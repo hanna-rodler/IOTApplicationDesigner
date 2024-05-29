@@ -33,10 +33,18 @@ function TopicNode({id, data}: NodeProps) {
 
     return (
         <div className="node-body w-48 border-primary h-32">
-            <Handle className="node-target-handle p-1 left-1" type="target" position={Position.Left} style={handleIndent}
+            <Handle className="bg-accent  p-1 left-1" type="target" position={Position.Left} style={handleIndent}
                     id="commandTopic"/>
             <div>
-                <div className="node-header">
+                {/*background: #038C8C;*/}
+                {/*font-size: 14px;*/}
+                {/*padding: 3px 10px;*/}
+                {/*border-radius: 4px;*/}
+                {/*color: #F8F8F8;*/}
+                {/*display: flex;*/}
+                {/*justify-content: space-between;*/}
+                {/*className="flex text-black rounded-md m-2 text-base justify-between "*/}
+                <div className="flex p-1 pl-2 rounded-md text-white justify-between bg-primary text-base ">
                     <div className="node-heading">{data.nodeName}</div>
                     <div className="delete-node" onClick={deleteNode}>X</div>
                 </div>
@@ -65,7 +73,7 @@ function TopicNode({id, data}: NodeProps) {
                 id="reportTopic"
                 style={reportIndent}
                 isConnectable={isConnectable}
-                className="node-source-handle right-2 p-1"
+                className="bg-accent  right-2 p-1"
             />
         </div>
     );
