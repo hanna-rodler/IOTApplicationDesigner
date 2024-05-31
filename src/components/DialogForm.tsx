@@ -33,8 +33,9 @@ const DialogForm = () => {
     return (
         <>
             <TopBar addButton={false}/>
-            <div className="flex items-center justify-center min-h-screen bg-gray-100">
-                <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+            <div className="flex items-center justify-center bg-gray-100"
+                 style={{ minHeight: 'calc(100vh - 50px)' }}>
+                <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl mt-2">
                     <h2 className="text-2xl font-bold mb-6 text-center">MQTT Settings</h2>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
