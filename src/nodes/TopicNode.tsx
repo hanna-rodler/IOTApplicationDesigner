@@ -3,7 +3,7 @@ import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
 import "../styles/multiple-prop-node.css"
 import {useDispatch} from "react-redux";
-import {setCommandTopic, setReportTopic} from "../redux/reducer/nodeSlice.ts";
+import {setCommandTopic, setReportTopic, updateNode} from "../redux/reducer/nodeSlice.ts";
 import {store} from "../redux/store.ts";
 
 const handleIndent = {top: 102};
@@ -18,15 +18,19 @@ function TopicNode({id, data}: NodeProps) {
     const dispatch = useDispatch();
 
     const onChangeReport = useCallback((evt) => {
-        const nodeData = [{id: id, reportTopic: evt.target.value}]
-        dispatch(setReportTopic(nodeData))
+        const nodeData = {reportTopic: evt.target.value}
+
+        // console.log(id)
+        dispatch(updateNode({id: id, newData: nodeData}))
+        // dispatch(setReportTopic(nodeData))
     }, []);
     const onChangeCommand = useCallback((evt) => {
-        const nodeData = [{id: id, commandTopic: evt.target.value}]
-        dispatch(setCommandTopic(nodeData))
-        console.log(store.getState().nodeStore.nodes)
+        const nodeData = {commandTopic: evt.target.value}
+        dispatch(updateNode({id: id, newData: nodeData}))
+
     }, []);
 
+//TODO: Funktioniert noch nicht für neuen State (grafik weg node bleibt)
     const deleteNode = useCallback(() => {
         deleteElements({nodes: [{id}]});
     }, [id, deleteElements]);
@@ -36,14 +40,6 @@ function TopicNode({id, data}: NodeProps) {
             <Handle className="bg-accent  p-1 left-1" type="target" position={Position.Left} style={handleIndent}
                     id="commandTopic"/>
             <div>
-                {/*background: #038C8C;*/}
-                {/*font-size: 14px;*/}
-                {/*padding: 3px 10px;*/}
-                {/*border-radius: 4px;*/}
-                {/*color: #F8F8F8;*/}
-                {/*display: flex;*/}
-                {/*justify-content: space-between;*/}
-                {/*className="flex text-black rounded-md m-2 text-base justify-between "*/}
                 <div className="flex p-1 pl-2 rounded-md text-white justify-between bg-primary text-base ">
                     <div className="node-heading">{data.nodeName}</div>
                     <div className="delete-node" onClick={deleteNode}>X</div>

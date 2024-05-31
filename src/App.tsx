@@ -14,7 +14,7 @@ function App() {
         <Fragment>
             <Provider store={store}>
                 <BrowserRouter>
-                    <Routes>
+                <Routes>
                         <Route path="/" Component={ProjectPage}/>
                     </Routes>
                 </BrowserRouter>

@@ -3,7 +3,12 @@ import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
 import "../styles/multiple-prop-node.css"
 import {useDispatch} from "react-redux";
-import {setCommandTopic, setReportTopic} from "../redux/reducer/nodeSlice.ts";
+import {
+    setMapping,
+    setNodesState,
+    setQos,
+    setRetain
+} from "../redux/reducer/nodeSlice.ts";
 import {store} from "../redux/store.ts";
 
 const reportIndent = {top: 66};
@@ -16,19 +21,24 @@ function MappingNode({id, data}: NodeProps) {
 
     const dispatch = useDispatch();
 
+    //Todo: Refactor für neuen State
     const onChangeMapping = useCallback((evt) => {
-        // const nodeData = [{id: id, reportTopic: evt.target.value}]
-        // dispatch(setReportTopic(nodeData))
+        const nodeData = [{id: id, mapping: evt.target.value}]
+        dispatch(setNodesState(nodeData))
+        dispatch(setMapping(nodeData))
+        console.log(store.getState().nodeStore.nodes)
     }, []);
+
     const onChangeQos = useCallback((evt) => {
-        // const nodeData = [{id: id, commandTopic: evt.target.value}]
-        // dispatch(setCommandTopic(nodeData))
-        // console.log(store.getState().nodeStore.nodes)
+        const nodeData = [{id: id, qos: evt.target.value}]
+        dispatch(setQos(nodeData))
+        console.log(store.getState().nodeStore.nodes)
     }, []);
+
     const onChangeRetain = useCallback((evt) => {
-        // const nodeData = [{id: id, commandTopic: evt.target.value}]
-        // dispatch(setCommandTopic(nodeData))
-        // console.log(store.getState().nodeStore.nodes)
+        const nodeData = [{id: id, retain: evt.target.value}]
+        dispatch(setRetain(nodeData))
+        console.log(store.getState().nodeStore.nodes)
     }, []);
 
     const deleteNode = useCallback(() => {
@@ -48,11 +58,12 @@ function MappingNode({id, data}: NodeProps) {
                 <div className="ml-5 mr-5">
                     <div>
                         <label htmlFor="Mapping"> Mapping: </label>
-                        <input className="nodrag h-5 p-1 w-36" id="mapping" name="mapping" onChange={onChangeMapping} />
+                        <input className="nodrag h-5 p-1 w-36" id="mapping" name="mapping" onChange={onChangeMapping} placeholder="e.g. on / off " />
                     </div>
                     <div>
                         <label htmlFor="qos">qos:</label> <br/>
                         <select className="nodrag h-5 p-1 w-36" id="qos" name="qos" onChange={onChangeQos}>
+                            <option disabled selected value hidden > - select an option - </option>
                             <option>0</option>
                             <option>1</option>
                             <option>2</option>
@@ -61,6 +72,7 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         <label htmlFor="retain">retain:</label> <br/>
                         <select className="nodrag h-5 p-1 w-36" id="retain" name="retain" onChange={onChangeRetain}>
+                            <option disabled selected value hidden > - select an option - </option>
                             <option>true</option>
                             <option>false</option>
                         </select>
