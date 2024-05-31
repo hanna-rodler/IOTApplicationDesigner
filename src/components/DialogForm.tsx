@@ -1,6 +1,7 @@
 import {useState} from "react";
 import TopBar from "./TopBar";
 import TabNavigation from "./TabNavigation";
+import { writeMqttFile } from "../utils/jsonHandling";
 
 
 const DialogForm = () => {
@@ -25,9 +26,20 @@ const DialogForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     console.log('Form data submitted: ', formData);
+    //     const response = await writeMqttFile();
+    // };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form data submitted: ', formData);
+        try {
+            const response = await writeMqttFile();
+            console.log(response.message);
+        } catch (error) {
+            console.error('Error writing JSON file:', error);
+        }
     };
 
     return (
