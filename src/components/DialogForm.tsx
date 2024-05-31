@@ -38,7 +38,7 @@ const DialogForm = () => {
                     <h2 className="text-2xl font-bold mb-6 text-center">MQTT Settings</h2>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-gray-700">Discovery Prefix (optional)</label>
+                            <label className="block text-gray-700 ml-3">Discovery Prefix (optional)</label>
                             <input
                                 type="text"
                                 name="discovery_prefix"
@@ -48,7 +48,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Keep Alive (optional, default: 60)</label>
+                            <label className="block text-gray-700 ml-3">Keep Alive (optional, default: 60)</label>
                             <input
                                 type="number"
                                 name="keep_alive"
@@ -58,7 +58,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Client ID (optional)</label>
+                            <label className="block text-gray-700 ml-3">Client ID (optional)</label>
                             <input
                                 type="text"
                                 name="client_id"
@@ -68,7 +68,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Will Message (optional)</label>
+                            <label className="block text-gray-700 ml-3">Will Message (optional)</label>
                             <input
                                 type="text"
                                 name="will_message"
@@ -78,7 +78,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Will Topic (optional)</label>
+                            <label className="block text-gray-700 ml-3">Will Topic (optional)</label>
                             <input
                                 type="text"
                                 name="will_topic"
@@ -88,7 +88,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Will QoS (optional)</label>
+                            <label className="block text-gray-700 ml-3">Will QoS (optional)</label>
                             <input
                                 type="number"
                                 name="will_qos"
@@ -98,7 +98,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Username (optional)</label>
+                            <label className="block text-gray-700 ml-3">Username (optional)</label>
                             <input
                                 type="text"
                                 name="username"
@@ -108,7 +108,7 @@ const DialogForm = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700">Password (optional)</label>
+                            <label className="block text-gray-700 ml-3">Password (optional)</label>
                             <input
                                 type="password"
                                 name="password"
