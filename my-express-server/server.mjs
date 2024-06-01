@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/write-mqtt-file', (req, res) => {
+    console.log('express write');
     const test = {
         discovery_prefix: "iotempower",
         connection: {
@@ -22,8 +23,11 @@ app.post('/write-mqtt-file', (req, res) => {
             clean_session: true,
         },
     };
+    const formData = req.body;
+    console.log('server js formData ', req.body);
+    console.log('formData type', typeof(formData));
 
-    fs.writeFile(path.join(FILE_PREFIX, 'test.json'), JSON.stringify(test, null, 2), (err) => {
+    fs.writeFile(path.join(FILE_PREFIX, 'test.json'), formData, (err) => {
         if (err) {
             console.log('error writing file: ' + err);
             return res.status(500).json({ message: 'Failed to write file', error: err });

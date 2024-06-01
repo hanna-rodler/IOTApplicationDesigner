@@ -34,8 +34,9 @@ const DialogForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log('Form data submitted: ', formData);
         try {
-            const response = await writeMqttFile();
+            const response = await writeMqttFile(formData, true);
             console.log(response.message);
         } catch (error) {
             console.error('Error writing JSON file:', error);
