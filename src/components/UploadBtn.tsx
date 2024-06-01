@@ -8,7 +8,8 @@ const UploadBtn: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        // Handle the files
+        setError(null); 
+        // TODO: Handle the files
         console.log(acceptedFiles);
     }, []);
 
@@ -32,9 +33,9 @@ const UploadBtn: React.FC = () => {
                 >
                 <input {...getInputProps()} />
                 <MdOutlineFileUpload className="iconBtn" />
-                <span className="min-w-64">{isDragActive ? 'drop the .json file here ...' : 'Drag & drop .json files here, or click to serelect files'}</span>
+                <span className="min-w-64">{isDragActive ? 'drop the .json file here ...' : 'Drag & drop .json files here, or click to serelect files'} {error && <span className="text-red-500 mt-2"><br/>{error}</span>}</span>
+            
             </div>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
     );
 };
