@@ -7,7 +7,6 @@ export async function writeMqttFile(
   const data = convertToValidJson(formData, isPrefix);
   const stringifiedData: string = JSON.stringify(data);
   if (data != undefined) {
-    console.log("writing to mqtt ");
     const response = await fetch("http://localhost:5000/write-mqtt-file", {
       method: "POST",
       headers: {

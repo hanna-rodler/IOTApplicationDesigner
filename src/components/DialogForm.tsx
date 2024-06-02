@@ -26,15 +26,8 @@ const DialogForm = () => {
         });
     };
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log('Form data submitted: ', formData);
-    //     const response = await writeMqttFile();
-    // };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form data submitted: ', formData);
         try {
             const response = await writeMqttFile(formData, true);
             console.log(response.message);
