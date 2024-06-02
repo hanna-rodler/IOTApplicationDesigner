@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import {connectDB} from "../database/database.js";
+import {getFileName} from './utils/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +19,11 @@ app.use(cors());
 app.post('/write-mqtt-file', (req, res) => {
     const formData = req.body; 
 
-    fs.writeFile(path.join(FILE_PREFIX, 'test.json'), JSON.stringify(formData, null, 2), (err) => {
+    const fileName = getFileName(formData.discover_prefix);
+
+    console.log(fileName, ' name');
+
+    fs.writeFile(path.join(FILE_PREFIX, fileName), JSON.stringify(formData, null, 2), (err) => {
         if (err) {
             console.log('error writing file: ' + err);
             return res.status(500).json({ message: 'Failed to write file', error: err });
