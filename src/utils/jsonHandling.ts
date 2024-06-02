@@ -31,7 +31,7 @@ function convertToValidJson(
 ): JSONPrefix | undefined {
   if (isPrefix) {
     const prefix: JSONPrefix = {
-      discover_prefix: formData.discovery_prefix,
+      discover_prefix: formData.discover_prefix,
       connection: {
         keep_alive: formData.keep_alive,
         client_id: formData.client_id,
