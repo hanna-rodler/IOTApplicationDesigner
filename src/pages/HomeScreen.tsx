@@ -1,11 +1,9 @@
 import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
-import { MdOutlineFileUpload } from "react-icons/md";
-import { CiSquarePlus } from "react-icons/ci";
 import { GoPlus } from "react-icons/go";
-import { NavLink } from "react-router-dom";
 import UploadBtn from '../components/UploadBtn'; 
+import {NavLink} from "react-router-dom";
 
 export function HomeScreen() {
   return (
@@ -26,7 +24,7 @@ export function HomeScreen() {
             eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
           </div>
-          <div className="lg:mt-14 mt-12 flex sm:flex-row flex-col lg:justify-start justify-center justify-items-center">
+          <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
             <NavLink to="/setup" className="secondaryBtn sm:mr-6 min-w-14">
               <GoPlus className="iconBtn" />
               Start new project

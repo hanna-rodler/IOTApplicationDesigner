@@ -115,7 +115,7 @@ export const ProjectPage = () => {
 
     return (
         <div className="flex flex-col h-screen w-screen overflow-hidden">
-            <TopBar onAddTab={addNewTab} />
+            <TopBar onAddTab={addNewTab} addButton={true} />
             <TabNavigation
                 tabs={tabs}
                 activeTab={activeTab}

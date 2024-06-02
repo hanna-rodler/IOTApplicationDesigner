@@ -6,6 +6,7 @@ import { store } from "./redux/store.ts";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomeScreen } from "./pages/HomeScreen.tsx";
 import { ProjectPage } from "./pages/ProjectPage.tsx";
+import {SetupPage} from "./pages/SetupPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" Component={HomeScreen} />
             <Route path="/project" Component={ProjectPage} />
+            <Route path="/setup" Component={SetupPage} />
           </Routes>
         </BrowserRouter>
       </Provider>
