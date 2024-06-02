@@ -2,11 +2,12 @@ import {useState} from "react";
 import TopBar from "./TopBar";
 import TabNavigation from "./TabNavigation";
 import { writeMqttFile } from "../utils/jsonHandling";
+import { FirstDialogue } from "../types/jsonTypes";
 
 
 const DialogForm = () => {
-    const [formData, setFormData] = useState({
-        discovery_prefix: '',
+    const [formData, setFormData] = useState<FirstDialogue>({
+        discover_prefix: '',
         keep_alive: 60,
         client_id: '',
         clean_session: true,
@@ -44,11 +45,11 @@ const DialogForm = () => {
                     <h2 className="text-2xl font-bold mb-6 text-center">MQTT Settings</h2>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-gray-700">Discovery Prefix (optional)</label>
+                            <label className="block text-gray-700">Discover Prefix (optional)</label>
                             <input
                                 type="text"
-                                name="discovery_prefix"
-                                value={formData.discovery_prefix}
+                                name="discover_prefix"
+                                value={formData.discover_prefix}
                                 onChange={handleChange}
                                 className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-secondary focus:ring-opacity-50"
                             />
