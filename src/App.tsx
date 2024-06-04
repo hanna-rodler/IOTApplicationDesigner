@@ -32,11 +32,12 @@ function App() {
         will_message: '',
         will_qos: 0,
         will_retain: false,
-        username: 'tobi',
+        username: 'asdf',
         password: '',
       },
       mapping: {},
     };
+    console.log(mappingData);
     await saveMapping(mappingData);
   };
 

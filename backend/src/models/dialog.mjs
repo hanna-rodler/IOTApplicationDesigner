@@ -18,6 +18,8 @@ const mappingSchema = new Schema({
 
 export const Mapping = model('Mapping', mappingSchema);
 
+
+
 /*
 import { Schema, model } from 'mongoose';
 

@@ -5,6 +5,7 @@ const API_URL = 'http://localhost:5000/api/mappings';
 export const saveMapping = async (mappingData: any) => {
     try {
         const response = await axios.post(API_URL, mappingData);
+        console.log(response);
         return response.data;
     } catch (error) {
         console.error('Error saving mapping:', error);
