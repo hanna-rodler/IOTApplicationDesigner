@@ -1,38 +1,55 @@
 import { Router } from 'express';
-import {getDB} from "../database/database.mjs";
+import {ObjectId} from "mongodb";
 
 const router = Router();
+const NOTES_COLLECTION = "mappings";
 
-router.post('/api/mappings', async (req, res) => {
-    const mappingData = req.body;
+router.post('/', async (req, res) => {
     try {
-        const db = getDB();
-        const result = await db.collection('mappings').insertOne(mappingData);
-        const newMapping = { _id: result.insertedId, ...mappingData };
-        res.status(201).json(newMapping);
-        console.log("Data saved");
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: "Unknown error" });
-        }
+        res.json(
+            await req.db.collection(NOTES_COLLECTION).insertOne(req.body)
+        );
+    } catch(error) {
+        console.log(error);
     }
 });
 
-router.get('/api/mappings', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const db = getDB();
-        const mappings = await db.collection('mappings').find({}).toArray();
-        res.status(200).json(mappings);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: "Unknown error" });
-        }
+        res.json(
+            await req.db.collection(NOTES_COLLECTION).find().toArray()
+        );
+    } catch(error) {
+        console.log(error);
     }
 });
+
+router.delete('/:id', async (req,res,next) => {
+    try {
+        res.json(
+            await req.db.collection(NOTES_COLLECTION).deleteOne(
+                {_id: new ObjectId(req.params.id)}
+            )
+        );
+    } catch(error) {
+        console.log(error);
+    }
+});
+
+router.put('/:id', async (req,res,next) => {
+    try {
+        res.json(
+            await req.db.collection(NOTES_COLLECTION).updateOne(
+                {_id: new ObjectId(req.params.id)},
+                {$set: {contents: req.body.contents}}
+            )
+        );
+    } catch(error) {
+        console.log(error);
+    }
+});
+
+
 
 export default router;
 

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { connectDB, getDB } from "../database/database.mjs";
 import { getFileName } from './utils/utils.mjs';
 import mappingsRouter from './../routes/dialog.mjs'
+import {MongoClient} from "mongodb";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,9 +15,26 @@ const app = express();
 const PORT = 5000;
 const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 
+const uri = 'mongodb+srv://tobi:WWkjfLektNUm3QVM@iot-configuration.qoupblv.mongodb.net/?retryWrites=true&w=majority&appName=IoT-Configuration';
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
+
+app.use(async (req,res,next) => {
+    try {
+        const client = new MongoClient(uri);
+        await client.connect();
+        req.db = client.db("test");
+        console.log("DB Connection Success");
+        next();
+    } catch(error) {
+        console.log("DB Connection Error "+ error);
+    }
+});
+
+app.use('api/mappings', mappingsRouter);
 
 app.post('/write-mqtt-file', (req, res) => {
     const formData = req.body;
@@ -33,12 +51,7 @@ app.post('/write-mqtt-file', (req, res) => {
     });
 });
 
-app.use(mappingsRouter);
-
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}).catch(error => {
-    console.error('Failed to connect to the database', error);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
+
