@@ -46,7 +46,7 @@ function MappingNode({id, data}: NodeProps) {
     }, [id, deleteElements]);
 
     return (
-        <div className="node-body w-48 border-t-4 border-primary h-40">
+        <div className="node-body w-48 border-t-4 border-primary pb-4">
             <Handle className="bg-accent p-1 left-1" type="target" position={Position.Left} style={reportIndent}
                     id="mappingIn"/>
             <div>
@@ -76,8 +76,15 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         <label htmlFor="Mapping"> Mapping: </label>
                         {/*Todo: value und json textfield*/}
+                        {data.nodeType === "static" &&
                         <input className="nodrag h-5 p-1 w-36" id="mapping" name="mapping" onChange={onChangeMapping}
                                placeholder="e.g. on / off "/>
+                        }
+                        {data.nodeType !== "static" &&
+                            <textarea className="nodrag h-14 p-1 w-36" id="mapping" name="mapping" onChange={onChangeMapping}
+                                   placeholder="e.g. {% if message <= 8.0 %}on
+{% else % }off{% endif %}"/>
+                        }
                     </div>
                     <div>
                         <label htmlFor="qos">qos:</label> <br/>
