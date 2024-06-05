@@ -22,14 +22,13 @@ function TopicNode({id, data}: NodeProps) {
         setNodeName(evt.target.value)
     },[])
 
-    const onChangeReport = useCallback((evt) => {
+    const onBlurReport = useCallback((evt) => {
         const nodeData = {reportTopic: evt.target.value}
-
         // console.log(id)
         dispatch(updateNode({id: id, newData: nodeData}))
         // dispatch(setReportTopic(nodeData))
     }, []);
-    const onChangeCommand = useCallback((evt) => {
+    const onBlurCommand = useCallback((evt) => {
         const nodeData = {commandTopic: evt.target.value}
         dispatch(updateNode({id: id, newData: nodeData}))
 
@@ -53,11 +52,11 @@ function TopicNode({id, data}: NodeProps) {
                 <div className="node-props m-2">
                     <div>
                         <label htmlFor="Report Topic">Report Topic:</label>
-                        <input className="nodrag h-5 p-1 w-36" id="reportTopic" name="reportTopic" onChange={onChangeReport} />
+                        <input className="nodrag h-5 p-1 w-36" id="reportTopic" name="reportTopic" onBlur={onBlurReport} />
                     </div>
                     <div>
                         <label htmlFor="Command Topic">Command Topic:</label>
-                        <input className="nodrag h-5 p-1 w-36" id="commandTopic" name="commandTopic" onChange={onChangeCommand} />
+                        <input className="nodrag h-5 p-1 w-36" id="commandTopic" name="commandTopic" onBlur={onBlurCommand} />
                     </div>
                     {/*<div>*/}
                     {/*    <input id="commandTopic" name="commandTopic" onChange={onChangeCommand} className="nodrag"/>*/}
