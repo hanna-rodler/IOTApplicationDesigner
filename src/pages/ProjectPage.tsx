@@ -12,31 +12,54 @@ import MappingNode from "../nodes/MappingNode.tsx";
 import {addNode} from "../redux/reducer/nodeSlice.ts";
 
 const initialNodes = [
-    // {
-    //     id: '1',
-    //     data: { label: 'Hello' },
-    //     position: { x: 0, y: 0 },
-    //     type: 'input',
-    // },
+    // Topic Nodes
     {
         id: 'fridgeNode',
-        data: {nodeName: 'Fridge'},
+        data: {
+            nodeName: 'Fridge',
+            commandTopic: '',
+            reportTopic: ''
+        },
         type: 'topic',
-        reportTopic: '',
         position: {x: 200, y: 200},
     },
     {
         id: 'switchNode',
         data: {nodeName: 'Switch 1'},
         type: 'topic',
-        reportTopic: '',
         position: {x: 250, y: 250},
+        commandTopic: '',
+        reportTopic: ''
     },
+    // Mapping Nodes
     {
         id: 'staticMapping',
-        data: {nodeType: 'static'},
+        data: {
+            nodeType: 'static',
+            mapping: '',
+            qos: '',
+            retain: ''
+        },
         type: 'mapping',
         position: {x: 100, y: 100},
+    },
+    {
+        id: 'valueMapping',
+        data: {nodeType: 'value'},
+        type: 'mapping',
+        position: {x: 100, y: 100},
+        mapping: '',
+        qos: '',
+        retain: ''
+    },
+    {
+        id: 'jsonMapping',
+        data: {nodeType: 'json'},
+        type: 'mapping',
+        position: {x: 100, y: 100},
+        mapping: '',
+        qos: '',
+        retain: ''
     }
 
 ];
