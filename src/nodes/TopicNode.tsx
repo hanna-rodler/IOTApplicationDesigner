@@ -1,10 +1,9 @@
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
 import "../styles/multiple-prop-node.css"
 import {useDispatch} from "react-redux";
-import {setCommandTopic, setReportTopic, updateNode} from "../redux/reducer/nodeSlice.ts";
-import {store} from "../redux/store.ts";
+import { updateNode} from "../redux/reducer/nodeSlice.ts";
 
 const handleIndent = {top: 102};
 const reportIndent = {top: 65};
@@ -14,8 +13,14 @@ const isConnectable = true;
 
 function TopicNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
+    const [nodeName, setNodeName] = useState(data.nodeName);
+
 
     const dispatch = useDispatch();
+
+    const changeNodeName = useCallback((evt) =>{
+        setNodeName(evt.target.value)
+    },[])
 
     const onChangeReport = useCallback((evt) => {
         const nodeData = {reportTopic: evt.target.value}
@@ -30,9 +35,10 @@ function TopicNode({id, data}: NodeProps) {
 
     }, []);
 
-//TODO: Funktioniert noch nicht für neuen State (grafik weg node bleibt)
+//TODO: Funktioniert noch nicht für neuen State (grafik weg, node bleibt)
     const deleteNode = useCallback(() => {
         deleteElements({nodes: [{id}]});
+        dispatch(deleteNode(id))
     }, [id, deleteElements]);
 
     return (
@@ -41,7 +47,7 @@ function TopicNode({id, data}: NodeProps) {
                     id="commandTopic"/>
             <div>
                 <div className="flex p-1 pl-2 rounded-md text-white justify-between bg-primary text-base ">
-                    <div className="node-heading">{data.nodeName}</div>
+                    <input className="node-heading bg-primary border-0 w-36" value={nodeName} onChange={changeNodeName}></input>
                     <div className="delete-node" onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2">
