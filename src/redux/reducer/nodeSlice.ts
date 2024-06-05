@@ -35,6 +35,17 @@ export const nodeSlice = createSlice({
                 }
             }
         },
+        deleteNode: (state, action) => {
+            const { id } = action.payload;
+            console.log("Node deletion")
+            for (let i = 0; i < state.nodes.length; i++) {
+                if (state.nodes[i].id === id) {
+                    state.nodes[i] = null;
+                    console.log("Node deleted!")
+                    return;
+                }
+            }
+        },
         setReportTopic: (state, action: PayloadAction<object>) => {
             for (let i = 0; i < state.nodes.length; i++) {
                 if (state.nodes[i].id === action.payload[0].id) {
@@ -92,7 +103,8 @@ export const {
     setQos,
     setRetain,
     addNode,
-    updateNode
+    updateNode,
+    deleteNode
 } = nodeSlice.actions
 
 export default nodeSlice.reducer
