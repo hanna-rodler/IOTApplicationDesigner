@@ -12,3 +12,8 @@ export function getFileName(discover_prefix) {
         return formattedDateTime + '.json';
     }
 }
+
+
+export function isObjectEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
