@@ -40,7 +40,7 @@ const Sidebar = () => {
         <h5>Topics</h5>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "topic", "New")}
+          onDragStart={(event) => onDragStart(event, "topic", "New Topic")}
           draggable
         >
           New Topic
@@ -49,21 +49,21 @@ const Sidebar = () => {
         <h5 className="pt-3">Mappings</h5>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "input", "Static")}
+          onDragStart={(event) => onDragStart(event, "static", "Static")}
           draggable
         >
           Static Mapping
         </div>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "input", "Value")}
+          onDragStart={(event) => onDragStart(event, "value", "Value")}
           draggable
         >
           Value Mapping
         </div>
         <div
           className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "input", "JSON")}
+          onDragStart={(event) => onDragStart(event, "json", "JSON")}
           draggable
         >
           JSON Mapping
