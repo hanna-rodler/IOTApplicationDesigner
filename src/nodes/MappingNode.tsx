@@ -30,8 +30,13 @@ function MappingNode({id, data}: NodeProps) {
 
     return (
         <div className="w-56 border-t-4 border-primary pb-4 bg-gray-fieldBg rounded-md text-sm">
-            <Handle className="bg-accent p-1 left-1" type="target" position={Position.Left} style={reportIndent}
-                    id="mappingIn"/>
+            <Handle className="bg-accent p-1 left-1"
+                    type="target"
+                    position={Position.Left}
+                    style={reportIndent}
+                    id="mappingIn"
+                    isValidConnection={(connection) => connection.targetHandle === 'reportTopic'}
+            />
             <div>
                 <div className="flex text-black rounded-md m-2 text-lg justify-between ">
                     <div className="mt-1">
@@ -74,8 +79,8 @@ function MappingNode({id, data}: NodeProps) {
                     </div>
                     <div>
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-44" id="qos" name="qos" onChange={onChangeQos}>
-                            <option disabled selected value hidden> - select an option -</option>
+                        <select className="p-1 w-44" id="qos" name="qos" onChange={onChangeQos} >
+                            <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
                             <option className="text-xl">2</option>
@@ -98,6 +103,7 @@ function MappingNode({id, data}: NodeProps) {
                 style={reportIndent}
                 isConnectable={isConnectable}
                 className="bg-accent  right-2 p-1"
+                isValidConnection={(connection) => connection.targetHandle === 'commandTopic'}
             />
         </div>
     );
