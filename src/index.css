@@ -10,37 +10,6 @@ html, body, #root {
   box-sizing: border-box;
 }
 
-body {
-  @apply text-base;
-}
-
-h1 {
-  @apply mb-7 font-semibold xl:text-5xl text-4xl;
-}
-
-.primaryBtn {
-  border: 1px solid var(--primary);
-  padding: 0.5rem;
-  @apply rounded-btn bg-primary text-white;
-}
-
-.secondaryBtn {
-  border: 2px solid var(--primary);
-  padding: 0.5rem 0.7rem;
-  display: flex;
-  @apply rounded-btn bg-secondary text-white;
-}
-
-.secondaryBtn:hover,
-.secondaryBtn:focus {
-  box-shadow: 2 2 2 2em var(--topbar);
-  @apply bg-topbar shadow-md;
-}
-
-.iconBtn {
-  @apply flex self-center mr-2
-}
-
 /* #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -75,7 +44,7 @@ h1 {
   @apply fileBtn text-black border-dashed  ;
 }
 
-.secondaryBtn:hover,
+.secondaryBtn:hover, 
 .secondaryBtn:focus {
   box-shadow: 2 2 2 2em var(--topbar);
   @apply bg-topbar shadow-md;
@@ -185,22 +154,3 @@ h1 {
   @apply bg-secondary rounded-btn;
 }
 
-.dndflow .reactflow-wrapper {
-  flex-grow: 1;
-  height: 100%;
-}
-
-.dndflow .selectall {
-  margin-top: 10px;
-}
-
-@media screen and (min-width: 768px) {
-  .dndflow {
-    flex-direction: row;
-  }
-
-  .dndflow aside {
-    width: 20%;
-    max-width: 250px;
-  }
-}
