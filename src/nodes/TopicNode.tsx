@@ -1,7 +1,7 @@
 import {useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
-const handleIndent = {top: 114};
+const handleIndent = {top: 120};
 const reportIndent = {top: 70};
 
 
@@ -18,8 +18,17 @@ function TopicNode({id, data}: NodeProps) {
     const onBlurReport = useCallback((evt) => {
         const nodeData = {reportTopic: evt.target.value}
     }, []);
+
     const onBlurCommand = useCallback((evt) => {
         const nodeData = {commandTopic: evt.target.value}
+    }, []);
+
+    const onBlurSubscription = useCallback((evt) => {
+         // evt.target.value
+    }, []);
+
+    const onChangeQos = useCallback((evt) => {
+        const nodeData = [{id: id, qos: evt.target.value}]
     }, []);
 
     const deleteNode = useCallback(() => {
@@ -30,18 +39,31 @@ function TopicNode({id, data}: NodeProps) {
             <Handle className="bg-accent p-1 left-1" type="target" position={Position.Left} style={handleIndent}
                     id="commandTopic"/>
             <div>
-                <div className="flex w-48 rounded-md text-white justify-between bg-primary text-base ">
-                    <input className="node-heading bg-primary border-0 w-40 p-2 rounded-md" value={nodeName} onBlur={changeNodeName}></input>
+                <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
+                    <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName} onChange={changeNodeName}></input>
                     <div className=" m-2 " onClick={deleteNode}>X</div>
                 </div>
-                <div className="node-props m-2 pl-3 font-bold">
+                <div className="node-props m-2 pl-3">
                     <div>
-                        <label htmlFor="Report Topic">Report Topic:</label>
-                        <input className="p-1 w-36" id="reportTopic" name="reportTopic" onBlur={onBlurReport} />
+                        <label htmlFor="Report Topic" className="font-bold">Report Topic:</label>
+                        <input className="p-1 w-36 border rounded-md" id="reportTopic" name="reportTopic" onBlur={onBlurReport} />
                     </div>
                     <div className="mt-2 pb-3">
-                        <label htmlFor="Command Topic">Command Topic:</label>
-                        <input className="nodrag p-1 w-36" id="commandTopic" name="commandTopic" onBlur={onBlurCommand} />
+                        <label htmlFor="Command Topic" className="font-bold">Command Topic:</label>
+                        <input className="p-1 w-36 border rounded-md" id="commandTopic" name="commandTopic" onBlur={onBlurCommand} />
+                    </div>
+                    <div className="pb-3">
+                        <label htmlFor="SubsciptionType" className="font-bold">Subscription Type:</label>
+                        <input className="p-1 w-36 border rounded-md" id="subscriptionType" name="subscriptionType" onBlur={onBlurSubscription} />
+                    </div>
+                    <div className="pb-3">
+                        <label htmlFor="qos" className="font-bold">qos:</label> <br/>
+                        <select className="p-1 w-40 border rounded-md " id="qos" name="qos" onChange={onChangeQos}>
+                            <option disabled selected value hidden> - select an option -</option>
+                            <option className="text-xl">0</option>
+                            <option className="text-xl">1</option>
+                            <option className="text-xl">2</option>
+                        </select>
                     </div>
                 </div>
             </div>
