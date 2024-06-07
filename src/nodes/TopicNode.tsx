@@ -1,62 +1,48 @@
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
-import "../styles/multiple-prop-node.css"
-import {useDispatch} from "react-redux";
-import {setCommandTopic, setReportTopic} from "../redux/reducer/nodeSlice.ts";
-import {store} from "../redux/store.ts";
-
-const handleIndent = {top: 102};
-const reportIndent = {top: 65};
+const handleIndent = {top: 114};
+const reportIndent = {top: 70};
 
 
 const isConnectable = true;
 
 function TopicNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
+    const [nodeName, setNodeName] = useState(data.nodeName);
 
-    const dispatch = useDispatch();
+    const changeNodeName = useCallback((evt) =>{
+        setNodeName(evt.target.value)
+    },[])
 
-    const onChangeReport = useCallback((evt) => {
-        const nodeData = [{id: id, reportTopic: evt.target.value}]
-        dispatch(setReportTopic(nodeData))
+    const onBlurReport = useCallback((evt) => {
+        const nodeData = {reportTopic: evt.target.value}
     }, []);
-    const onChangeCommand = useCallback((evt) => {
-        const nodeData = [{id: id, commandTopic: evt.target.value}]
-        dispatch(setCommandTopic(nodeData))
-        console.log(store.getState().nodeStore.nodes)
+    const onBlurCommand = useCallback((evt) => {
+        const nodeData = {commandTopic: evt.target.value}
     }, []);
 
     const deleteNode = useCallback(() => {
-        deleteElements({nodes: [{id}]});
     }, [id, deleteElements]);
 
     return (
-        <div className="node-body w-48 border-primary h-32">
-            <Handle className="node-target-handle p-1 left-1" type="target" position={Position.Left} style={handleIndent}
+        <div className="bg-gray-fieldBg rounded-md w-48 text-xs">
+            <Handle className="bg-accent p-1 left-1" type="target" position={Position.Left} style={handleIndent}
                     id="commandTopic"/>
             <div>
-                <div className="node-header">
-                    <div className="node-heading">{data.nodeName}</div>
-                    <div className="delete-node" onClick={deleteNode}>X</div>
+                <div className="flex w-48 rounded-md text-white justify-between bg-primary text-base ">
+                    <input className="node-heading bg-primary border-0 w-40 p-2 rounded-md" value={nodeName} onBlur={changeNodeName}></input>
+                    <div className=" m-2 " onClick={deleteNode}>X</div>
                 </div>
-                <div className="node-props m-2">
+                <div className="node-props m-2 pl-3 font-bold">
                     <div>
                         <label htmlFor="Report Topic">Report Topic:</label>
-                        <input className="nodrag h-5 p-1 w-36" id="reportTopic" name="reportTopic" onChange={onChangeReport} />
+                        <input className="p-1 w-36" id="reportTopic" name="reportTopic" onBlur={onBlurReport} />
                     </div>
-                    <div>
+                    <div className="mt-2 pb-3">
                         <label htmlFor="Command Topic">Command Topic:</label>
-                        <input className="nodrag h-5 p-1 w-36" id="commandTopic" name="commandTopic" onChange={onChangeCommand} />
+                        <input className="nodrag p-1 w-36" id="commandTopic" name="commandTopic" onBlur={onBlurCommand} />
                     </div>
-                    {/*<div>*/}
-                    {/*    <input id="commandTopic" name="commandTopic" onChange={onChangeCommand} className="nodrag"/>*/}
-                    {/*</div>*/}
-                    {/*<div>*/}
-                    {/*    <button>*/}
-                    {/*        +  Add command topic*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
                 </div>
             </div>
             <Handle
@@ -65,7 +51,7 @@ function TopicNode({id, data}: NodeProps) {
                 id="reportTopic"
                 style={reportIndent}
                 isConnectable={isConnectable}
-                className="node-source-handle right-2 p-1"
+                className="bg-accent  right-3 p-1"
             />
         </div>
     );
