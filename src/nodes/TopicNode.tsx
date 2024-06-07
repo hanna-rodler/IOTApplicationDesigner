@@ -1,8 +1,8 @@
 import {useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
-const handleIndent = {top: 120};
-const reportIndent = {top: 70};
+const handleIndent = {top: 130};
+const reportIndent = {top: 80};
 
 
 const isConnectable = true;
