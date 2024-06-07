@@ -1,33 +1,62 @@
-import { useCallback, useEffect, useState } from "react";
-import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes } from "reactflow";
-import TextUpdaterNode from "../nodes/TextUpdaterNode.tsx";
+import {useCallback, useEffect, useRef, useState} from "react";
+import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
-import { useDispatch } from "react-redux";
-import { setEdgesState } from "../redux/reducer/edgeSlice.ts";
-import { store } from "../redux/store.ts";
+import {useDispatch} from "react-redux";
+import {setEdgesState} from "../redux/reducer/edgeSlice.ts";
+import {store} from "../redux/store.ts";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import TabNavigation from "../components/TabNavigation";
+import "../styles/project-page.css";
+import MappingNode from "../nodes/MappingNode.tsx";
+import {addNode} from "../redux/reducer/nodeSlice.ts";
 
 const initialNodes = [
-    {
-        id: '1',
-        data: { label: 'Hello' },
-        position: { x: 0, y: 0 },
-        type: 'input',
-    },
+    // Topic Nodes
     {
         id: 'fridgeNode',
-        data: {nodeName: 'Fridge'},
+        nodeName: 'Fridge',
         type: 'topic',
         position: {x: 200, y: 200},
+        commandTopic: '',
+        reportTopic: ''
     },
     {
         id: 'switchNode',
-        data: {nodeName: 'Switch 1'},
+        nodeName: 'Switch 1',
         type: 'topic',
         position: {x: 250, y: 250},
-    }
+        commandTopic: '',
+        reportTopic: ''
+    },
+    // Mapping Nodes
+    {
+        id: 'staticMapping',
+        type: 'mapping',
+        nodeType: 'static',
+        mapping: '',
+        qos: '',
+        retain: '',
+        position: {x: 100, y: 100},
+    },
+    {
+        id: 'staticMapping',
+        type: 'mapping',
+        nodeType: 'value',
+        mapping: '',
+        qos: '',
+        retain: '',
+        position: {x: 100, y: 100},
+    },
+    {
+        id: 'staticMapping',
+        type: 'mapping',
+        nodeType: 'json',
+        mapping: '',
+        qos: '',
+        retain: '',
+        position: {x: 100, y: 100},
+    },
 
 ];
 
@@ -38,7 +67,7 @@ const initialEdges = [
 ];
 
 const nodeTypes: NodeTypes = {
-    custom: TextUpdaterNode,
+    mapping: MappingNode,
     topic: TopicNode
 };
 
