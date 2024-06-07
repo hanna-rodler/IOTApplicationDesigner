@@ -3,6 +3,25 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+          'xs': '450px',
+      },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
+      fontWeight: {
+        normal: 400,
+        semibold: 600,
+      },
+      fontSize: {
+        sm: "0.8rem",
+        base: "1rem",
+        xl: "1.25rem",
+        "2xl": "1.563rem",
+        "3xl": "1.953rem",
+        "4xl": "2.441rem",
+        "5xl": "3.5rem",
+      },
       colors: {
         primary: {
           light: "#03a696",
@@ -24,6 +43,17 @@ export default {
         orange: {
           edge: "#F4F4F4",
         },
+        topbar: "#012E40",
+      },
+      maxHeight: {
+        128: "32rem",
+        112: "28rem",
+      },
+      height: {
+        topBar: "3.125rem",
+      },
+      margin: {
+        topBar: "3.125rem",
       },
       borderRadius: {
         btn: "5px",

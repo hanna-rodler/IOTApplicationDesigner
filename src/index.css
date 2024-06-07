@@ -8,7 +8,81 @@ html, body, #root {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+}
+
+body {
+  @apply text-base;
+}
+
+h1 {
+  @apply mb-7 font-semibold xl:text-5xl text-4xl;
+}
+
+.primaryBtn {
+  border: 1px solid var(--primary);
+  padding: 0.5rem;
+  @apply rounded-btn bg-primary text-white;
+}
+
+.secondaryBtn {
+  border: 2px solid var(--primary);
+  padding: 0.5rem 0.7rem;
+  display: flex;
+  @apply rounded-btn bg-secondary text-white;
+}
+
+.secondaryBtn:hover,
+.secondaryBtn:focus {
+  box-shadow: 2 2 2 2em var(--topbar);
+  @apply bg-topbar shadow-md;
+}
+
+.iconBtn {
+  @apply flex self-center mr-2
+}
+
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
+body {
+  @apply text-base;
+}
+
+h1 {
+  @apply mb-7 font-semibold xl:text-5xl text-4xl;
+}
+
+.primaryBtn {
+  border: 1px solid var(--primary);
+  padding: 0.5rem;
+  @apply rounded-btn bg-primary text-white;
+}
+
+
+.fileBtn {
+  @apply flex rounded-btn border-2 p-4 justify-center cursor-pointer border-secondary self-center;
+}
+
+.secondaryBtn {
+  @apply  fileBtn text-white border-solid bg-secondary;
+}
+
+.uploadBtn {
+  @apply fileBtn text-black border-dashed  ;
+}
+
+.secondaryBtn:hover,
+.secondaryBtn:focus {
+  box-shadow: 2 2 2 2em var(--topbar);
+  @apply bg-topbar shadow-md;
+}
+
+.iconBtn {
+  @apply flex self-center mr-2 text-2xl;
 }
 
 .react-flow__devtools {
@@ -78,8 +152,8 @@ html, body, #root {
 }
 
 .react-flow-container {
-  width: 90vw;
-  height: 90vh;
+  width: 100vw;
+  height: 100vh;
 }
 
 .dndflow {
