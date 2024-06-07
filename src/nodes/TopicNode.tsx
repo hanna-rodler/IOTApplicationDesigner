@@ -33,7 +33,7 @@ function TopicNode({id, data}: NodeProps) {
                     id="commandTopic"/>
             <div>
                 <div className="flex p-1 pl-2 rounded-md text-white justify-between bg-primary text-base ">
-                    <input className="node-heading bg-primary border-0 w-36" value={nodeName} onChange={changeNodeName}></input>
+                    <input className="node-heading bg-primary border-0 w-36" value={nodeName} onBlur={changeNodeName}></input>
                     <div className="delete-node" onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2">
