@@ -135,7 +135,7 @@ export const ProjectPage = () => {
         }
     };
 
-    const deleteTab = (index) => {
+    const deleteTab = (index: number) => {
         if (tabs.length === 1) {
             alert("You must have at least one Configuration-Tab open.");
             return;
@@ -148,7 +148,7 @@ export const ProjectPage = () => {
         }
     };
 
-    const renameTab = (index) => {
+    const renameTab = (index: number) => {
         const newTabName = prompt("Enter new name for this Configuration-Tab:");
         if (newTabName) {
             setTabs((prevTabs) => {
