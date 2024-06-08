@@ -37,7 +37,7 @@ function renderMappedEdgesAsTopicLevels(mappedEdgesWithContents) {
             // else add mapping content to mapping type if mapping type already exists
             //console.log('topic Level exists ', topicLevelName, topicLevels);
             
-            const existingTopicLevel = getTopicLevel(matchingTopicLevelName, topicLevels, true);
+            const existingTopicLevel = getTopicLevel(matchingTopicLevelName, topicLevels);
             let mergedSubscription = {};
             if(topicLevelName === matchingTopicLevelName){
                 console.log('existing full Topic Level ', existingTopicLevel);
@@ -79,8 +79,8 @@ function renderMappedEdgesAsTopicLevels(mappedEdgesWithContents) {
                 topicLevel.name = topicLevelName;
                 topicLevel.subscription = renderSubscriptionPart(sourceTopic, mapping, edge.targetTopic);
                 topicLevelNames.push(topicLevelName);
+                console.log('push new topicLevel', topicLevel);
             }
-            console.log('push new topicLevel', topicLevel);
             topicLevels.push(topicLevel);
         }
         
@@ -168,13 +168,24 @@ function findMatchingTopicLevelName(name, topicLevelNames) {
 
 function getTopicLevel(name, topicLevels) {
     // TODO: right now I think it only itereates through the first level of topic Levels? or if that is iterable? continue here
-    // console.log('get topic levels ', topicLevels, ' with name ', name);
+    console.log('get topic levels ', topicLevels, ' with name ', name, ' length ', topicLevels.length);
     if(Array.isArray(topicLevels) && topicLevels.length > 1) {
+        console.log('in array');
         for (const topic of topicLevels) {
             if (topic.name === name) {
+                console.log(' matched topic.name = ', name, ' topic: ', topic)
                 return topic;
             }
             if (topic.topic_level) {
+                if(isNestedTopicLabel(name)){
+                    let names = name.split("/");
+                    // only cut first part if first parts match
+                    if(names[0] === topic.name) {
+                        names.shift();
+                        name = names.join("/");
+                    }
+                }
+                console.log('looking in subtopic ', topic.topic_level, ' name ', name);
                 const foundInSublevel = getTopicLevel(name, topic.topic_level);
                 if (foundInSublevel) {
                     return foundInSublevel;
@@ -184,7 +195,11 @@ function getTopicLevel(name, topicLevels) {
         return null; 
     } else {
         console.log('not iterable');
-        return findLastMatchingTopicLevelByName(name, topicLevels[0]);
+        let nonIterableTopicLevels = topicLevels;
+        if(Array.isArray(topicLevels)) {
+            nonIterableTopicLevels = topicLevels[0];
+        }
+        return findLastMatchingTopicLevelByName(name, nonIterableTopicLevels);
     }
 }
 

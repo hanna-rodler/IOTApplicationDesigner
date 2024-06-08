@@ -1,6 +1,6 @@
 export function getDialog(){
     return {
-        "discover_prefix": "iotempower_static",
+        "discover_prefix": "iotempower_static_value",
         "connection": {
             "keep_alive": 60,
             "client_id": "MQTT-Integrator",
@@ -13,6 +13,13 @@ export function getDialog(){
             "password": "Password"
         }
     }
+}
+
+export function getStaticAndValueTopics(){
+    const staticObj = getStaticTestTopics();
+    const value = getValueTestTopics();
+    const merged = staticObj.concat(value);
+    return merged;
 }
 
 
@@ -118,6 +125,13 @@ export function getValueTestTopics(){
 
     ]
     
+}
+
+export function getStaticAndValueMappings(){
+    const staticObj = getStaticMappings();
+    const value = getValueMappings();
+    const merged = staticObj.concat(value);
+    return merged;
 }
 
 export function getStaticMappings(){
@@ -258,6 +272,13 @@ export function getValueMappings(){
             retain: true
         },
     ]
+}
+
+export function getStaticAndValueEdges(){
+    const staticObj = getStaticEdges();
+    const value = getValueEdges();
+    const merged = staticObj.concat(value);
+    return merged;
 }
 
 export function getValueEdges() {

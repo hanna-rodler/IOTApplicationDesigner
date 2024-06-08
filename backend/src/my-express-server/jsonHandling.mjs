@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {getFileName} from './utils/utils.mjs';
-import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings} from './utils/testData.mjs';
+import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings} from './utils/testData.mjs';
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 
@@ -12,13 +12,22 @@ const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 export const exportToJson = async (req, res) => {
         // TODO: get data from DB
         const dialog = getDialog();
-        const topics = getStaticTestTopics();
+
+        // STATIC
+        // const topics = getStaticTestTopics();
+        // const edges = getStaticEdges();
+        // const mappings = getStaticMappings();
+
+        // VALUE
         // const topics = getValueTestTopics();
-        const edges = getStaticEdges();
         // const edges = getValueEdges();
-        const mappings = getStaticMappings();
         // const mappings = getValueMappings();
-    
+        
+        // VALUE AND STATIC
+        const topics = getStaticAndValueTopics();
+        const edges = getStaticAndValueEdges();
+        const mappings = getStaticAndValueMappings();
+
         let mqttJson = dialog;
         mqttJson.mapping = {}
     
