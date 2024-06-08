@@ -5,22 +5,22 @@ import {FaCode} from "react-icons/fa6";
 import {LuFileJson2} from "react-icons/lu";
 
 
-const reportIndent = {top: 74};
+const reportIndent = {top: 80};
 
 const isConnectable = true;
 
 function MappingNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
 
-    const onChangeMapping = useCallback((evt) => {
+    const onBlurMapping = useCallback((evt) => {
         const nodeData = [{id: id, mapping: evt.target.value}]
     }, []);
 
-    const onChangeQos = useCallback((evt) => {
+    const onBlurQos = useCallback((evt) => {
         const nodeData = [{id: id, qos: evt.target.value}]
     }, []);
 
-    const onChangeRetain = useCallback((evt) => {
+    const onBlurRetain = useCallback((evt) => {
         const nodeData = [{id: id, retain: evt.target.value}]
     }, []);
 
@@ -64,22 +64,32 @@ function MappingNode({id, data}: NodeProps) {
                 </div>
                 <div className="ml-5 mr-5">
                     <div>
-                        <label htmlFor="Mapping" className="font-bold"> Mapping: </label>
                         {data.nodeType === "static" &&
-                            <input className="nodrag h-5 p-1 w-44" id="mapping" name="mapping"
-                                   onChange={onChangeMapping}
-                                   placeholder="e.g. on / off "/>
+                            <div>
+                                <label htmlFor="Message" className="font-bold"> Message: </label>
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping"
+                                       onBlur={onBlurMapping}
+                                       placeholder="e.g. pressed / on "/>
+                                <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping"
+                                       onBlur={onBlurMapping}
+                                       placeholder="e.g. released / off "/>
+                            </div>
                         }
                         {data.nodeType !== "static" &&
-                            <textarea className="nodrag h-14 p-1 w-44 text-xs" id="mapping" name="mapping"
-                                      onChange={onChangeMapping}
-                                      placeholder="e.g. {% if message <= 8.0 %}on
+                            <div>
+                                <label htmlFor="Mapping" className="font-bold"> Mapping: </label>
+                                <textarea className="nodrag h-16 p-1 w-44 text-xs border rounded-md" id="mapping"
+                                          name="mapping"
+                                          obBlur={onBlurMapping}
+                                          placeholder="e.g. {% if message <= 8.0 %}on
 {% else % }off{% endif %}"/>
+                            </div>
                         }
                     </div>
                     <div>
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-44" id="qos" name="qos" onChange={onChangeQos} >
+                        <select className="p-1 w-44 border rounded-md" id="qos" name="qos" onBlur={onBlurQos}>
                             <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
@@ -88,7 +98,8 @@ function MappingNode({id, data}: NodeProps) {
                     </div>
                     <div className="mt-2">
                         <label htmlFor="retain" className="font-bold">retain:</label> <br/>
-                        <select className=" p-1 w-44" id="retain" name="retain" onChange={onChangeRetain}>
+                        <select className=" p-1 w-44 border rounded-md" id="retain" name="retain"
+                                onBlur={onBlurRetain}>
                             <option disabled selected value hidden> - select an option -</option>
                             <option className="text-xl">true</option>
                             <option className="text-xl">false</option>
