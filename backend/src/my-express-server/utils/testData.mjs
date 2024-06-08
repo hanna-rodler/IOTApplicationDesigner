@@ -1,6 +1,6 @@
 export function getDialog(){
     return {
-        "discover_prefix": "iotempower_static_value",
+        "discover_prefix": "iotempower_static_value_ref",
         "connection": {
             "keep_alive": 60,
             "client_id": "MQTT-Integrator",
@@ -116,7 +116,17 @@ export function getValueTestTopics(){
             "id": "tempOwn",
             "nodeName": "tempFahrenheit",
             "reportTopic": "temperature/myOwnTemp",
-            "commandTopic": "temperature/kelvin",
+            "commandTopic": "temperature/myOwnTemp",
+            "subscriptionType": "",
+            "qos": '',
+            "type": "myType",
+            "position": {x: 100, y: 100}
+        },
+        {
+            "id": "kelvinOwn",
+            "nodeName": "tempFahrenheit",
+            "reportTopic": "temperature/kelvin",
+            "commandTopic": "",
             "subscriptionType": "",
             "qos": '',
             "type": "myType",
@@ -271,6 +281,15 @@ export function getValueMappings(){
             qos: 2,
             retain: true
         },
+        {
+            id: 'kelvin_own',
+            nodeType: 'value',
+            type: 'mapping',
+            position: {x: 100, y: 100},
+            mapping: '{{ round(float(message), 2) }}',
+            qos: 2,
+            retain: true
+        },
     ]
 }
 
@@ -418,6 +437,20 @@ export function getValueEdges() {
         },
         {
             "source": "own_own",
+            "sourceHandle": "mappingOut",
+            "target": "tempOwn",
+            "targetHandle": "commandTopic",
+            "id": "reactflow__edge-staticMappingmappingOut-setBrightnessReleasedcommandTopic"
+        },
+        {
+            "source": "kelvinOwn",
+            "sourceHandle": "reportTopic",
+            "target": "kelvin_own",
+            "targetHandle": "mappingIn",
+            "id": "reactflow__edge-button1reportTopic-staticMappingmappingIn"
+        },
+        {
+            "source": "kelvin_own",
             "sourceHandle": "mappingOut",
             "target": "tempOwn",
             "targetHandle": "commandTopic",
