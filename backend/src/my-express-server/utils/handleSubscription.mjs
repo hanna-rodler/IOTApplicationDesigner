@@ -1,5 +1,5 @@
 import { isObjectEmpty } from "./utils.mjs";
-// TODO: for static, json and value
+// TODO: for json
 export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscription = {}) {
     const subscriptionExists = !isObjectEmpty(subscription);
     const mappingType = mapping.nodeType;
@@ -12,8 +12,8 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
             subscription[mappingType] = mappingTypeValue;
             return subscription;
         } else {
-            console.info('add mapping type to subscription');
             // add mappingType. e.g. subscription.static exists, add subscription.value
+            console.info('add mapping type to subscription');
             subscription[mappingType] = renderMapping(mapping, targetTopic);
         }
     } else {
@@ -28,15 +28,11 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
         subscription[mappingType] = renderMapping(mapping, targetTopic);
     }
 
-    
-    // TODO: check if [] or {} or if this particular subscription already exists
-    //subscription[mappingType] = {};
-
     //console.log('subscription ', subscription);
     return subscription;
 }
 
-// TODO: json and value.
+// TODO: json and value wildcard topic
 function renderMapping(mapping, targetTopic) {
     const mappingType = mapping.nodeType;
     if(mappingType === 'static') {
@@ -62,7 +58,7 @@ function transformExistingMappingTypeToArray(subscription, mappingType) {
 }
 
 function hasMappingType(subscription, mappingType) {
-    // TODO: implement
+    // TODO: implement and test for double mapping type in 1 subscription.
     // Check if the subscription object has the specified mappingType
     return true;
     //return Object.values(subscription).some(value => typeof value === 'object' && value.hasOwnProperty(mappingType));

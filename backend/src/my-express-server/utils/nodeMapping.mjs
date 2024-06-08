@@ -25,8 +25,6 @@ function renderMappedEdgesAsTopicLevels(mappedEdgesWithContents) {
 
     for(let edge of mappedEdgesWithContents) {
         let topicLevel = {};
-        // TODO: check if name is already in topicLevels
-        // TODO: check if reportTopic has / in names -> aufteilen
         //console.log('topc level name', topicLevelName, ' edge ', edge);
 
         // INIT Variables
@@ -52,7 +50,6 @@ function renderMappedEdgesAsTopicLevels(mappedEdgesWithContents) {
             } else {
                 if ('topic_level' in existingTopicLevel){
                     topicLevelNames.push(topicLevelName)
-                    // TODO: if already array -> continue somewhere here. kelvin temperature/celius gets rendered correctly. second one: kelvin temperature/kelvin doesn't get rendered correctly.
                     if(!Array.isArray(existingTopicLevel.topic_level)){
                         console.log('MAKE ARRAY for ', matchingTopicLevelName);
                         existingTopicLevel.topic_level = [existingTopicLevel.topic_level];
@@ -75,7 +72,6 @@ function renderMappedEdgesAsTopicLevels(mappedEdgesWithContents) {
             }
             // console.log('merged subscription ', mergedSubscription);
         } else {
-            // TODO: match part of topicLevelName
             if(isNestedTopicLabel(topicLevelName)) {
                 console.log('create nested topic label');
                 topicLevel = createNestedTopicLevel(topicLevelName, sourceTopic, mapping, targetTopic);

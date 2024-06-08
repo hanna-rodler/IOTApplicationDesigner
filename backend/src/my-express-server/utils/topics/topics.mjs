@@ -57,7 +57,6 @@ export function findMatchingTopicLevelName(name, topicLevelNames) {
 }
 
 export function getTopicLevel(name, topicLevels) {
-    // TODO: right now I think it only itereates through the first level of topic Levels? or if that is iterable? continue here
     console.log('get topic levels ', topicLevels, ' with name ', name, ' length ', topicLevels.length);
     if(Array.isArray(topicLevels) && topicLevels.length > 1) {
         console.log('in array');

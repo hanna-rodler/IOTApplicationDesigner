@@ -18,7 +18,6 @@ function getMappedEdges(edges) {
 function getHalfMappedEdges(edges) {
     const halfMappedEdges = [];
     for(let edge of edges){
-        // TODO: handle error in FE that topic -> topic or mapping -> mapping isValidSourceTargetHandle(edge) <- sourceHandle = 'reportTopic' || 'mappingIn'. targetHandle = 'commandTopic' || 'mappingOut'
         const halfMappedEdge = getHalfMappedEdge(edge);
         halfMappedEdges.push(halfMappedEdge)
     }
