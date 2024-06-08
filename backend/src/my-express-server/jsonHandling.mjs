@@ -37,8 +37,6 @@ export const exportToJson = async (req, res) => {
             mqttJson.mapping.topic_levels = await renderMappingsToJson(topics, edges, mappings);
             const fileName = getFileName(dialog.discover_prefix);
         
-            console.log(fileName, ' name');
-        
             fs.writeFile(path.join(FILE_PREFIX, fileName), JSON.stringify(mqttJson, null, 2), (err) => {
                 if (err) {
                     console.log('error writing file: ' + err);
@@ -50,4 +48,8 @@ export const exportToJson = async (req, res) => {
         } else {
             res.status(500).json({message: 'topics, edges or mappings are empty'});
         }
+}
+
+export const importJson = async(req, rees) => {
+    // TODO: implement import JSON.
 }
