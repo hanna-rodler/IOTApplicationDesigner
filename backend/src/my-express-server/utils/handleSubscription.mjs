@@ -8,7 +8,7 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
         if(hasMappingType(subscription, mappingType)) {
             const mappingTypeValue = transformExistingMappingTypeToArray(subscription, mappingType);
             mappingTypeValue.push(renderMapping(mapping, targetTopic));
-            console.log('added ', mappingTypeValue);
+            // console.log('added ', mappingTypeValue);
             subscription[mappingType] = mappingTypeValue;
             return subscription;
         } else {
@@ -32,7 +32,7 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
     // TODO: check if [] or {} or if this particular subscription already exists
     //subscription[mappingType] = {};
 
-    console.log('subscription ', subscription);
+    //console.log('subscription ', subscription);
     return subscription;
 }
 
@@ -40,8 +40,10 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
 function renderMapping(mapping, targetTopic) {
     const mappingType = mapping.nodeType;
     if(mappingType === 'static') {
-        return renderStaticMapping(mapping, targetTopic)
-     }
+        return renderStaticMapping(mapping, targetTopic);
+    } else if(mappingType === 'value'){
+        return renderValueJsonMapping(mapping, targetTopic);
+    }
 
 }
 
@@ -60,6 +62,7 @@ function transformExistingMappingTypeToArray(subscription, mappingType) {
 }
 
 function hasMappingType(subscription, mappingType) {
+    // TODO: implement
     // Check if the subscription object has the specified mappingType
     return true;
     //return Object.values(subscription).some(value => typeof value === 'object' && value.hasOwnProperty(mappingType));
@@ -68,7 +71,6 @@ function hasMappingType(subscription, mappingType) {
 
 function renderStaticMapping(mapping, targetTopic) {
     console.log('renderingStaticMapping')
-    // TODO: check if [] or {} or if this particular subscription already exists
     const staticMapping = {
         mapped_topic: targetTopic.commandTopic,
         message_mapping: {
@@ -85,4 +87,19 @@ function renderStaticMapping(mapping, targetTopic) {
 
     console.log('staticMapping ', staticMapping);
     return staticMapping;
+}
+
+function renderValueJsonMapping(mapping, targetTopic) {
+    console.log('renderValueJsonMapping');
+    let valueJsonMapping = {
+        mapped_topic: targetTopic.commandTopic,
+        mapping_template: mapping.mapping,
+    }
+    if(mapping.qos !== '') {
+        valueJsonMapping.qos = mapping.qos;
+    }
+    if(mapping.retain !== '') {
+        valueJsonMapping.retain = mapping.retain;
+    }
+    return valueJsonMapping;
 }

@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {getFileName} from './utils/utils.mjs';
-import {getStaticTestTopics, getDialog, getStaticEdges, getStaticMappings} from './utils/testData.mjs';
+import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings} from './utils/testData.mjs';
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 
@@ -13,8 +13,11 @@ export const exportToJson = async (req, res) => {
         // TODO: get data from DB
         const dialog = getDialog();
         const topics = getStaticTestTopics();
+        // const topics = getValueTestTopics();
         const edges = getStaticEdges();
+        // const edges = getValueEdges();
         const mappings = getStaticMappings();
+        // const mappings = getValueMappings();
     
         let mqttJson = dialog;
         mqttJson.mapping = {}
