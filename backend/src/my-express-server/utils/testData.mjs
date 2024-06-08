@@ -1,6 +1,6 @@
 export function getDialog(){
     return {
-        "discover_prefix": "iotempower",
+        "discover_prefix": "iotempower_static_orig",
         "connection": {
             "keep_alive": 60,
             "client_id": "MQTT-Integrator",
@@ -24,6 +24,16 @@ export function getStaticTestTopics() {
             "reportTopic": "button1",
             "commandTopic": "xyz",
             "subscriptionType": "button1/binary_sensor",
+            "qos": 2,
+            "type": "binary_sensor",
+            "position": {x: 100, y: 100}
+        },
+        {
+            "id": "button2",
+            "nodeName": "button2",
+            "reportTopic": "button2",
+            "commandTopic": "xyz",
+            "subscriptionType": "button2/binary_sensor",
             "qos": 2,
             "type": "binary_sensor",
             "position": {x: 100, y: 100}
@@ -67,6 +77,19 @@ export function getStaticMappings(){
             }
         },
         {
+            "id": "staticMapping2",
+            "nodeType": "static",
+            "message": "released",
+            "mapped_message": "0",
+            "qos": 1,
+            "retain": "",
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
             "id": "RGBMapping",
             "nodeType": "static",
             "message": "pressed",
@@ -93,6 +116,20 @@ export function getStaticEdges(){
         },
         {
             "source": "staticMapping",
+            "sourceHandle": "mappingOut",
+            "target": "setBrightnessReleased",
+            "targetHandle": "commandTopic",
+            "id": "reactflow__edge-staticMappingmappingOut-setBrightnessReleasedcommandTopic"
+        },
+        {
+            "source": "button2",
+            "sourceHandle": "reportTopic",
+            "target": "staticMapping2",
+            "targetHandle": "mappingIn",
+            "id": "reactflow__edge-button1reportTopic-staticMappingmappingIn"
+        },
+        {
+            "source": "staticMapping2",
             "sourceHandle": "mappingOut",
             "target": "setBrightnessReleased",
             "targetHandle": "commandTopic",
