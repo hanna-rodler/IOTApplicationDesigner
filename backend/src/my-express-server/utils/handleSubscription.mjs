@@ -22,8 +22,8 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
         if(sourceTopic.qos !== ''){
             subscription.qos = sourceTopic.qos;
         }
-        if(sourceTopic.type !== '') {
-            subscription.type = sourceTopic.type;
+        if(sourceTopic.subscriptionType !== '') {
+            subscription.type = sourceTopic.subscriptionType;
         }
         subscription[mappingType] = renderMapping(mapping, targetTopic);
     }
@@ -37,10 +37,11 @@ function renderMapping(mapping, targetTopic) {
     const mappingType = mapping.nodeType;
     if(mappingType === 'static') {
         return renderStaticMapping(mapping, targetTopic);
-    } else if(mappingType === 'value'){
+    } else if(mappingType === 'value' || mappingType === 'json'){
         return renderValueJsonMapping(mapping, targetTopic);
+    } else {
+        console.error('unknown mapping type');
     }
-
 }
 
 function transformExistingMappingTypeToArray(subscription, mappingType) {

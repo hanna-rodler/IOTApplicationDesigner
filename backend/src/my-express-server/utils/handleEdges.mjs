@@ -90,6 +90,7 @@ function getEdgesWithContents(mappedEdges, topics, mappings) {
 
 function getMappingForEdgeWithContent(edge, mappings){
     const mapping = mappings[edge.mappingId];
+    console.log('mapping ', mapping , 'get edge mapping with content');
     const { position, ...mappingWithoutPosition } = mapping;
     return mappingWithoutPosition;
 }

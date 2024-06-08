@@ -1,6 +1,6 @@
 export function getDialog(){
     return {
-        "discover_prefix": "iotempower_static_value_ref",
+        "discover_prefix": "iotempower_json_static_value",
         "connection": {
             "keep_alive": 60,
             "client_id": "MQTT-Integrator",
@@ -15,6 +15,13 @@ export function getDialog(){
     }
 }
 
+export function getAllTestTopics(){
+    const staticAndValue = getStaticAndValueTopics();
+    const jsonObj = getJsonTestTopics();
+    const merged = staticAndValue.concat(jsonObj);
+    return merged;
+}
+
 export function getStaticAndValueTopics(){
     const staticObj = getStaticTestTopics();
     const value = getValueTestTopics();
@@ -22,15 +29,14 @@ export function getStaticAndValueTopics(){
     return merged;
 }
 
-
 export function getStaticTestTopics() {
     return [
         {
             "id": "button1",
             "nodeName": "button1",
-            "reportTopic": "button1",
+            "reportTopic": "test01/button1",
             "commandTopic": "xyz",
-            "subscriptionType": "button1/binary_sensor",
+            "subscriptionType": "binary_sensor",
             "qos": 2,
             "type": "binary_sensor",
             "position": {x: 100, y: 100}
@@ -40,7 +46,7 @@ export function getStaticTestTopics() {
             "nodeName": "button2",
             "reportTopic": "button2",
             "commandTopic": "xyz",
-            "subscriptionType": "button2/binary_sensor",
+            "subscriptionType": "test01/button2/binary_sensor",
             "qos": 2,
             "type": "binary_sensor",
             "position": {x: 100, y: 100}
@@ -68,6 +74,30 @@ export function getStaticTestTopics() {
     ]
 }
 
+export function getJsonTestTopics(){
+    return [
+        {
+            "id": "jsonMapping",
+            "nodeName": "jsonMapping",
+            "reportTopic": "mapping/json",
+            "commandTopic": "",
+            "subscriptionType": "",
+            "qos": 0,
+            "type": "topic",
+            "position": {x: 100, y: 100}
+        },
+        {
+            "id": "onboard",
+            "nodeName": "onboard",
+            "reportTopic": "",
+            "commandTopic": "test02/onboard/set",
+            "subscriptionType": "",
+            "qos": 0,
+            "type": "topic",
+            "position": {x: 100, y: 100}
+        },
+    ]
+}
 
 export function getValueTestTopics(){
     // TODO: wildcard mapping value.json erstes.
@@ -89,7 +119,7 @@ export function getValueTestTopics(){
             "commandTopic": "temperature/celsius",
             "subscriptionType": "button1/binary_sensor",
             "qos": 2,
-            "type": "",
+            "type": "topic",
             "position": {x: 100, y: 100}
         },
         {
@@ -99,7 +129,7 @@ export function getValueTestTopics(){
             "commandTopic": "temperature/kelvin",
             "subscriptionType": "",
             "qos": 2,
-            "type": "",
+            "type": "topic",
             "position": {x: 100, y: 100}
         },
         {
@@ -109,7 +139,7 @@ export function getValueTestTopics(){
             "commandTopic": "temperature/farenheit",
             "subscriptionType": "",
             "qos": 2,
-            "type": "",
+            "type": "topic",
             "position": {x: 100, y: 100}
         },
         {
@@ -119,7 +149,7 @@ export function getValueTestTopics(){
             "commandTopic": "temperature/myOwnTemp",
             "subscriptionType": "",
             "qos": '',
-            "type": "myType",
+            "type": "topic",
             "position": {x: 100, y: 100}
         },
         {
@@ -129,12 +159,19 @@ export function getValueTestTopics(){
             "commandTopic": "",
             "subscriptionType": "",
             "qos": '',
-            "type": "myType",
+            "type": "topic",
             "position": {x: 100, y: 100}
         },
 
     ]
     
+}
+
+export function getAllTestMappings(){
+    const staticAndValue = getStaticAndValueMappings();
+    const jsonObj = getJsonMappings();
+    const merged = staticAndValue.concat(jsonObj);
+    return merged;
 }
 
 export function getStaticAndValueMappings(){
@@ -185,6 +222,20 @@ export function getStaticMappings(){
                 "y": 100
             }
         }
+    ]
+}
+
+export function getJsonMappings(){
+    return [
+        {
+            id: 'json_onboard',
+            nodeType: 'json',
+            type: 'mapping',
+            position: {x: 100, y: 100},
+            mapping: '{% if message.state == "on" %}on{% else if message.state == "off" %}off{% endif %}',
+            qos: 0,
+            retain: false
+        },
     ]
 }
 
@@ -293,11 +344,38 @@ export function getValueMappings(){
     ]
 }
 
+export function getAllTestEdges(){
+    const staticAndValue = getStaticAndValueEdges();
+    const jsonObj = getJsonEdges();
+    const merged = staticAndValue.concat(jsonObj);
+    return merged;
+}
+
+
 export function getStaticAndValueEdges(){
     const staticObj = getStaticEdges();
     const value = getValueEdges();
     const merged = staticObj.concat(value);
     return merged;
+}
+
+export function getJsonEdges(){
+    return [
+        {
+            "source": "jsonMapping",
+            "sourceHandle": "reportTopic",
+            "target": "json_onboard",
+            "targetHandle": "mappingIn",
+            "id": "reactflow__edge-button1reportTopic-staticMappingmappingIn"
+        },
+        {
+            "source": "json_onboard",
+            "sourceHandle": "mappingOut",
+            "target": "onboard",
+            "targetHandle": "commandTopic",
+            "id": "MappingmappingOut-setBrightnessReleasedcommandTopic"
+        },
+    ]
 }
 
 export function getValueEdges() {

@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {getFileName} from './utils/utils.mjs';
-import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings} from './utils/testData.mjs';
+import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings, getJsonTestTopics, getJsonEdges, getJsonMappings, getAllTestTopics, getAllTestEdges, getAllTestMappings} from './utils/testData.mjs';
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 
@@ -22,11 +22,20 @@ export const exportToJson = async (req, res) => {
         // const topics = getValueTestTopics();
         // const edges = getValueEdges();
         // const mappings = getValueMappings();
+
+        // JSON
+        // const topics = getJsonTestTopics();
+        // const edges = getJsonEdges();
+        // const mappings = getJsonMappings();
         
         // VALUE AND STATIC
-        const topics = getStaticAndValueTopics();
-        const edges = getStaticAndValueEdges();
-        const mappings = getStaticAndValueMappings();
+        // const topics = getStaticAndValueTopics();
+        // const edges = getStaticAndValueEdges();
+        // const mappings = getStaticAndValueMappings();
+
+        const topics = getAllTestTopics();
+        const edges = getAllTestEdges();
+        const mappings = getAllTestMappings();
 
         let mqttJson = dialog;
         mqttJson.mapping = {}
