@@ -3,9 +3,6 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      screens: {
-          'xs': '450px',
-      },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
       },
@@ -30,9 +27,6 @@ export default {
         secondary: {
           DEFAULT: "#025159",
         },
-        accent: {
-          DEFAULT: "#F28705",
-        },
         gray: {
           fieldBg: "#F9FAF9",
           fieldBorder: "#D1D5DB",
@@ -48,12 +42,6 @@ export default {
       maxHeight: {
         128: "32rem",
         112: "28rem",
-      },
-      height: {
-        topBar: "3.125rem",
-      },
-      margin: {
-        topBar: "3.125rem",
       },
       borderRadius: {
         btn: "5px",
