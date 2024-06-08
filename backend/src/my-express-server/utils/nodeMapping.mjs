@@ -251,37 +251,6 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
     return traverse(topicLevels, nameParts) || null;
 }
 
-
-
-function findLastMatchingTopicByName(name, topicLevels) {
-    const nameParts = name.split('/');
-
-    // Recursive function to traverse the topic levels
-    function traverse(level, parts) {
-        // If there are no more parts to match, return the current level
-        if (parts.length === 0) {
-            return level;
-        }
-
-        // If the current level name matches the first part
-        if (level.name === parts[0]) {
-            // If there is a next topic level, continue traversal
-            if (level.topic_level) {
-                return traverse(level.topic_level, parts.slice(1));
-            } else {
-                // If no more topic levels and parts remain, return the current level
-                return parts.length === 1 ? level : null;
-            }
-        } else {
-            // If the current level name does not match, return null
-            return null;
-        }
-    }
-
-    // Start traversal with the top level and name parts
-    return traverse(topicLevels, nameParts) || null;
-}
-
 function isNestedTopicLabel(name) {
     const occurences = name.split("/").length-1;
     return occurences > 0;
