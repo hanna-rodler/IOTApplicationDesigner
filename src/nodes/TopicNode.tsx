@@ -27,11 +27,16 @@ function TopicNode({id, data}: NodeProps) {
 
     return (
         <div className="bg-gray-fieldBg rounded-md w-48 text-xs">
-            <Handle className="bg-accent p-1 left-1" type="target" position={Position.Left} style={handleIndent}
-                    id="commandTopic"/>
+            <Handle className="bg-accent p-1 left-1"
+                    type="target"
+                    position={Position.Left}
+                    style={handleIndent}
+                    id="commandTopic"
+                    isValidConnection={(connection) => connection.sourceHandle === 'mappingOut'}
+            />
             <div>
                 <div className="flex w-48 rounded-md text-white justify-between bg-primary text-base ">
-                    <input className="node-heading bg-primary border-0 w-40 p-2 rounded-md" value={nodeName} onBlur={changeNodeName}></input>
+                    <input className="node-heading bg-primary border-0 w-40 p-2 rounded-md" value={nodeName} onChange={changeNodeName}></input>
                     <div className=" m-2 " onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2 pl-3 font-bold">
@@ -52,6 +57,7 @@ function TopicNode({id, data}: NodeProps) {
                 style={reportIndent}
                 isConnectable={isConnectable}
                 className="bg-accent  right-3 p-1"
+                isValidConnection={(connection) => connection.targetHandle === 'mappingIn'}
             />
         </div>
     );
