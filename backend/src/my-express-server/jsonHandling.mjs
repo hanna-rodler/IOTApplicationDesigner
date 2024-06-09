@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {getFileName} from './utils/utils.mjs';
-import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings, getJsonTestTopics, getJsonEdges, getJsonMappings, getAllTestTopics, getAllTestEdges, getAllTestMappings, getImportDialog, getImportTopics, getImportMappings, getImportEdges} from './utils/testData.mjs';
+import TestDataLoader from './testData/testDataLoader.mjs'
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 import Dialog from './classes/Dialog.mjs';
@@ -13,44 +13,11 @@ const __dirname = path.dirname(__filename);
 const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 
 export const exportToJson = async (req, res) => {
-        // TODO: get data from DB
-        //const dialog = getDialog();
-
-        // STATIC
-        // const topics = getStaticTestTopics();
-        // const edges = getStaticEdges();
-        // const mappings = getStaticMappings();
-
-        // VALUE
-        // const topics = getValueTestTopics();
-        // const edges = getValueEdges();
-        // const mappings = getValueMappings();
-
-        // JSON
-        // const topics = getJsonTestTopics();
-        // const edges = getJsonEdges();
-        // const mappings = getJsonMappings();
-        
-        // VALUE AND STATIC
-        // const topics = getStaticAndValueTopics();
-        // const edges = getStaticAndValueEdges();
-        // const mappings = getStaticAndValueMappings();
-
-        // ALL TEST TOPICS
-        // const topics = getAllTestTopics();
-        // const edges = getAllTestEdges();
-        // const mappings = getAllTestMappings();
-
-        // TEST IMPORT
-        const dialog = getImportDialog();
-        const topics = getImportTopics();
-        const edges = getImportEdges();
-        const mappings = getImportMappings();
+        const testdataLoader = new TestDataLoader('import');
+        const {dialog, topics, edges, mappings} = testdataLoader.getTestData();
 
         let mqttJson = dialog;
         mqttJson.mapping = {}
-    
-        // console.log('mqtt json ', mqttJson);
     
         if(topics && edges && mappings){
             mqttJson.mapping.topic_levels = await renderMappingsToJson(topics, edges, mappings);
