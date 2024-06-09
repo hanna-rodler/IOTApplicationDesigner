@@ -53,7 +53,6 @@ export const importFromJson = async(req, res) => {
 
 function parseJsonImportFile(file) {
     const jsonFile = JSON.parse(file);
-    // console.log('file content ', jsonFile);
 
     const dialog = new Dialog(jsonFile.discover_prefix, jsonFile.connection);
     // dialog can be sent to DB 1:1;
@@ -61,14 +60,10 @@ function parseJsonImportFile(file) {
     const mapping = new MappingLevel(jsonFile.mapping.plugins, jsonFile.mapping.topic_level);
     mapping.parseTopicLevels();
     const mappings = mapping.mappings;
-    // console.log('mappings', mappings);
     
     const topics = mapping.renderTopics();
-    // console.log('topics ', topics);
 
     const edges = mapping.renderEdges();
-    // const edges = mapping.edges;
-    // console.log('edges ', edges);
 
     return {
         dialog: dialog,

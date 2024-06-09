@@ -14,7 +14,7 @@ export default class ValueJsonMapping {
     }
 
     display(){
-        console.log('static Mapping', this);
+        console.log('value json Mapping', this);
     } 
 
     getMapping() {
