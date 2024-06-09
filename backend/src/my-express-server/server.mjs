@@ -5,7 +5,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import {connectDB} from "../database/database.js";
 import {getFileName} from './utils/utils.mjs';
-import {exportToJson} from './jsonHandling.mjs';
+import {exportToJson, importFromJson} from './jsonHandling.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +35,8 @@ app.post('/write-mqtt-file', (req, res) => {
 });
 
 app.post('/write-to-json', exportToJson);
+
+app.post('/import-test', importFromJson);
 
 //connectDB().then(() => {
     app.listen(PORT, () => {

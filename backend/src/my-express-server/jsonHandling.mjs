@@ -4,6 +4,9 @@ import {getFileName} from './utils/utils.mjs';
 import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings, getJsonTestTopics, getJsonEdges, getJsonMappings, getAllTestTopics, getAllTestEdges, getAllTestMappings} from './utils/testData.mjs';
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
+import Dialog from './classes/Dialog.mjs';
+import MappingLevel from './classes/MappingLevel.mjs';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,6 +62,42 @@ export const exportToJson = async (req, res) => {
         }
 }
 
-export const importJson = async(req, rees) => {
+export const importFromJson = async(req, res) => {
     // TODO: implement import JSON.
+
+    const fileName = 'mapfile.json';
+    fs.readFile(path.join(FILE_PREFIX, fileName), 'utf8', (err, data) => {
+        if (err) {
+            console.log('error reading file: ' + err);
+            return res.status(500).json({ message: 'Failed to read file', error: err });
+        }
+        const reactFlowData = parseJsonImportFile(data);
+        console.log('Successfully read file ');
+        res.status(200).json({ message: 'File read successfully', data: reactFlowData });
+    });
+}
+
+function parseJsonImportFile(file) {
+    const jsonFile = JSON.parse(file);
+    // console.log('file content ', jsonFile);
+
+    const dialog = new Dialog(jsonFile.discover_prefix, jsonFile.connection);
+    // dialog can be sent to DB 1:1;
+
+    const mapping = new MappingLevel(jsonFile.mapping.plugins, jsonFile.mapping.topic_level);
+    mapping.parseTopicLevels();
+    const edges = mapping.edges;
+    // console.log('edges ', edges);
+    const mappings = mapping.mappings;
+    // console.log('mappings', mappings);
+
+    const topics = mapping.renderTopics();
+    console.log('topics ', topics);
+
+    return {
+        dialog: dialog,
+        edges: edges,
+        mappings: mappings,
+        topics: topics
+    }
 }
