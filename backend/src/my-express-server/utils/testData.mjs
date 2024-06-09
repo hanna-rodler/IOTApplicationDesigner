@@ -15,6 +15,379 @@ export function getDialog(){
     }
 }
 
+export function getImportDialog() {
+    return {
+        "discover_prefix": "importData_to_export",
+        "connection": {
+            "keep_alive": 60,
+            "client_id": "MQTT-Integrator",
+            "clean_session": true,
+            "will_topic": "will/topic",
+            "will_message": "Last Will",
+            "will_qos": 0,
+            "will_retain": false,
+            "username": "Username",
+            "password": "Password"
+        }
+    }
+}
+
+export function getImportTopics() {
+    return [
+        {
+            "id": "topic_wIxHz4JrNIgX",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "test01/button1",
+            "commandTopic": "",
+            "subscriptionType": "binary_sensor",
+            "qos": 2,
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        },
+        {
+            "id": "topic_Fpxlk1qYQD3w",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "test01/rfid",
+            "commandTopic": "",
+            "subscriptionType": "new rfid reader",
+            "qos": "",
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        },
+        {
+            "id": "topic_27BFBPvpYFVF",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "temperature/celsius/set",
+            "commandTopic": "temperature/celsius",
+            "subscriptionType": "",
+            "qos": 2,
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        },
+        {
+            "id": "topic_Sb1a35Lx23lc",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "temperature/kelvin/set",
+            "commandTopic": "temperature/kelvin",
+            "subscriptionType": "",
+            "qos": 2,
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        },
+        {
+            "id": "topic_yMQHDEKjoZyR",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "",
+            "commandTopic": "test02/strip1/rgb/set",
+            "subscriptionType": "",
+            "qos": "",
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        },
+        {
+            "id": "topic_640AkT4XXu8e",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "",
+            "commandTopic": "strip/strip1/brightness/set",
+            "subscriptionType": "",
+            "qos": "",
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        },
+        {
+            "id": "topic_XzbmCmLcusus",
+            "data": {
+                "nodeName": "nodeName"
+            },
+            "reportTopic": "",
+            "commandTopic": "temperature/farenheit",
+            "subscriptionType": "",
+            "qos": "",
+            "type": "topic",
+            "position": {
+                "x": 100,
+                "y": 150
+            }
+        }
+    ]
+}
+
+export function getImportMappings(){
+    return [
+        {
+            "id": "static_3pLsRgknaR",
+            "nodeType": "static",
+            "message": "pressed",
+            "mapped_message": "front red",
+            "qos": "",
+            "retain": "",
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "static_Qqpbh4coM8",
+            "nodeType": "static",
+            "message": "released",
+            "mapped_message": "0",
+            "qos": "",
+            "retain": "",
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_pvujRwFmHjt",
+            "nodeType": "value",
+            "mapping": "front {{ message }}",
+            "qos": "",
+            "retain": "",
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_Hg8ABqCUdNx",
+            "nodeType": "value",
+            "mapping": "{{ round(float(message), 2) }}",
+            "qos": 2,
+            "retain": true,
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_LhotPd6lxMI",
+            "nodeType": "value",
+            "mapping": "{{ round(float(message) + 273.15, 2) }}",
+            "qos": 1,
+            "retain": true,
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_rGXGFgc7Ab5",
+            "nodeType": "value",
+            "mapping": "{{ round(float(message) * 1.8 + 32, 2) }}",
+            "qos": 2,
+            "retain": true,
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_84VgGHEZ4VP",
+            "nodeType": "value",
+            "mapping": "{{ round(float(message) - 273.15, 2) }}",
+            "qos": 2,
+            "retain": true,
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_dyO6Z6evNJC",
+            "nodeType": "value",
+            "mapping": "{{ round(float(message), 2) }}",
+            "qos": 1,
+            "retain": true,
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "value_x4Utr6SFFXk",
+            "nodeType": "value",
+            "mapping": "{{ round((float(message) - 273.15) * 1.8 + 32, 2) }}",
+            "qos": 2,
+            "retain": true,
+            "type": "mapping",
+            "position": {
+                "x": 100,
+                "y": 100
+            }
+        }
+    ]
+}
+
+export function getImportEdges(){
+    return [
+        {
+            "id": "reactflow__edge-in9ggmmJ361J",
+            "source": "topic_wIxHz4JrNIgX",
+            "sourceHandle": "reportTopic",
+            "target": "static_3pLsRgknaR",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outjJB5Pu4x3Jw",
+            "source": "static_3pLsRgknaR",
+            "sourceHandle": "mappingOut",
+            "target": "topic_yMQHDEKjoZyR",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-inLyMK48dkHO",
+            "source": "topic_wIxHz4JrNIgX",
+            "sourceHandle": "reportTopic",
+            "target": "static_Qqpbh4coM8",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outyaEziMnCbee",
+            "source": "static_Qqpbh4coM8",
+            "sourceHandle": "mappingOut",
+            "target": "topic_640AkT4XXu8e",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-inPsigl0tyLV",
+            "source": "topic_Fpxlk1qYQD3w",
+            "sourceHandle": "reportTopic",
+            "target": "value_pvujRwFmHjt",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outLcg6yHjOmyo",
+            "source": "value_pvujRwFmHjt",
+            "sourceHandle": "mappingOut",
+            "target": "topic_yMQHDEKjoZyR",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-inPQsKVtIxy0",
+            "source": "topic_27BFBPvpYFVF",
+            "sourceHandle": "reportTopic",
+            "target": "value_Hg8ABqCUdNx",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outRsVd7Zg0l7Y",
+            "source": "value_Hg8ABqCUdNx",
+            "sourceHandle": "mappingOut",
+            "target": "topic_27BFBPvpYFVF",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-inmxRTljKXIp",
+            "source": "topic_27BFBPvpYFVF",
+            "sourceHandle": "reportTopic",
+            "target": "value_LhotPd6lxMI",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outl5xjrwxLzt1",
+            "source": "value_LhotPd6lxMI",
+            "sourceHandle": "mappingOut",
+            "target": "topic_Sb1a35Lx23lc",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-inACaD37B7di",
+            "source": "topic_27BFBPvpYFVF",
+            "sourceHandle": "reportTopic",
+            "target": "value_rGXGFgc7Ab5",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-out2G7lrDV4fQD",
+            "source": "value_rGXGFgc7Ab5",
+            "sourceHandle": "mappingOut",
+            "target": "topic_XzbmCmLcusus",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-iny8RRzSgsKl",
+            "source": "topic_Sb1a35Lx23lc",
+            "sourceHandle": "reportTopic",
+            "target": "value_84VgGHEZ4VP",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outums9cCAMi8W",
+            "source": "value_84VgGHEZ4VP",
+            "sourceHandle": "mappingOut",
+            "target": "topic_27BFBPvpYFVF",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-ingor1Y7SeIa",
+            "source": "topic_Sb1a35Lx23lc",
+            "sourceHandle": "reportTopic",
+            "target": "value_dyO6Z6evNJC",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-out5U7vItoxDvd",
+            "source": "value_dyO6Z6evNJC",
+            "sourceHandle": "mappingOut",
+            "target": "topic_Sb1a35Lx23lc",
+            "targetHandle": "commandTopic"
+        },
+        {
+            "id": "reactflow__edge-inaW9W8ZeyDB",
+            "source": "topic_Sb1a35Lx23lc",
+            "sourceHandle": "reportTopic",
+            "target": "value_x4Utr6SFFXk",
+            "targetHandle": "mappingIn"
+        },
+        {
+            "id": "reactflow__edge-outPjEjyOW1bAN",
+            "source": "value_x4Utr6SFFXk",
+            "sourceHandle": "mappingOut",
+            "target": "topic_XzbmCmLcusus",
+            "targetHandle": "commandTopic"
+        }
+    ]
+}
+
 export function getAllTestTopics(){
     const staticAndValue = getStaticAndValueTopics();
     const jsonObj = getJsonTestTopics();

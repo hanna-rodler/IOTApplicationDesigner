@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {getFileName} from './utils/utils.mjs';
-import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings, getJsonTestTopics, getJsonEdges, getJsonMappings, getAllTestTopics, getAllTestEdges, getAllTestMappings} from './utils/testData.mjs';
+import {getStaticTestTopics, getValueTestTopics, getDialog, getValueEdges, getValueMappings, getStaticEdges, getStaticMappings, getStaticAndValueTopics, getStaticAndValueEdges, getStaticAndValueMappings, getJsonTestTopics, getJsonEdges, getJsonMappings, getAllTestTopics, getAllTestEdges, getAllTestMappings, getImportDialog, getImportTopics, getImportMappings, getImportEdges} from './utils/testData.mjs';
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 import Dialog from './classes/Dialog.mjs';
@@ -14,7 +14,7 @@ const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 
 export const exportToJson = async (req, res) => {
         // TODO: get data from DB
-        const dialog = getDialog();
+        //const dialog = getDialog();
 
         // STATIC
         // const topics = getStaticTestTopics();
@@ -36,9 +36,16 @@ export const exportToJson = async (req, res) => {
         // const edges = getStaticAndValueEdges();
         // const mappings = getStaticAndValueMappings();
 
-        const topics = getAllTestTopics();
-        const edges = getAllTestEdges();
-        const mappings = getAllTestMappings();
+        // ALL TEST TOPICS
+        // const topics = getAllTestTopics();
+        // const edges = getAllTestEdges();
+        // const mappings = getAllTestMappings();
+
+        // TEST IMPORT
+        const dialog = getImportDialog();
+        const topics = getImportTopics();
+        const edges = getImportEdges();
+        const mappings = getImportMappings();
 
         let mqttJson = dialog;
         mqttJson.mapping = {}
@@ -86,13 +93,15 @@ function parseJsonImportFile(file) {
 
     const mapping = new MappingLevel(jsonFile.mapping.plugins, jsonFile.mapping.topic_level);
     mapping.parseTopicLevels();
-    const edges = mapping.edges;
-    // console.log('edges ', edges);
     const mappings = mapping.mappings;
     // console.log('mappings', mappings);
-
+    
     const topics = mapping.renderTopics();
-    console.log('topics ', topics);
+    // console.log('topics ', topics);
+
+    const edges = mapping.renderEdges();
+    // const edges = mapping.edges;
+    // console.log('edges ', edges);
 
     return {
         dialog: dialog,

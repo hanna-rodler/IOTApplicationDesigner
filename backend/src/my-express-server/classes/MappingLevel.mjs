@@ -1,48 +1,20 @@
 import Subscription from './Subscription.mjs';
 import Topic from './Topic.mjs';
+import {removeDuplicates} from '../utils/utils.mjs';
 
 export default class MappingLevel {
     constructor(plugins, topic_levels) {
         this.plugins = plugins;
         this.topic_levels = topic_levels;
+        this.topics = [];
         this.edges = [];
         this.mappings = [];
-        this.topics = [];
         this.allCommandTopics = [];
+        this.allTopicsRendered = false;
     }
 
     display(){
         console.log('dis_pref ', this.plugins, '\nconnection: ', this.topic_levels);
-    }
-
-    parseTopicLevels2(){
-        for(let topic_level of this.topic_levels) {
-            // console.log('topic_level ', topic_level);
-            if('topic_level' in topic_level){
-                // parse subtopics
-                this.parseTopicLevel(topic_level, topic_level.name);
-            } else if('subscription' in topic_level) {
-                this.parseSubscription(topic_level);
-            }
-        }
-    }  
-
-    parseTopicLevel2(topic_level, name) {
-        console.log('parsing topic level ', topic_level, 'sub topic ', topic_level.topic_level);
-        for(let sub_topic of topic_level.topic_level){
-            if('track_name' in sub_topic) {
-                sub_topic.track_name += name;
-            } else {
-                sub_topic.track_name = name;
-            }
-            //console.log('sub topic ', sub_topic);
-            if('topic_level' in sub_topic){
-                // parse subtopics
-                this.parseTopicLevel(sub_topic, sub_topic.name);
-            } else if('subscription' in sub_topic) {
-                this.parseSubscription(sub_topic);
-            }
-        }
     }
 
     parseTopicLevels(){
@@ -95,14 +67,36 @@ export default class MappingLevel {
 
     renderTopics() {
         // additionally create the topics that wouldn't have a matching topic in the edges.
-        return this.topics.concat(renderMissingTopics(this.allCommandTopics, this.topics))
+        const missingTopics = renderMissingTopics(this.allCommandTopics, this.topics);
+        this.allTopicsRendered = true; // not checking missingTopics for length because theoretically there could be no missing topics.
+        this.topics = this.topics.concat(missingTopics);
+        return this.topics;
     }
 
-
+    renderEdges(){
+        if(this.allTopicsRendered){
+            // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping
+            for(let edge of this.edges) {
+                if(edge.targetHandle === 'commandTopic') {
+                    const commandTopic = edge.target;
+                    const topic = getTopicByCommandTopic(this.topics, commandTopic);
+                    edge.target = topic.id;
+                }
+            }
+            return this.edges;
+        } else {
+            this.renderTopics();
+            this.renderEdges();
+        }
+    }
 }
 
-function removeDuplicates(arr){
-    return [...new Set(arr)]
+function getTopicByCommandTopic(topics, commandTopic) {
+    for(let topic of topics) {
+        if(topic.commandTopic === commandTopic) {
+            return topic;
+        }
+    }
 }
 
 function renderMissingTopics(allCommandTopics, topics) {

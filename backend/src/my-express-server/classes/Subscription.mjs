@@ -1,8 +1,6 @@
 import StaticMapping from './StaticMapping.mjs';
 import ValueJsonMapping from './ValueJsonMapping.mjs';
 import Topic from './Topic.mjs';
-import EdgeIn from './EdgeIn.mjs';
-import EdgeOut from './EdgeOut.mjs';
 import {createEdgeIn, createEdgeOut} from './Edges.mjs';
 
 export default class Subscription {
@@ -52,6 +50,7 @@ export default class Subscription {
         const mappings = this.getAllMappings();
         for(let mapping of mappings) {
             renderedEdges.push(createEdgeIn(this.topic.id, mapping.id));
+            // TODO: gets mapping.commandTopic but topic doesn't get commandTopic as id later.
             renderedEdges.push(createEdgeOut(mapping.id, mapping.commandTopic));
         }
         return renderedEdges;

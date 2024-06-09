@@ -1,3 +1,5 @@
+import { generateRandomString } from "../utils/utils.mjs";
+
 export default class StaticMapping {
     constructor(mapping, reportTopic) {
         this.nodeType = 'static';
@@ -9,7 +11,7 @@ export default class StaticMapping {
         this.position = {x: 100, y: 100};
         this.commandTopic = mapping.mapped_topic;
         this.reportTopic = reportTopic;
-        this.id = 'static_'+this.commandTopic + '_' + this.reportTopic;
+        this.id = 'static_'+generateRandomString(10);
     }
 
     display(){

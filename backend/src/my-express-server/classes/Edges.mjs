@@ -1,5 +1,7 @@
+import { generateRandomString } from "../utils/utils.mjs"
+
 export const createEdgeIn = (topicId, mappingId) => ({
-    id:`reactflow__edge-in$t${topicId}_$m${mappingId}`, 
+    id:`reactflow__edge-in${generateRandomString(10)}`, 
     source: topicId,
     sourceHandle: 'reportTopic',
     target: mappingId,
@@ -7,7 +9,7 @@ export const createEdgeIn = (topicId, mappingId) => ({
 })
 
 export const createEdgeOut = (mappingId, commandTopic) => ({
-    id: `reactflow__edge-out$m${mappingId}_$c${commandTopic}`,
+    id: `reactflow__edge-out${generateRandomString(11)}`,
     source: mappingId,
     sourceHandle: 'mappingOut',
     target: commandTopic,

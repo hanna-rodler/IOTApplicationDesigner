@@ -102,7 +102,9 @@ function getSourceTopic(edge, topics) {
 }
 
 function getTargetTopic(edge, topics) {
+    console.log('edge ', edge)
     const targetTopic = topics[edge.targetTopicId];
+    console.log('get target topic for edge', targetTopic);
     const { id, commandTopic } = targetTopic;
     return {id, commandTopic};
 }
