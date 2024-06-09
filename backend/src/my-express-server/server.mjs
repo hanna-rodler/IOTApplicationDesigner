@@ -34,7 +34,7 @@ app.post('/write-mqtt-file', (req, res) => {
     });
 });
 
-app.post('/write-to-json', exportToJson);
+app.post('/export', exportToJson);
 
 app.post('/import-test', importFromJson);
 
