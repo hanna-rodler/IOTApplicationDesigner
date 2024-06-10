@@ -11,25 +11,35 @@ import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
 import {addNode} from "../redux/reducer/nodeSlice.ts";
 
+const projectId:String = '1';
+
 const initialNodes = [
     // Topic Nodes
     {
         id: 'fridgeNode',
         data: {
             nodeName: 'Fridge',
-            commandTopic: '',
-            reportTopic: ''
+            commandTopic: 'fridge/temperature/set',
+            reportTopic: 'fridge/temperature',
+            subscriptionTopic: 'test',
+            qos: '2',
+            projectId: projectId,
         },
         type: 'topic',
         position: {x: 200, y: 200},
     },
     {
         id: 'switchNode',
-        data: {nodeName: 'Switch 1'},
+        data: {
+            nodeName: 'Switch 1',
+            commandTopic: '',
+            reportTopic: '',
+            subscriptionTopic: '',
+            qos: '',
+            projectId: projectId,
+        },
         type: 'topic',
         position: {x: 250, y: 250},
-        commandTopic: '',
-        reportTopic: ''
     },
     // Mapping Nodes
     {
@@ -105,7 +115,8 @@ export const ProjectPage = () => {
         (changes) => setTabs((prevTabs) => {
             const updatedTabs = [...prevTabs];
             updatedTabs[activeTab].nodes = applyNodeChanges(changes, prevTabs[activeTab].nodes);
-            console.log(store.getState().nodeStore.nodes);
+            console.log("Init Nodes: ")
+            console.log(initialNodes);
             return updatedTabs;
         }),
         [activeTab],
