@@ -36,7 +36,7 @@ export default class Subscription {
             }
         }
 
-        this.topic = new Topic(this.reportTopic, this.qos, this.type);
+        this.topic = new Topic({reportTopic: this.reportTopic, qos: this.qos, type: this.type });
     }
 
     display() {
@@ -70,7 +70,7 @@ export default class Subscription {
     }
 
     getTopicReportTopic() {
-        return this.topic.reportTopic;
+        return this.topic.data.reportTopic;
     }
 
     getTopic(){
