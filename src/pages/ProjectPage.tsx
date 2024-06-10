@@ -22,7 +22,7 @@ const initialNodes = [
             commandTopic: 'fridge/temperature/set',
             reportTopic: 'fridge/temperature',
             subscriptionTopic: 'test',
-            qos: '2',
+            qos: 2,
             projectId: projectId,
         },
         type: 'topic',
@@ -36,7 +36,6 @@ const initialNodes = [
             reportTopic: '',
             subscriptionTopic: '',
             qos: '',
-            projectId: projectId,
         },
         type: 'topic',
         position: {x: 250, y: 250},
@@ -46,16 +45,22 @@ const initialNodes = [
         id: 'staticMapping',
         data: {
             nodeType: 'static',
-            mapping: '',
-            qos: '',
-            retain: ''
+            message: 'on',
+            mapping: 'pressed',
+            qos: 2,
+            retain: true
         },
         type: 'mapping',
         position: {x: 100, y: 100},
     },
     {
         id: 'valueMapping',
-        data: {nodeType: 'value'},
+        data: {
+            nodeType: 'value',
+            mapping: '',
+            qos: 0,
+            retain: false
+        },
         type: 'mapping',
         position: {x: 100, y: 100},
         mapping: '',
@@ -64,7 +69,12 @@ const initialNodes = [
     },
     {
         id: 'jsonMapping',
-        data: {nodeType: 'json'},
+        data: {
+            nodeType: 'json',
+            mapping: '',
+            qos: 0,
+            retain: false
+        },
         type: 'mapping',
         position: {x: 100, y: 100},
         mapping: '',
