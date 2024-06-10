@@ -34,7 +34,7 @@ app.use(async (req,res,next) => {
     }
 });
 
-app.use('api/mappings', mappingsRouter);
+app.use('/api/mappings', mappingsRouter);
 
 app.post('/write-mqtt-file', (req, res) => {
     const formData = req.body;
