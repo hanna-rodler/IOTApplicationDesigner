@@ -7,46 +7,38 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomeScreen } from "./pages/HomeScreen.tsx";
 import { ProjectPage } from "./pages/ProjectPage.tsx";
 import {SetupPage} from "./pages/SetupPage";
-import {getMappings, saveMapping} from "./services/api";
+import {createProject, getProjects} from "./services/api";
 
 function App() {
-  const [mappings, setMappings] = useState<any[]>([]);
+  const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchMappings = async () => {
-      const data = await getMappings();
-      setMappings(data);
+    const fetchProjects = async () => {
+      const projects = await getProjects();
+      setProjects(projects);
     };
 
-    fetchMappings();
+    fetchProjects();
   }, []);
 
-  const handleSaveMapping = async () => {
-    const mappingData = {
-      discover_prefix: '',
-      connection: {
-        keep_alive: 60,
-        client_id: '',
-        clean_session: true,
-        will_topic: '',
-        will_message: '',
-        will_qos: 0,
-        will_retain: false,
-        username: 'asdf',
-        password: '',
-      },
-      mapping: {},
+  const handleCreateProject  = async () => {
+    const newProject = {
+      name: 'New Project'
     };
-    console.log(mappingData);
-    await saveMapping(mappingData);
+    const createdProject = await createProject(newProject);
+    setProjects([...projects, createdProject]);
   };
 
   return (
     <Fragment>
       <div>
         <h1>Mapping Data</h1>
-        <pre>{JSON.stringify(mappings, null, 2)}</pre>
-        <button onClick={handleSaveMapping}>Save Mapping</button>
+        <ul>
+          {projects.map((project) => (
+              <b><li key={project._id}>{project.name}</li></b>
+          ))}
+        </ul>
+        <button onClick={handleCreateProject}>Create Project</button>
       </div>
       <Provider store={store}>
         <BrowserRouter>

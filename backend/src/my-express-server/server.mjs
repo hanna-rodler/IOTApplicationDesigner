@@ -3,9 +3,8 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { connectDB, getDB } from "../database/database.mjs";
 import { getFileName } from './utils/utils.mjs';
-import mappingsRouter from './../routes/dialog.mjs'
+import mappingsRouter from './../routes/routes.mjs'
 import {MongoClient} from "mongodb";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,11 +16,12 @@ const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 
 const uri = 'mongodb+srv://tobi:WWkjfLektNUm3QVM@iot-configuration.qoupblv.mongodb.net/?retryWrites=true&w=majority&appName=IoT-Configuration';
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
+
+// connect to db via middleware
 app.use(async (req,res,next) => {
     try {
         const client = new MongoClient(uri);
@@ -34,7 +34,7 @@ app.use(async (req,res,next) => {
     }
 });
 
-app.use('/api/mappings', mappingsRouter);
+app.use('/api/projects', mappingsRouter);
 
 app.post('/write-mqtt-file', (req, res) => {
     const formData = req.body;

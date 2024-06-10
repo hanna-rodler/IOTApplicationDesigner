@@ -2,53 +2,72 @@ import { Router } from 'express';
 import {ObjectId} from "mongodb";
 
 const router = Router();
-const NOTES_COLLECTION = "mappings";
+const PROJECTS_COLLECTION = "projects";
 
+// Create a new project
 router.post('/', async (req, res) => {
     try {
-        res.json(
-            await req.db.collection(NOTES_COLLECTION).insertOne(req.body)
-        );
-    } catch(error) {
+        const project = {
+            name: req.body.name,
+            topics: [],
+            dialog: [],
+            edges: [],
+            mappings: []
+        };
+        const result = await req.db.collection(PROJECTS_COLLECTION).insertOne(project);
+        res.json(result);
+    } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Failed to create project' });
     }
 });
 
+// Get all projects
 router.get('/', async (req, res) => {
     try {
-        res.json(
-            await req.db.collection(NOTES_COLLECTION).find().toArray()
-        );
-    } catch(error) {
+        const projects = await req.db.collection(PROJECTS_COLLECTION).find().toArray();
+        res.json(projects);
+    } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Failed to get projects' });
     }
 });
 
-router.delete('/:id', async (req,res,next) => {
+// Get a specific project by ID
+router.get('/:id', async (req, res) => {
     try {
-        res.json(
-            await req.db.collection(NOTES_COLLECTION).deleteOne(
-                {_id: new ObjectId(req.params.id)}
-            )
-        );
-    } catch(error) {
+        const project = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+        res.json(project);
+    } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Failed to get project' });
     }
 });
 
-router.put('/:id', async (req,res,next) => {
+// Update a project by ID
+router.put('/:id', async (req, res) => {
     try {
-        res.json(
-            await req.db.collection(NOTES_COLLECTION).updateOne(
-                {_id: new ObjectId(req.params.id)},
-                {$set: {contents: req.body.contents}}
-            )
+        const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: req.body }
         );
-    } catch(error) {
+        res.json(result);
+    } catch (error) {
         console.log(error);
+        res.status(500).json({ error: 'Failed to update project' });
     }
 });
 
+// Delete a project by ID
+router.delete('/:id', async (req, res) => {
+    try {
+        const result = await req.db.collection(PROJECTS_COLLECTION).deleteOne({ _id: new ObjectId(req.params.id) });
+        res.json(result);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to delete project' });
+    }
+});
 
 
 export default router;
@@ -58,7 +77,7 @@ export default router;
 /*
 
 import { Router } from 'express';
-import { Mapping } from '../models/dialog.mjs';
+import { Mapping } from '../models/routes.mjs';
 
 const router = Router();
 
@@ -97,7 +116,7 @@ export default router;
 
 
 import { Router } from 'express';
-import { Mapping } from '../models/dialog.mjs';
+import { Mapping } from '../models/routes.mjs';
 
 const router = Router();
 
