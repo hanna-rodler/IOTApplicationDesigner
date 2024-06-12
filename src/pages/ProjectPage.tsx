@@ -48,10 +48,11 @@ const initialNodes = [
             message: 'on',
             mapping: 'pressed',
             qos: 2,
-            retain: true
+            retain: true,
+            supressions: 'None',
         },
         type: 'mapping',
-        position: {x: 100, y: 100},
+        position: {x: 80, y: 100},
     },
     {
         id: 'valueMapping',
@@ -59,10 +60,11 @@ const initialNodes = [
             nodeType: 'value',
             mapping: '',
             qos: 0,
-            retain: false
+            retain: false,
+            supressions: 'None',
         },
         type: 'mapping',
-        position: {x: 100, y: 100},
+        position: {x: 110, y: 100},
         mapping: '',
         qos: '',
         retain: ''
@@ -73,10 +75,11 @@ const initialNodes = [
             nodeType: 'json',
             mapping: '',
             qos: 0,
-            retain: false
+            retain: false,
+            supressions: '',
         },
         type: 'mapping',
-        position: {x: 100, y: 100},
+        position: {x: 140, y: 100},
         mapping: '',
         qos: '',
         retain: ''
