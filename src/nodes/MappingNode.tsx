@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FiBox} from "react-icons/fi";
 import {FaCode} from "react-icons/fa6";
@@ -11,21 +11,49 @@ const isConnectable = true;
 
 function MappingNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
+    const [mapping, setMapping] = useState(data.mapping);
+    const [message, setMessage] = useState(data.message);
+    const [qos, setQos] = useState(data.qos);
+    const [retain, setRetain] = useState(data.retain);
+    const [isTrueRetain, setTrueRetain] = useState(data.retain);
+
+
+    const onChangeMapping = useCallback((evt) => {
+        setMapping(evt.target.value)
+    }, []);
+    const onChangeMessage = useCallback((evt) => {
+        setMessage(evt.target.value)
+    }, []);
+    const onChangeQos = useCallback((evt) => {
+        setQos(evt.target.value)
+    }, []);
+    const onChangeRetain = useCallback((evt) => {
+        setRetain(evt.target.value)
+        console.log(retain)
+        setTrueRetain(!isTrueRetain)
+        console.log(isTrueRetain)
+    }, []);
+
+    // const changeSelectedRetain = useCallback((evt) => {
+    //     setTrueRetain(!isTrueRetain)
+    // }, []);
 
     const onBlurMapping = useCallback((evt) => {
-        const nodeData = [{id: id, mapping: evt.target.value}]
+        // const nodeData = [{id: id, mapping: evt.target.value}]
+        // Todo: save mapping and message
     }, []);
 
     const onBlurQos = useCallback((evt) => {
-        const nodeData = [{id: id, qos: evt.target.value}]
+        // Todo: save qos
     }, []);
 
     const onBlurRetain = useCallback((evt) => {
-        const nodeData = [{id: id, retain: evt.target.value}]
+        // Todo: save retain
     }, []);
 
     const deleteNode = useCallback(() => {
         deleteElements({nodes: [{id}]});
+        // Todo: delete node
     }, [id, deleteElements]);
 
     return (
@@ -67,12 +95,12 @@ function MappingNode({id, data}: NodeProps) {
                         {data.nodeType === "static" &&
                             <div>
                                 <label htmlFor="Message" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping"
-                                       onBlur={onBlurMapping}
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
+                                       onBlur={onBlurMapping} onChange={onChangeMessage}
                                        placeholder="e.g. pressed / on "/>
                                 <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping"
-                                       onBlur={onBlurMapping}
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={message}
+                                       onBlur={onBlurMapping} onChange={onChangeMapping}
                                        placeholder="e.g. released / off "/>
                             </div>
                         }
@@ -80,8 +108,8 @@ function MappingNode({id, data}: NodeProps) {
                             <div>
                                 <label htmlFor="Mapping" className="font-bold"> Mapping: </label>
                                 <textarea className="nodrag h-16 p-1 w-44 text-xs border rounded-md" id="mapping"
-                                          name="mapping"
-                                          obBlur={onBlurMapping}
+                                          name="mapping" value={mapping}
+                                          onBlur={onBlurMapping} onChange={onChangeMapping}
                                           placeholder="e.g. {% if message <= 8.0 %}on
 {% else % }off{% endif %}"/>
                             </div>
@@ -89,7 +117,8 @@ function MappingNode({id, data}: NodeProps) {
                     </div>
                     <div>
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-44 border rounded-md" id="qos" name="qos" onBlur={onBlurQos}>
+                        <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
+                                onBlur={onBlurQos} onChange={onChangeQos}>
                             <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
@@ -98,11 +127,11 @@ function MappingNode({id, data}: NodeProps) {
                     </div>
                     <div className="mt-2">
                         <label htmlFor="retain" className="font-bold">retain:</label> <br/>
-                        <select className=" p-1 w-44 border rounded-md" id="retain" name="retain"
-                                onBlur={onBlurRetain}>
-                            <option disabled selected value hidden> - select an option -</option>
-                            <option className="text-xl">true</option>
-                            <option className="text-xl">false</option>
+                        <select className=" p-1 w-44 border rounded-md" id="retain" name="retain" value={retain}
+                                onBlur={onBlurRetain} onChange={onChangeRetain}>
+                            <option disabled selected hidden> - select an option -</option>
+                            <option className="text-xl" >true</option>
+                            <option className="text-xl" >false</option>
                         </select>
                     </div>
                 </div>
