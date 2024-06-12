@@ -19,7 +19,7 @@ const initialNodes = [
         id: 'fridgeNode',
         data: {
             nodeName: 'Fridge',
-            commandTopic: 'fridge/temperature/set',
+            commandTopic: ['fridge/temperature/set','test/try'],
             reportTopic: 'fridge/temperature',
             subscriptionTopic: 'test',
             qos: 2,
@@ -32,7 +32,7 @@ const initialNodes = [
         id: 'switchNode',
         data: {
             nodeName: 'Switch 1',
-            commandTopic: '',
+            commandTopic: [''],
             reportTopic: '',
             subscriptionTopic: '',
             qos: '',
