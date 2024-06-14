@@ -1,6 +1,6 @@
-import {useCallback, useState} from 'react';
+import {SyntheticEvent, useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
-import {setCommandTopic} from "../redux/reducer/nodeSlice.ts";
+
 
 const handleIndent = {top: 130};
 const reportIndent = {top: 80};
@@ -16,44 +16,48 @@ function TopicNode({id, data}: NodeProps) {
     const [qos, setQos] = useState(data.qos);
     const [subscritpion, setSubscription] = useState(data.subscriptionTopic);
 
-    const changeNodeName = useCallback((evt) =>{
-        setNodeName(evt.target.value)
-    },[])
-
-    const onChangeReport = useCallback((evt) =>{
-        setReportTopic(evt.target.value)
-    },[])
-
-    const onChangeCommand = useCallback((evt) =>{
-        setCommandTopic(evt.target.value)
-    },[])
-
-    const onChangeSubscription = useCallback((evt) =>{
-        setSubscription(evt.target.value)
-    },[])
-    const onChangeQos = useCallback((evt) =>{
-        setQos(evt.target.value)
-    //     Todo: save qos
-    },[])
-    
-    const onBlurReport = useCallback((evt) => {
-        // const nodeData = {reportTopic: evt.target.value}
-    //     Todo: save reportTopic
-
-    }, []);
-
-    const onBlurCommand = useCallback((evt) => {
-    //     Todo: save commandTopic
-    }, []);
-
-    const onBlurSubscription = useCallback((evt) => {
-         // evt.target.value
-    //     Todo: save subscription
-    }, []);
+    function triggerCustomEvent(eventName, data) {
+        const event = new CustomEvent(eventName, {
+            bubbles: true,
+            cancelable: true,
+            detail: data,
+        });
+        window.dispatchEvent(event);
+    }
 
     const deleteNode = useCallback(() => {
-    //     Todo: delete Node from db
+        //     Todo: delete Node from db
     }, [id, deleteElements]);
+
+    const onChangeReport = (event) => {
+        setReportTopic(event.target.value);
+    };
+    const changeNodeName = (event) => {
+        setNodeName(event.target.value);
+    };
+    const onChangeCommand = (event) => {
+        setCommandTopic(event.target.value);
+    };
+    const onChangeSubscription = (event) => {
+        setSubscription(event.target.value);
+    };
+
+    const onChangeQos = (event) => {
+        setQos(event.target.value);
+    };
+    const onBlurEvent = () => {
+        triggerCustomEvent('customEvent', {
+            id: id,
+            data: {
+                nodeName: nodeName,
+                commandTopic: commandTopic,
+                reportTopic: reportTopic,
+                subscriptionTopic: subscritpion,
+                qos: qos,
+            },
+        })
+
+    }
 
     return (
         <div className="bg-gray-fieldBg rounded-md w-48 text-xs">
@@ -65,28 +69,33 @@ function TopicNode({id, data}: NodeProps) {
                     isValidConnection={(connection) => connection.sourceHandle === 'mappingOut'}
             />
             <div>
-              <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
-                    <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName} onChange={changeNodeName}></input>
+                <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
+                    <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName}
+                           onChange={changeNodeName} onBlur={onBlurEvent}></input>
 
-                
+
                     <div className=" m-2 " onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2 pl-3">
                     <div>
                         <label htmlFor="Report Topic" className="font-bold">Report Topic:</label>
-                        <input className="p-1 w-36 border rounded-md" id="reportTopic" name="reportTopic" value={reportTopic} onChange={onChangeReport} onBlur={onBlurReport} />
+                        <input className="p-1 w-36 border rounded-md" id="reportTopic" name="reportTopic"
+                               value={reportTopic} onChange={onChangeReport} onBlur={onBlurEvent}/>
                     </div>
                     <div className="mt-2 pb-3">
                         <label htmlFor="Command Topic" className="font-bold">Command Topic:</label>
-                        <input className="p-1 w-36 border rounded-md" id="commandTopic" name="commandTopic" value={commandTopic} onChange={onChangeCommand} onBlur={onBlurCommand} />
+                        <input className="p-1 w-36 border rounded-md" id="commandTopic" name="commandTopic"
+                               value={commandTopic} onChange={onChangeCommand} onBlur={onBlurEvent}/>
                     </div>
                     <div className="pb-3">
                         <label htmlFor="SubsciptionType" className="font-bold">Subscription Type:</label>
-                        <input className="p-1 w-36 border rounded-md" id="subscriptionType" name="subscriptionType" value={subscritpion} onChange={onChangeSubscription} onBlur={onBlurSubscription} />
+                        <input className="p-1 w-36 border rounded-md" id="subscriptionType" name="subscriptionType"
+                               value={subscritpion} onChange={onChangeSubscription} onBlur={onBlurEvent}/>
                     </div>
                     <div className="pb-3">
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-40 border rounded-md " id="qos" name="qos" value={qos} onChange={onChangeQos}>
+                        <select className="p-1 w-40 border rounded-md " id="qos" name="qos" value={qos}
+                                onChange={onChangeQos} onBlur={onBlurEvent}>
                             <option disabled selected value hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
