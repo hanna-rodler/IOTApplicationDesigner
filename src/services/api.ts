@@ -20,57 +20,90 @@ export const createProject = async (projectData) => {
  gets all projects
  ********************/
 export const getProjects = async () => {
-    const response = await axios.get(API_URL);
-    return response.data;
+    try {
+        const response = await axios.get(API_URL);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting projects:', error);
+        throw error;
+    }
 };
 
 /*****************************
  gets a specific project by ID
  ****************************/
 export const getProjectById = async (id) => {
-    const response = await axios.get(API_URL + `${id}`);
-    return response.data;
+    try {
+        const response = await axios.get(`${API_URL}${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting project by ID:', error);
+        throw error;
+    }
 };
 
 /*****************************
  updates a project by ID
  ****************************/
 export const updateProject = async (id, projectData) => {
-    const response = await axios.put(API_URL + `${id}`, projectData);
-    return response.data;
+    try {
+        const response = await axios.put(`${API_URL}${id}`, projectData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating project:', error);
+        throw error;
+    }
 };
 
 /*****************************
  delete a project by ID
  ****************************/
 export const deleteProject = async (id) => {
-    const response = await axios.delete(API_URL + `${id}`);
-    return response.data;
+    try {
+        const response = await axios.delete(`${API_URL}${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        throw error;
+    }
 };
 
 /*******************************
  adds an item to a subcollection
  ******************************/
 export const addSubcollectionItem = async (projectId, subcollection, itemData) => {
-    const response = await axios.post(API_URL + `${projectId}/${subcollection}`, itemData);
-    console.log(response.data);
-    return response.data;
+    try {
+        const response = await axios.post(`${API_URL}${projectId}/${subcollection}`, itemData);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error adding subcollection item:', error);
+        throw error;
+    }
 };
 
 /**********************************
  updates an item in a subcollection
  *********************************/
-export const updateSubcollectionItem = async (projectId, subcollection, subId, itemData) => {
-    const response = await axios.put(API_URL + `${projectId}/${subcollection}/${subId}`, itemData);
-    return response.data;
+export const updateSubcollectionItem = async (projectId, subcollection, itemData) => {
+    try {
+        const response = await axios.put(`${API_URL}${projectId}/${subcollection}`, itemData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating subcollection item:', error);
+        throw error;
+    }
 };
 
 /************************************
  deletes an item from a subcollection
  ***********************************/
-export const deleteSubcollectionItem = async (projectId, subcollection, subId) => {
-    const response = await axios.delete(API_URL + `${projectId}/${subcollection}/${subId}`);
-    return response.data;
+export const deleteSubcollectionItem = async (projectId, subcollection) => {
+    try {
+        const response = await axios.delete(`${API_URL}${projectId}/${subcollection}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting subcollection item:', error);
+        throw error;
+    }
 };
-
-

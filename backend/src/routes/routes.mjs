@@ -11,18 +11,20 @@ router.post('/', async (req, res) => {
     try {
         const project = {
             name: req.body.name,
-            topics: [],
-            dialog: [],
-            edges: [],
-            mappings: []
+            topics: {},
+            dialog: {},
+            edges: {},
+            mappings: {}
         };
         const result = await req.db.collection(PROJECTS_COLLECTION).insertOne(project);
-        res.json(result);
+        const insertedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: result.insertedId });
+        res.json(insertedProject);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Failed to create project' });
     }
 });
+
 
 /*********************
  gets all projects
@@ -59,7 +61,13 @@ router.put('/:id', async (req, res) => {
             { _id: new ObjectId(req.params.id) },
             { $set: req.body }
         );
-        res.json(result);
+
+        if (result.modifiedCount > 0) {
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            res.json(updatedProject);
+        } else {
+            res.status(404).json({ error: 'Project not found or not updated' });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Failed to update project' });
@@ -91,15 +99,15 @@ router.post('/:id/:subcollection', async (req, res) => {
             return res.status(400).json({ error: 'Invalid subcollection!' });
         }
 
-        const newItem = { ...req.body, _id: new ObjectId() }; // Generate a new _id for the item
+        const newItem = { ...req.body, _id: new ObjectId() };
 
         const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
             { _id: new ObjectId(req.params.id) },
-            { $push: { [subcollection]: newItem } }
+            { $set: { [subcollection]: newItem } }
         );
 
         if (result.modifiedCount > 0) {
-            res.json(newItem); // return with ID!
+            res.json(newItem);
         } else {
             res.status(404).json({ error: 'Project not found or item not added' });
         }
@@ -108,6 +116,65 @@ router.post('/:id/:subcollection', async (req, res) => {
         res.status(500).json({ error: 'Failed to add item to subcollection' });
     }
 });
+
+/****************************************
+ updates an item in a subcollection
+ **************************************/
+router.put('/:id/:subcollection', async (req, res) => {
+    try {
+        const subcollection = req.params.subcollection;
+        const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
+
+        if (!validSubcollections.includes(subcollection)) {
+            return res.status(400).json({ error: 'Invalid subcollection' });
+        }
+
+        const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: { [subcollection]: req.body } }
+        );
+
+        if (result.modifiedCount > 0) {
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            res.json(updatedProject);
+        } else {
+            res.status(404).json({ error: 'Project not found or item not updated' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to update item in subcollection' });
+    }
+});
+
+/******************************************
+ deletes an item from a subcollection
+ ****************************************/
+router.delete('/:id/:subcollection', async (req, res) => {
+    try {
+        const subcollection = req.params.subcollection;
+        const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
+
+        if (!validSubcollections.includes(subcollection)) {
+            return res.status(400).json({ error: 'Invalid subcollection' });
+        }
+
+        const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $unset: { [subcollection]: "" } }
+        );
+
+        if (result.modifiedCount > 0) {
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            res.json(updatedProject);
+        } else {
+            res.status(404).json({ error: 'Project not found or item not deleted' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to delete item from subcollection' });
+    }
+});
+
 
 
 /****************************************
