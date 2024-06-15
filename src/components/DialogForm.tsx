@@ -1,12 +1,13 @@
 import {useState} from "react";
 import TopBar from "./TopBar";
 import TabNavigation from "./TabNavigation";
-import { writeMqttFile } from "../utils/jsonHandling";
+import { writeMqttFile, convertToValidJson } from "../utils/jsonHandling";
 import { FirstDialogue } from "../types/jsonTypes";
 
 
 const DialogForm = () => {
     const [formData, setFormData] = useState<FirstDialogue>({
+        project_name: '',
         discover_prefix: '',
         keep_alive: 60,
         client_id: '',
@@ -30,8 +31,14 @@ const DialogForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await writeMqttFile(formData, true);
-            console.log(response.message);
+            //const data = convertToValidJson(formData, true);
+            //console.log(data);
+            const projectName = formData.project_name;
+            const { project_name: _, ...dialogFormData } = formData;
+            console.log(projectName);
+            console.log(dialogFormData)
+            //const response = await writeMqttFile(formData, true);
+            //console.log(response.message);
         } catch (error) {
             console.error('Error writing JSON file:', error);
         }
@@ -42,8 +49,18 @@ const DialogForm = () => {
             <TopBar addButton={false}/>
             <div className="flex items-center justify-center min-h-screen bg-gray-100">
                 <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-                    <h2 className="text-2xl font-bold mb-6 text-center">MQTT Settings</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-center">MQTT Settings</h2>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block text-gray-700">Project Name</label>
+                            <input
+                                type="text"
+                                name="project_name"
+                                value={formData.project_name}
+                                onChange={handleChange}
+                                className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-secondary focus:ring-opacity-50"
+                            />
+                        </div>
                         <div>
                             <label className="block text-gray-700">Discover Prefix (optional)</label>
                             <input

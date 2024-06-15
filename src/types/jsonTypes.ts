@@ -1,4 +1,5 @@
 export type FirstDialogue = {
+  project_name: string,
   discover_prefix: string;
   keep_alive: number;
   client_id: string;
