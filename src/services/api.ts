@@ -8,7 +8,6 @@ const API_URL = 'http://localhost:5000/api/projects/';
 export const createProject = async (projectData) => {
     try {
         const response = await axios.post(API_URL, projectData);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error creating new project:', error);
@@ -74,7 +73,6 @@ export const deleteProject = async (id) => {
 export const addSubcollectionItem = async (projectId, subcollection, itemData) => {
     try {
         const response = await axios.post(`${API_URL}${projectId}/${subcollection}`, itemData);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error adding subcollection item:', error);
@@ -107,3 +105,19 @@ export const deleteSubcollectionItem = async (projectId, subcollection) => {
         throw error;
     }
 };
+
+/************************************
+ gets an item from a subcollection
+ ***********************************/
+export const getSubcollectionItem = async (projectId, subcollection) => {
+    try {
+        const response = await axios.get(`${API_URL}${projectId}/${subcollection}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting subcollection item:', error);
+        throw error;
+    }
+};
+
+
+
