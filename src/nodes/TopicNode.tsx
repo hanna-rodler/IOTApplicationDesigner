@@ -46,7 +46,7 @@ function TopicNode({id, data}: NodeProps) {
         setQos(event.target.value);
     };
     const onBlurEvent = () => {
-        triggerCustomEvent('customEvent', {
+        triggerCustomEvent('blurEvent', {
             id: id,
             data: {
                 nodeName: nodeName,

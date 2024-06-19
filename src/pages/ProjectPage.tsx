@@ -125,8 +125,10 @@ export const ProjectPage = () => {
                 try {
                     const topics = await getSubcollectionItem(selectedProject._id, 'topics');
                     const mappings = await getSubcollectionItem(selectedProject._id, 'mappings');
-                    const combinedArray = transformAndCombine(topics, mappings)
-                    setNodes(combinedArray)
+                    const edges = await getSubcollectionItem(selectedProject._id, 'edges');
+
+                    setNodes(transformAndCombine(topics, mappings))
+                    setEdges(transformObject(edges))
                 } catch (error) {
                     console.error('Error fetching nodes:', error);
                 }
@@ -136,14 +138,6 @@ export const ProjectPage = () => {
     }, [selectedProject]);
 
     const transformAndCombine = (topics, mappings) => {
-        const transformObject = (obj) => {
-            return Object.keys(obj)
-                .filter(key => key !== '_id')
-                .map(key => {
-                    const { width, height, ...rest } = obj[key];
-                    return rest;
-                });
-        };
 
         const transformedTopics = transformObject(topics);
         const transformedMappings = transformObject(mappings);
@@ -151,15 +145,20 @@ export const ProjectPage = () => {
         return [...transformedTopics, ...transformedMappings];
     };
 
+    const transformObject = (obj) => {
+        return Object.keys(obj)
+            .filter(key => key !== '_id')
+            .map(key => {
+                const { width, height, ...rest } = obj[key];
+                return rest;
+            });
+    };
+
     const updateNodeCollection = async () => {
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
         }
-
-        console.log("UpdateNodeCollCalled");
-        console.log("Selected Project:", selectedProject);
-
         try {
             const topics = [];
             const mappings = [];
@@ -193,29 +192,19 @@ export const ProjectPage = () => {
         }
     };
 
-    useEffect(() => {
-        const handleCustomEvent = (event) => {
-            setNodes(prevNodes => {
-                return prevNodes.map(node => {
-                    if (node.id === event.detail.id) {
-                        return {
-                            ...node,
-                            data: event.detail.data
-                        };
-                    }
-                    return node;
-                });
-            });
-            updateNodeCollection();
-        };
+    const updateEdgeCollection = async () => {
+        if (!selectedProject) {
+            console.error('No selected project to update');
+            return;
+        }
 
-        window.addEventListener('customEvent', handleCustomEvent);
+        try {
+            await addSubcollectionItem(selectedProject._id, 'edges', edges);
 
-        return () => {
-            window.removeEventListener('customEvent', handleCustomEvent);
-        };
-    }, [selectedProject, nodes, projects]);
-
+        } catch (error) {
+            console.error('Error adding subcollection item:', error);
+        }
+    };
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -239,17 +228,16 @@ export const ProjectPage = () => {
         }
     };
 
+    function saveItems() {
+        updateNodeCollection();
+        updateEdgeCollection();
+    }
+
     return (
         <div className="flex flex-col h-screen w-screen overflow-hidden">
             <TopBar onAddTab={addNewTab} addButton={true}/>
-            {/*<TabNavigation*/}
-            {/*    tabs={tabs}*/}
-            {/*    activeTab={activeTab}*/}
-            {/*    setActiveTab={setActiveTab}*/}
-            {/*    onDeleteTab={deleteTab}*/}
-            {/*    onRenameTab={renameTab}*/}
-            {/*/>*/}
             <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
+                <button onClick={saveItems}>Save to Db</button>
                 <ReactFlow
                     nodes={nodes}
                     onNodesChange={onNodesChange}
