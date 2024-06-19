@@ -1,7 +1,6 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
-import {useDispatch} from "react-redux";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
@@ -93,7 +92,6 @@ const edgeTypes = {
     'edge-input': EdgeInput,
 };
 
-/* TODO: Handle event */
 
 export const ProjectPage = () => {
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
@@ -118,9 +116,6 @@ export const ProjectPage = () => {
         fetchProjects();
     }, []);
 
-    // useEffect(() => {
-    //     console.log("Selected Project:", selectedProject);
-    // }, [selectedProject]);
 
 
     useEffect(() => {
@@ -193,7 +188,6 @@ export const ProjectPage = () => {
                 return p;
             });
             setProjects(updatedProjects);
-            console.log(updatedProjects)
         } catch (error) {
             console.error('Error adding subcollection item:', error);
         }
@@ -201,17 +195,17 @@ export const ProjectPage = () => {
 
     useEffect(() => {
         const handleCustomEvent = (event) => {
-            setNodes(prevNodes => prevNodes.map(node => {
-                if (node.id === event.detail.id) {
-                    return {
-                        ...node,
-                        data: event.detail.data
-                    };
-                }
-                return node;
-            }));
-
-            console.log("Selected Project:", selectedProject);
+            setNodes(prevNodes => {
+                return prevNodes.map(node => {
+                    if (node.id === event.detail.id) {
+                        return {
+                            ...node,
+                            data: event.detail.data
+                        };
+                    }
+                    return node;
+                });
+            });
             updateNodeCollection();
         };
 
