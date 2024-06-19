@@ -1,10 +1,9 @@
 import React from 'react';
 import "../styles/tab-navigation.css";
-import { MdEdit } from "react-icons/md";
 
 const TabNavigation = ({ tabs, activeTab, setActiveTab, onDeleteTab, onRenameTab }) => {
     return (
-        <div className="flex bg-topbar">
+        <div className="tab-navigation-bar">
             {tabs.map((tab, index) => (
                 <button
                     key={index}
@@ -13,7 +12,7 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab, onDeleteTab, onRenameTab
                     onClick={() => setActiveTab(index)}
                 >
                     <div
-                        className="inline mr-3"
+                        className="tab-navigation-button-delete"
                         onClick={(e) => {
                             e.stopPropagation();
                             onDeleteTab(index);
@@ -21,16 +20,16 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab, onDeleteTab, onRenameTab
                     >
                         ✕
                     </div>
-                    {tab.name}
                     <div
-                        className="ml-3 mr-3"
+                        className="tab-navigation-button-edit"
                         onClick={(e) => {
                             e.stopPropagation();
                             onRenameTab(index);
                         }}
                     >
-                        <MdEdit />
+                        ✎
                     </div>
+                    {tab.name}
                 </button>
             ))}
         </div>

@@ -10,6 +10,13 @@ html, body, #root {
   box-sizing: border-box;
 }
 
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
 body {
   @apply text-base;
 }
@@ -24,11 +31,17 @@ h1 {
   @apply rounded-btn bg-primary text-white;
 }
 
+
+.fileBtn {
+  @apply flex rounded-btn border-2 p-4 justify-center cursor-pointer border-secondary self-center;
+}
+
 .secondaryBtn {
-  border: 2px solid var(--primary);
-  padding: 0.5rem 0.7rem;
-  display: flex;
-  @apply rounded-btn bg-secondary text-white;
+  @apply  fileBtn text-white border-solid bg-secondary;
+}
+
+.uploadBtn {
+  @apply fileBtn text-black border-dashed  ;
 }
 
 .secondaryBtn:hover, 
@@ -38,7 +51,7 @@ h1 {
 }
 
 .iconBtn {
-  @apply flex self-center mr-2
+  @apply flex self-center mr-2 text-2xl;
 }
 
 .react-flow__devtools {

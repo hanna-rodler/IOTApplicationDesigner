@@ -1,23 +1,16 @@
 import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
-import { MdOutlineFileUpload } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
-import {useNavigate} from "react-router-dom";
+import UploadBtn from '../components/UploadBtn'; 
+import {NavLink} from "react-router-dom";
 
 export function HomeScreen() {
-  const navigate = useNavigate();
-
-  const handleNewProject = () => {
-    navigate("/setup");
-  }
-
   return (
-    <div className="react-flow-container">
+    <div className="lg:h-screen">
       <TopBar />
-      <div className="tab-navigation-bar h-7"></div>
-      <div className="lg:h-full flex lg:items-center lg:justify-evenly justify-center lg:w-screen lg:flex-row flex-col">
-        <div className="lg:w-5/12 order-2 lg:order-first lg:mt-0 mt-12  mx-10 sm:mx-14 lg:mx-0">
+      <div className="lg:h-screen -mt-topBar flex lg:items-center lg:justify-evenly justify-center lg:w-screen lg:flex-row flex-col">
+        <div className="lg:w-5/12 order-2 lg:order-first lg:mt-0 mt-12  mx-10 lg:mb-0 mb-10 sm:mx-14 lg:mx-0">
           <h1 className="text-center lg:text-left">Create your Home</h1>
           <div className="text-center lg:text-left">
             Lorem ipsum ... ein möglicher Erklärtext zu IoT Configurator. Built
@@ -32,13 +25,11 @@ export function HomeScreen() {
             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
           </div>
           <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
-            <button className="secondaryBtn mr-6">
-              <GoPlus className="iconBtn" onClick={handleNewProject}  />
+            <NavLink to="/setup" className="secondaryBtn sm:mr-6 min-w-14">
+              <GoPlus className="iconBtn" />
               Start new project
-            </button>
-            <button className="secondaryBtn">
-              <MdOutlineFileUpload className="iconBtn" /> Upload Project
-            </button>
+            </NavLink>
+            <UploadBtn />
           </div>
         </div>
         <div className="lg:w-1/3 lg:order-2 order-first w-full">
