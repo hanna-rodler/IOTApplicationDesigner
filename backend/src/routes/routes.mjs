@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
         const project = {
             name: req.body.name,
             topics: {},
-            dialog: {},
+            dialog: req.body.dialog,
             edges: {},
             mappings: {}
         };
