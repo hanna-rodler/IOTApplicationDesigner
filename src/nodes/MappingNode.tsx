@@ -18,38 +18,44 @@ function MappingNode({id, data}: NodeProps) {
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
 
 
-    const onChangeMapping = useCallback((evt) => {
-        setMapping(evt.target.value)
-    }, []);
-    const onChangeMessage = useCallback((evt) => {
-        setMessage(evt.target.value)
-    }, []);
-    const onChangeQos = useCallback((evt) => {
-        setQos(evt.target.value)
-    }, []);
-    const onChangeRetain = useCallback((evt) => {
-        setRetain(evt.target.value)
-        console.log(retain)
+    function triggerCustomEvent(eventName, data) {
+        const event = new CustomEvent(eventName, {
+            bubbles: true,
+            cancelable: true,
+            detail: data,
+        });
+        window.dispatchEvent(event);
+    }
+
+    const onChangeMapping = (event) => {
+        setMapping(event.target.value);
+    };
+    const onChangeMessage = (event) => {
+        setMessage(event.target.value);
+    };
+    const onChangeQos = (event) => {
+        setQos(event.target.value);
+    };
+    const onChangeRetain = (event) => {
+        setRetain(event.target.value);
         setTrueRetain(!isTrueRetain)
-        console.log(isTrueRetain)
-    }, []);
 
-    // const changeSelectedRetain = useCallback((evt) => {
-    //     setTrueRetain(!isTrueRetain)
-    // }, []);
+    };
 
-    const onBlurMapping = useCallback((evt) => {
-        // const nodeData = [{id: id, mapping: evt.target.value}]
-        // Todo: save mapping and message
-    }, []);
 
-    const onBlurQos = useCallback((evt) => {
-        // Todo: save qos
-    }, []);
+    const onBlurEvent = () => {
+        triggerCustomEvent('customEvent', {
+            id: id,
+            data: {
+                nodeType: data.nodeType,
+                message: message,
+                mapping: mapping,
+                qos: qos,
+                retain: retain,
+            },
+        })
 
-    const onBlurRetain = useCallback((evt) => {
-        // Todo: save retain
-    }, []);
+    }
 
     const deleteNode = useCallback(() => {
         deleteElements({nodes: [{id}]});
@@ -96,11 +102,11 @@ function MappingNode({id, data}: NodeProps) {
                             <div>
                                 <label htmlFor="Message" className="font-bold"> Message: </label>
                                 <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
-                                       onBlur={onBlurMapping} onChange={onChangeMessage}
+                                       onBlur={onBlurEvent} onChange={onChangeMessage}
                                        placeholder="e.g. pressed / on "/>
                                 <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
                                 <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={message}
-                                       onBlur={onBlurMapping} onChange={onChangeMapping}
+                                       onBlur={onBlurEvent} onChange={onChangeMapping}
                                        placeholder="e.g. released / off "/>
                             </div>
                         }
@@ -109,7 +115,7 @@ function MappingNode({id, data}: NodeProps) {
                                 <label htmlFor="Mapping" className="font-bold"> Mapping: </label>
                                 <textarea className="nodrag h-16 p-1 w-44 text-xs border rounded-md" id="mapping"
                                           name="mapping" value={mapping}
-                                          onBlur={onBlurMapping} onChange={onChangeMapping}
+                                          onBlur={onBlurEvent} onChange={onChangeMapping}
                                           placeholder="e.g. {% if message <= 8.0 %}on
 {% else % }off{% endif %}"/>
                             </div>
@@ -118,7 +124,7 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
                         <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
-                                onBlur={onBlurQos} onChange={onChangeQos}>
+                                onBlur={onBlurEvent} onChange={onChangeQos}>
                             <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
@@ -128,7 +134,7 @@ function MappingNode({id, data}: NodeProps) {
                     <div className="mt-2">
                         <label htmlFor="retain" className="font-bold">retain:</label> <br/>
                         <select className=" p-1 w-44 border rounded-md" id="retain" name="retain" value={retain}
-                                onBlur={onBlurRetain} onChange={onChangeRetain}>
+                                onBlur={onBlurEvent} onChange={onChangeRetain}>
                             <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl" >true</option>
                             <option className="text-xl" >false</option>

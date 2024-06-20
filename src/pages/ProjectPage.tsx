@@ -1,13 +1,12 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
-import {useDispatch} from "react-redux";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-
-const projectId: String = '1';
+import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
+import {ThreeDot} from "react-loading-indicators";
 
 const initialNodes = [
     // Topic Nodes
@@ -19,7 +18,6 @@ const initialNodes = [
             reportTopic: 'fridge/temperature',
             subscriptionTopic: 'test',
             qos: 2,
-            projectId: projectId,
         },
         type: 'topic',
         position: {x: 200, y: 200},
@@ -95,41 +93,121 @@ const edgeTypes = {
     'edge-input': EdgeInput,
 };
 
-/* TODO: Handle event */
 
 export const ProjectPage = () => {
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
-    // const [activeTab, setActiveTab] = useState(0);
-    const nodesCreated = useRef(false);
-    const dispatch = useDispatch();
-    const [nodes, setNodes] = useState(initialNodes);
+    const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
-
-
-
-    // * Log for Debuging * //
-    useEffect(() => {
-        console.log("Nodes: ")
-        console.log(nodes)
-    }, [nodes]);
-
-
+    const [projects, setProjects] = useState<any[]>([]);
+    const [selectedProject, setSelectedProject] = useState<any | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        window.addEventListener('customEvent', event => {
-            setNodes(prevNodes => prevNodes.map(node => {
-                if (node.id === event.detail.id) {
-                    return {
-                        ...node,
-                        data: event.detail.data
-                    };
+        const fetchProjects = async () => {
+            try {
+                const projects = await getProjects();
+                setProjects(projects);
+                if (projects.length > 0) {
+                    setSelectedProject(projects[0]);
                 }
-                return node;
-            }));
-        });
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+            }
+        };
+        fetchProjects();
     }, []);
 
 
+
+    useEffect(() => {
+        if (selectedProject) {
+            const fetchNodes = async () => {
+                console.log("Fetching nodes for project:", selectedProject);
+                try {
+                    const topics = await getSubcollectionItem(selectedProject._id, 'topics');
+                    const mappings = await getSubcollectionItem(selectedProject._id, 'mappings');
+                    const edges = await getSubcollectionItem(selectedProject._id, 'edges');
+
+                    setNodes(transformAndCombine(topics, mappings))
+                    setEdges(transformObject(edges))
+                    setIsLoading(false);
+
+                } catch (error) {
+                    console.error('Error fetching nodes:', error);
+                }
+            };
+            fetchNodes();
+        }
+    }, [selectedProject]);
+
+    const transformAndCombine = (topics, mappings) => {
+
+        const transformedTopics = transformObject(topics);
+        const transformedMappings = transformObject(mappings);
+
+        return [...transformedTopics, ...transformedMappings];
+    };
+
+    const transformObject = (obj) => {
+        return Object.keys(obj)
+            .filter(key => key !== '_id')
+            .map(key => {
+                const { width, height, ...rest } = obj[key];
+                return rest;
+            });
+    };
+
+    const updateNodeCollection = async () => {
+        if (!selectedProject) {
+            console.error('No selected project to update');
+            return;
+        }
+        try {
+            const topics = [];
+            const mappings = [];
+
+            for (const key in nodes) {
+                if (nodes[key].type === "topic") {
+                    topics.push(nodes[key]);
+                }
+            }
+            for (const key in nodes) {
+                if (nodes[key].type === "mapping") {
+                    mappings.push(nodes[key]);
+                }
+            }
+            const addedTopics = await addSubcollectionItem(selectedProject._id, 'topics', topics);
+            const addedMappings = await addSubcollectionItem(selectedProject._id, 'mappings', mappings);
+
+            const updatedProjects = projects.map(p => {
+                if (p._id === selectedProject._id) {
+                    return {
+                        ...p,
+                        "topics": addedTopics,
+                        "mappings": addedMappings
+                    };
+                }
+                return p;
+            });
+            setProjects(updatedProjects);
+        } catch (error) {
+            console.error('Error adding subcollection item:', error);
+        }
+    };
+
+    const updateEdgeCollection = async () => {
+        if (!selectedProject) {
+            console.error('No selected project to update');
+            return;
+        }
+
+        try {
+            await addSubcollectionItem(selectedProject._id, 'edges', edges);
+
+        } catch (error) {
+            console.error('Error adding subcollection item:', error);
+        }
+    };
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -144,32 +222,6 @@ export const ProjectPage = () => {
         [setEdges]
     );
 
-    // const onNodesChange = useCallback(
-    //     (changes) => setNodes((prevTabs) => {
-    //         const updatedNodes = [...prevTabs];
-    //         updatedNodes = applyNodeChanges(changes, prevTabs[activeTab].nodes);
-    //         console.log("Init Nodes: ")
-    //         console.log(initialNodes);
-    //         return updatedNodes;
-    //     }),
-    //     [activeTab],
-    // );
-    // const onEdgesChange = useCallback(
-    //     (changes) => setTabs((prevTabs) => {
-    //         const updatedTabs = [...prevTabs];
-    //         updatedTabs[activeTab].edges = applyEdgeChanges(changes, prevTabs[activeTab].edges);
-    //         return updatedTabs;
-    //     }),
-    //     [activeTab],
-    // );
-    // const onConnect = useCallback(
-    //     (params) => setTabs((prevTabs) => {
-    //         const updatedTabs = [...prevTabs];
-    //         updatedTabs[activeTab].edges = addEdge(params, prevTabs[activeTab].edges);
-    //         return updatedTabs;
-    //     }),
-    //     [activeTab],
-    // );
 
     const addNewTab = () => {
         const newTabName = prompt("Enter name for the new Cofiguration-Tab:");
@@ -178,42 +230,35 @@ export const ProjectPage = () => {
             setActiveTab(tabs.length);
         }
     };
-    //
-    // const deleteTab = (index: number) => {
-    //     if (tabs.length === 1) {
-    //         alert("You must have at least one Configuration-Tab open.");
-    //         return;
-    //     }
-    //     setTabs((prevTabs) => prevTabs.filter((_, i) => i !== index));
-    //     if (index === activeTab) {
-    //         setActiveTab(index - 1);
-    //     } else if (index < activeTab) {
-    //         setActiveTab((prevActiveTab) => prevActiveTab - 1);
-    //     }
-    // };
-    //
-    // const renameTab = (index: number) => {
-    //     const newTabName = prompt("Enter new name for this Configuration-Tab:");
-    //     if (newTabName) {
-    //         setTabs((prevTabs) => {
-    //             const updatedTabs = [...prevTabs];
-    //             updatedTabs[index].name = newTabName;
-    //             return updatedTabs;
-    //         });
-    //     }
-    // };
+
+    useEffect(() => {
+        const handleDelete = (event) => {
+            setNodes(prevNodes => {
+                return prevNodes.filter(node => node.id !== event.detail.id);
+            });
+        };
+
+        window.addEventListener('deleteNode', handleDelete);
+
+        return () => {
+            window.removeEventListener('deleteNode', handleDelete);
+        };
+    }, [selectedProject, nodes, projects]);
+
+    function saveItems() {
+        updateNodeCollection();
+        updateEdgeCollection();
+    }
 
     return (
         <div className="flex flex-col h-screen w-screen overflow-hidden">
             <TopBar onAddTab={addNewTab} addButton={true}/>
-            {/*<TabNavigation*/}
-            {/*    tabs={tabs}*/}
-            {/*    activeTab={activeTab}*/}
-            {/*    setActiveTab={setActiveTab}*/}
-            {/*    onDeleteTab={deleteTab}*/}
-            {/*    onRenameTab={renameTab}*/}
-            {/*/>*/}
             <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
+                <button className="p-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
+                {isLoading &&
+                    <div className="flex justify-center mt-20">
+                        <ThreeDot  color="#038C8C" size="medium" text="Loading data" textColor="" />
+                    </div>}
                 <ReactFlow
                     nodes={nodes}
                     onNodesChange={onNodesChange}

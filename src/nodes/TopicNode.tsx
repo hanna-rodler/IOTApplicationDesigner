@@ -1,4 +1,4 @@
-import {SyntheticEvent, useCallback, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 
 
@@ -26,7 +26,9 @@ function TopicNode({id, data}: NodeProps) {
     }
 
     const deleteNode = useCallback(() => {
-        //     Todo: delete Node from db
+        triggerCustomEvent('deleteNode', {
+            id: id,
+        })
     }, [id, deleteElements]);
 
     const onChangeReport = (event) => {
@@ -46,7 +48,7 @@ function TopicNode({id, data}: NodeProps) {
         setQos(event.target.value);
     };
     const onBlurEvent = () => {
-        triggerCustomEvent('customEvent', {
+        triggerCustomEvent('blurEvent', {
             id: id,
             data: {
                 nodeName: nodeName,
