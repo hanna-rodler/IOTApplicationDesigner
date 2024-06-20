@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
@@ -6,6 +6,7 @@ import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
 import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
+import {ThreeDot} from "react-loading-indicators";
 
 const initialNodes = [
     // Topic Nodes
@@ -95,11 +96,11 @@ const edgeTypes = {
 
 export const ProjectPage = () => {
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
-    // const [activeTab, setActiveTab] = useState(0);
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -129,6 +130,8 @@ export const ProjectPage = () => {
 
                     setNodes(transformAndCombine(topics, mappings))
                     setEdges(transformObject(edges))
+                    setIsLoading(false);
+
                 } catch (error) {
                     console.error('Error fetching nodes:', error);
                 }
@@ -228,6 +231,20 @@ export const ProjectPage = () => {
         }
     };
 
+    useEffect(() => {
+        const handleDelete = (event) => {
+            setNodes(prevNodes => {
+                return prevNodes.filter(node => node.id !== event.detail.id);
+            });
+        };
+
+        window.addEventListener('deleteNode', handleDelete);
+
+        return () => {
+            window.removeEventListener('deleteNode', handleDelete);
+        };
+    }, [selectedProject, nodes, projects]);
+
     function saveItems() {
         updateNodeCollection();
         updateEdgeCollection();
@@ -237,7 +254,11 @@ export const ProjectPage = () => {
         <div className="flex flex-col h-screen w-screen overflow-hidden">
             <TopBar onAddTab={addNewTab} addButton={true}/>
             <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
-                <button onClick={saveItems}>Save to Db</button>
+                <button className="p-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
+                {isLoading &&
+                    <div className="flex justify-center mt-20">
+                        <ThreeDot  color="#038C8C" size="medium" text="Loading data" textColor="" />
+                    </div>}
                 <ReactFlow
                     nodes={nodes}
                     onNodesChange={onNodesChange}

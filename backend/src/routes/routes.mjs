@@ -179,10 +179,14 @@ router.get('/:id/:subcollection', async (req, res) => {
     const subcollection = req.params.subcollection;
     const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
+    if (!validSubcollections.includes(subcollection)) {
+        return res.status(400).json({error: 'Invalid subcollection!'});
+    }
+
     try {
         const project = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: new ObjectId(req.params.id)});
+
         res.json(project[subcollection]);
-        console.log(project[subcollection])
     } catch (error) {
         console.log(error);
         res.status(500).json({error: 'Failed to get project'});
