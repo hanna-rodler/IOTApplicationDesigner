@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState, useRef} from "react";
-import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes, ReactFlowProvider} from "reactflow";
+import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes, ReactFlowProvider, useReactFlow} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
@@ -95,7 +95,11 @@ const edgeTypes = {
     'edge-input': EdgeInput,
 };
 
-export const ProjectPage = () => {
+// TODO: id needs to be set higher bc of possible duplicates when loading data
+let id = 0;
+const generateId = (type: string) =>{ return type+'_'+id++}
+
+const ProjectPageWithoutReactFlowProvider = () => {
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
@@ -103,7 +107,7 @@ export const ProjectPage = () => {
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
-    const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const { screenToFlowPosition } = useReactFlow();
 
 
     useEffect(() => {
@@ -120,8 +124,6 @@ export const ProjectPage = () => {
         };
         fetchProjects();
     }, []);
-
-
 
     useEffect(() => {
         if (selectedProject) {
@@ -249,6 +251,69 @@ export const ProjectPage = () => {
         };
     }, [selectedProject, nodes, projects]);
 
+    const onDragOver = useCallback((event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+      }, []);
+
+    const onDrop = useCallback(
+    (event) => {
+        event.preventDefault();
+
+        const nodeType = event.dataTransfer.getData("nodeType");
+        const nodeName = event.dataTransfer.getData("nodeName");
+        const type = event.dataTransfer.getData("type");
+
+        if (!type || typeof type === 'undefined') return;
+    
+        const position = screenToFlowPosition({
+            x: event.clientX,
+            y: event.clientY,
+        });
+        
+        const newNode = {
+            id: generateId(nodeType),
+            data: {},
+            type: type,
+            position: position
+        };
+        
+        if(type === 'mapping') {
+            if(nodeType === 'value' || nodeType === 'json') {
+                newNode.data = {
+                    nodeType: nodeType,
+                    mapping: '',
+                    qos: 0,
+                    retain: false
+                }
+            }
+            else if(nodeType === 'static') {
+                newNode.data =  {
+                    nodeType: 'static',
+                    message: '',
+                    mapping: '',
+                    qos: 0,
+                    retain: false
+                }
+            }
+        } else if (type === 'topic') {
+            newNode.data = {
+                nodeName: nodeName,
+                commandTopic: '',
+                reportTopic: '',
+                subscriptionTopic: '',
+                qos: 0
+            }
+        }
+        console.log('new node ', newNode);
+        const newNodes = nodes.concat(newNode);
+        console.log('fake new nodes ', newNodes);
+        // TODO: actually add to new nodes
+        // example, but that doesn't work here anymore https://reactflow.dev/examples/interaction/drag-and-drop
+        },
+        [screenToFlowPosition]
+    );
+
     function saveItems() {
         updateNodeCollection();
         updateEdgeCollection();
@@ -257,7 +322,6 @@ export const ProjectPage = () => {
     return (
         <div className="project-page-container">
             <TopBar onAddTab={addNewTab} addButton={true}/>
-            <ReactFlowProvider>
             <div className="react-flow-container" ref={reactFlowWrapper}>
                 <button className="py-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
                 {isLoading &&
@@ -272,6 +336,8 @@ export const ProjectPage = () => {
                     nodeTypes={nodeTypes}
                     edgeTypes={edgeTypes}
                     onConnect={onConnect}
+                    onDragOver={onDragOver}
+                    onDrop={onDrop}
                     fitView
                     edgesUpdatable={true}
                 >
@@ -279,7 +345,14 @@ export const ProjectPage = () => {
                 </ReactFlow>
             </div>
             <Sidebar />
-            </ReactFlowProvider>
         </div>
     );
+}
+
+export default function ProjectPage() {
+    return (
+        <ReactFlowProvider>
+            <ProjectPageWithoutReactFlowProvider />
+        </ReactFlowProvider>
+    )
 }

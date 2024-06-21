@@ -16,7 +16,7 @@ const Sidebar = () => {
     nodeName: string,
     nodeType: string = ''
   ) => {
-    event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.setData("nodeType", nodeType);
     event.dataTransfer.setData("type", type);
     event.dataTransfer.setData("nodeName", nodeName);
     event.dataTransfer.effectAllowed = "move";
