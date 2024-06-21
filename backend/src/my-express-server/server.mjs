@@ -23,17 +23,40 @@ app.use(cors())
 
 
 // connect to db via middleware
-app.use(async (req,res,next) => {
-    try {
-        const client = new MongoClient(uri);
+let client;
+let db;
+
+async function connectToDatabase() {
+    if (!client) {
+        client = new MongoClient(uri);
         await client.connect();
-        req.db = client.db("test");
+        db = client.db("test");
         console.log("DB Connection Success");
+    }
+    return db;
+}
+
+app.use(async (req, res, next) => {
+    try {
+        req.db = await connectToDatabase();
         next();
-    } catch(error) {
-        console.log("DB Connection Error "+ error);
+    } catch (error) {
+        console.log("DB Connection Error: " + error);
+        res.status(500).send("Database connection error");
     }
 });
+
+// app.use(async (req,res,next) => {
+//     try {
+//         const client = new MongoClient(uri);
+//         await client.connect();
+//         req.db = client.db("test");
+//         console.log("DB Connection Success");
+//         next();
+//     } catch(error) {
+//         console.log("DB Connection Error "+ error);
+//     }
+// });
 
 app.use('/api/projects', mappingsRouter);
 
