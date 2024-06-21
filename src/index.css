@@ -25,6 +25,11 @@ h1 {
   @apply mb-7 font-semibold xl:text-5xl text-4xl;
 }
 
+h5 {
+  @apply text-2xl mb-3 pb-0.5;
+  border-bottom: 2px solid #C0C0C0;
+}
+
 .primaryBtn {
   border: 1px solid var(--primary);
   padding: 0.5rem;
@@ -132,12 +137,6 @@ h1 {
   height: 100%;
 }
 
-.sidebar {
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
-}
-
 .dndflow aside .description {
   margin-bottom: 10px;
 }
@@ -151,6 +150,16 @@ h1 {
   align-items: center;
   cursor: grab;
   color: white;
-  @apply bg-secondary rounded-btn;
+  @apply bg-secondary rounded-btn text-base;
 }
 
+.sidebar {
+  border-left: 1px solid var(--fieldBorder);
+  height: calc(100vh - 4.9rem);
+}
+
+@media screen and (min-width: 768px) {
+  .project-page-container {
+    flex-direction: row;
+  }
+}

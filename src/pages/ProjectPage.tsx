@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useState} from "react";
-import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes} from "reactflow";
+import React, {useCallback, useEffect, useState, useRef} from "react";
+import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes, ReactFlowProvider} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
@@ -7,6 +7,8 @@ import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
 import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
+import Sidebar from "../components/Sidebar";
+import "../styles/project-page.css";
 
 const initialNodes = [
     // Topic Nodes
@@ -93,7 +95,6 @@ const edgeTypes = {
     'edge-input': EdgeInput,
 };
 
-
 export const ProjectPage = () => {
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
     const [nodes, setNodes] = useState([]);
@@ -101,6 +102,9 @@ export const ProjectPage = () => {
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const reactFlowWrapper = useRef<HTMLDivElement>(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -251,10 +255,11 @@ export const ProjectPage = () => {
     }
 
     return (
-        <div className="flex flex-col h-screen w-screen overflow-hidden">
+        <div className="project-page-container">
             <TopBar onAddTab={addNewTab} addButton={true}/>
-            <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
-                <button className="p-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
+            <ReactFlowProvider>
+            <div className="react-flow-container" ref={reactFlowWrapper}>
+                <button className="py-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
                 {isLoading &&
                     <div className="flex justify-center mt-20">
                         <ThreeDot  color="#038C8C" size="medium" text="Loading data" textColor="" />
@@ -273,6 +278,8 @@ export const ProjectPage = () => {
                     <Controls/>
                 </ReactFlow>
             </div>
+            <Sidebar />
+            </ReactFlowProvider>
         </div>
     );
 }
