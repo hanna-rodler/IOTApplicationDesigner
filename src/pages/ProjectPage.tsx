@@ -9,6 +9,7 @@ import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../servic
 import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
 import "../styles/project-page.css";
+import {generateId} from "../utils/utils.ts";
 
 const initialNodes = [
     // Topic Nodes
@@ -94,10 +95,6 @@ const nodeTypes: NodeTypes = {
 const edgeTypes = {
     'edge-input': EdgeInput,
 };
-
-// TODO: id needs to be set higher bc of possible duplicates when loading data
-let id = 0;
-const generateId = (type: string) =>{ return type+'_'+id++}
 
 const ProjectPageWithoutReactFlowProvider = () => {
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
@@ -272,7 +269,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
         });
         
         const newNode = {
-            id: generateId(nodeType),
+            id: generateId(type, nodeType),
             data: {},
             type: type,
             position: position
