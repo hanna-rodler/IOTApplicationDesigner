@@ -3,14 +3,42 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import '../index.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+const API_URL = 'http://localhost:5000/'
 
 const UploadBtn: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         setError(null); 
-        // TODO: Handle the files
-        console.log(acceptedFiles);
+        const file = acceptedFiles[0];
+        
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const fileContent = reader.result;
+            console.log(' file content received');
+            try {
+                const response = await axios.post(API_URL +'import', { fileContent });
+                console.log('Upload response from server:', response.data);
+                const projectId = response.data.id;
+
+                // redirect to project page
+                navigate(`/project/${projectId}`);
+            } catch (error) {
+                console.error('Error sending POST request:', error);
+                setError('Failed to upload file');
+            }
+        };
+        
+        reader.onerror = () => {
+            console.error('Error reading file');
+            setError('Failed to read file');
+        };
+
+        reader.readAsText(file);
     }, []);
 
     const onDropRejected = useCallback(() => {

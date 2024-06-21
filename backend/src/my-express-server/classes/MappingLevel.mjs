@@ -119,29 +119,30 @@ function createMissingTopics(missingCommandTopicNames){
 function getMissingCommandTopicNames(allCommandTopics, topics){
     allCommandTopics = removeDuplicates(allCommandTopics);
 
-    let matchedCommandTopics = [];
-    for(let commandTopic of allCommandTopics){
-        for(let topic of topics){
-            const reportTopic = topic.data.reportTopic;
-            const reportTopicParts = reportTopic.split('/');
-            reportTopicParts.pop();
-            // TODO: besprechen, ob das so ist. ansonsten müsste ich immer einzelne Topics ausspielen.
-            if(reportTopicParts.join('/') === commandTopic) {
-                console.log(commandTopic, ' matched ', reportTopicParts.join('/'));
-                topic.data.commandTopic = commandTopic;
-                matchedCommandTopics.push(commandTopic);
-            }
-        }
-    }
+    // let matchedCommandTopics = [];
+    // for(let commandTopic of allCommandTopics){
+    //     for(let topic of topics){
+    //         const reportTopic = topic.data.reportTopic;
+    //         const reportTopicParts = reportTopic.split('/');
+    //         reportTopicParts.pop();
+    //         // TODO: besprechen, ob das so ist. ansonsten müsste ich immer einzelne Topics ausspielen.
+    //         if(reportTopicParts.join('/') === commandTopic) {
+    //             console.log(commandTopic, ' matched ', reportTopicParts.join('/'));
+    //             topic.data.commandTopic = commandTopic;
+    //             matchedCommandTopics.push(commandTopic);
+    //         }
+    //     }
+    // }
 
-    matchedCommandTopics = removeDuplicates(matchedCommandTopics)
+    // matchedCommandTopics = removeDuplicates(matchedCommandTopics)
     // console.log('\nmatched command Topics ', matchedCommandTopics);
     // edges $t = topicid, $m = mappingId, $c = commandTopic
     
     // look for matching report Topic in this.commandTopics; ?
     
     // look for all the command Topics that weren't added to a topic
-    const missingCommandTopicNames = allCommandTopics.filter(commandTopic => !matchedCommandTopics.includes(commandTopic));
+    // const missingCommandTopicNames = allCommandTopics.filter(commandTopic => !matchedCommandTopics.includes(commandTopic));
     // console.log('missing ', missingCommandTopicNames);
-    return missingCommandTopicNames;
+    // return missingCommandTopicNames;
+    return allCommandTopics;
 }

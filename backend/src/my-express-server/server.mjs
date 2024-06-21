@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { getFileName } from './utils/utils.mjs';
-import {exportToJson, importFromJson} from './jsonHandling.mjs';
+import {exportToJson, importFromJson, importFromJsonBE} from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs'
 import {MongoClient} from "mongodb";
 
@@ -20,7 +20,7 @@ const uri = 'mongodb+srv://tobi:WWkjfLektNUm3QVM@iot-configuration.qoupblv.mongo
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
-
+//app.use(bodyParser.json());
 
 // connect to db via middleware
 let client;
@@ -77,7 +77,12 @@ app.post('/write-mqtt-file', (req, res) => {
 
 app.post('/export', exportToJson);
 
-app.post('/import-test', importFromJson);
+app.post('/import-test', importFromJsonBE);
+app.post('/import', importFromJson);
+
+app.get('/test', (req, res) => {
+    res.status(200).json('test is successful');
+})
 
 
 app.listen(PORT, () => {

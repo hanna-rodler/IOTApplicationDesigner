@@ -1,4 +1,4 @@
-import { generateRandomString } from "../utils/utils.mjs";
+import { generateRandomString, generateRandPosition } from "../utils/utils.mjs";
 
 export default class ValueJsonMapping {
     constructor2(mapping, nodeType, reportTopic) {
@@ -18,7 +18,7 @@ export default class ValueJsonMapping {
         }        
         this.commandTopic = mapping.mapped_topic;
         this.type = 'mapping';
-        this.position = {x: 100, y: 100};
+        this.position = mapping.position !== undefined ? mapping.position : generateRandPosition();
         this.reportTopic = reportTopic;
         this.id = id !== undefined ? id : 'static_'+generateRandomString(10);
     }

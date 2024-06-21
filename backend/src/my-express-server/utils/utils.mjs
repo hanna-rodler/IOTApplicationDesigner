@@ -28,6 +28,30 @@ export function generateRandomString(length) {
     return result;
 }
 
+export function getNodeName(name) {
+    let wordsArr = name.split("/");
+
+    if (wordsArr.length > 2) {
+        // Keep only the last 2 words
+        wordsArr = wordsArr.slice(wordsArr.length -2);
+    }
+
+    // Join the words back into a string
+    return wordsArr.join(" ");
+}
+
+export function generateRandPosition() {
+    const min = -500;
+    const max = 500;
+    return {x: randomIntFromInterval(min, max), y: randomIntFromInterval(min, max)}
+
+}
+
+
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 /**
  * Transforms e.g. [
     {

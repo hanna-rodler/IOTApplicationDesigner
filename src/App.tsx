@@ -161,7 +161,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" Component={HomeScreen} />
-              <Route path="/project" Component={ProjectPage} />
+              <Route path="/project/:projectId" Component={ProjectPage} />
               <Route path="/setup" Component={SetupPage} />
             </Routes>
           </BrowserRouter>

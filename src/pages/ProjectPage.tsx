@@ -5,8 +5,9 @@ import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
+import {addSubcollectionItem, getProjects, getSubcollectionItem, getProjectById} from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
+import { useParams } from 'react-router-dom';
 
 const initialNodes = [
     // Topic Nodes
@@ -95,6 +96,7 @@ const edgeTypes = {
 
 
 export const ProjectPage = () => {
+    const { projectId } = useParams<{ projectId: string }>();
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
@@ -106,10 +108,12 @@ export const ProjectPage = () => {
         const fetchProjects = async () => {
             try {
                 const projects = await getProjects();
-                setProjects(projects);
-                if (projects.length > 0) {
-                    setSelectedProject(projects[0]);
+                if(projects.length > 0) {
+                    setProjects(projects);
                 }
+                const project = await getProjectById(projectId);
+                console.log('project ', project)
+                setSelectedProject(project);
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }

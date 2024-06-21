@@ -6,6 +6,10 @@ import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 import Dialog from './classes/Dialog.mjs';
 import MappingLevel from './classes/MappingLevel.mjs';
+import axios from 'axios';
+import express from 'express';
+
+const router = express.Router();
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,20 +40,57 @@ export const exportToJson = async (req, res) => {
         }
 }
 
-export const importFromJson = async(req, res) => {
+export const importFromJsonBE = async(req, res) => {
     // TODO: implement import JSON.
 
     const fileName = 'mapfile.json';
-    fs.readFile(path.join(FILE_PREFIX, fileName), 'utf8', (err, data) => {
-        if (err) {
-            console.log('error reading file: ' + err);
-            return res.status(500).json({ message: 'Failed to read file', error: err });
-        }
-        const reactFlowData = parseJsonImportFile(data);
-        console.log('Successfully read file ');
+    let reactFlowData = {}
+    try {
+        await fs.readFile(path.join(FILE_PREFIX, fileName), 'utf8', (err, data) => {
+            if (err) {
+                console.log('error reading file: ' + err);
+                return res.status(500).json({ message: 'Failed to read file', error: err });
+            }
+            reactFlowData = parseJsonImportFile(data);
+            console.log('Successfully read file ');
+        });
+        console.log('react flow data ', reactFlowData);
+        const response = await axios.post("http://localhost:5000/api/projects/", reactFlowData);
+        console.log('Response from server: ', response.data);
         res.status(200).json({ message: 'File read successfully', data: reactFlowData });
-    });
+    } catch (error) {
+        console.error("Error sending post request:", error);
+        // TODO: server http error code
+        res.status(500).json({message: 'Failed to save project'});
+    }
 }
+
+export const importFromJson = async (req, res) => {
+    try {
+        const { fileContent } = req.body;
+        const reactFlowData = parseJsonImportFile(fileContent);
+
+        // Example: Send the parsed data to another API
+        const createdProjectResponse = await axios.post("http://localhost:5000/api/projects/", reactFlowData);
+        console.log('createdProjectResponse from server: ', createdProjectResponse.status);
+        const projectId = createdProjectResponse.data._id;
+        console.log('projectId', projectId);
+        const addMappingsRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/mappings", reactFlowData.mappings);
+        console.log('mappings response ', addMappingsRes.status)
+        const addEdgesRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/edges", reactFlowData.edges);
+        console.log('mappings response ', addEdgesRes.status)
+        const addTopicsRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/topics", reactFlowData.topics);
+        console.log('mappings response ', addTopicsRes.status)
+        const addDialogRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/dialog", reactFlowData.dialog);
+        console.log('mappings response ', addDialogRes.status)
+
+        // Respond to the client
+        res.status(200).json({ message: 'File read successfully', id: projectId});
+    } catch (error) {
+        console.error("Error handling the request:", error);
+        res.status(500).json({ message: 'Failed to read file or send data', error });
+    }
+};
 
 function parseJsonImportFile(file) {
     const jsonFile = JSON.parse(file);
@@ -69,6 +110,8 @@ function parseJsonImportFile(file) {
         dialog: dialog,
         edges: edges,
         mappings: mappings,
-        topics: topics
+        topics: topics,
+        isImport: true,
+        name: 'New Project'
     }
 }

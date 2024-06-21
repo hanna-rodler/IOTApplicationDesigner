@@ -1,4 +1,4 @@
-import { generateRandomString } from "../utils/utils.mjs";
+import { generateRandomString, generateRandPosition } from "../utils/utils.mjs";
 
 export default class StaticMapping {
     constructor(mapping, reportTopic, id=undefined) {
@@ -10,7 +10,7 @@ export default class StaticMapping {
             retain: mapping.retain !== undefined ? mapping.retain : ''
         }        
         this.type = 'mapping';
-        this.position = {x: 100, y: 100};
+        this.position = mapping.position !== undefined ? mapping.position : generateRandPosition();
         this.commandTopic = mapping.mapped_topic;
         this.reportTopic = reportTopic;
         this.id = id !== undefined ? id : 'static_'+generateRandomString(10);
