@@ -40,8 +40,8 @@ const initialNodes = [
         id: 'staticMapping',
         data: {
             nodeType: 'static',
-            message: 'on',
-            mapping: 'pressed',
+            message: 'released',
+            mapping: '0',
             qos: 2,
             retain: true
         },
@@ -58,9 +58,6 @@ const initialNodes = [
         },
         type: 'mapping',
         position: {x: 100, y: 100},
-        mapping: '',
-        qos: '',
-        retain: ''
     },
     {
         id: 'jsonMapping',
@@ -72,9 +69,6 @@ const initialNodes = [
         },
         type: 'mapping',
         position: {x: 100, y: 100},
-        mapping: '',
-        qos: '',
-        retain: ''
     }
 
 ];
