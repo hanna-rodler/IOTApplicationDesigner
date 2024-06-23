@@ -64,7 +64,7 @@ export default class Subscription {
         const renderedMappings = [];
         const mappings = this.getAllMappings();
         for(let mapping of mappings) {
-            renderedMappings.push(mapping.getMapping());
+            renderedMappings.push(mapping.getMappingForImport());
         }
         return renderedMappings;
     }

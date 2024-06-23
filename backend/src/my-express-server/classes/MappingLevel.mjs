@@ -3,8 +3,8 @@ import Topic from './Topic.mjs';
 import {removeDuplicates} from '../utils/utils.mjs';
 
 export default class MappingLevel {
-    constructor(plugins, topic_levels) {
-        this.plugins = plugins;
+    constructor(topic_levels, plugins = undefined) {
+        this.plugins = plugins !== undefined ? plugins : [];
         this.topic_levels = topic_levels;
         this.topics = [];
         this.edges = [];
@@ -14,14 +14,16 @@ export default class MappingLevel {
     }
 
     display(){
-        console.log('dis_pref ', this.plugins, '\nconnection: ', this.topic_levels);
+        console.log('dis_pref ', this.plugins, '\nconnection: ', this.topic_levels[0], 'mapping ', this.mappings);
     }
 
     parseTopicLevels(){
+        if(this.topic_levels )
         this.parseTopicLevel(this.topic_levels);
     } 
 
     parseTopicLevel(topic_level, name = ''){
+        console.log('topic_level ', topic_level);
         if(Array.isArray(topic_level)) {
             for(let level of topic_level){
                 if('track_name' in level && name !== '') {

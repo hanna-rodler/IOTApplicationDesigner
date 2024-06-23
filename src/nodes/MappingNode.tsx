@@ -100,13 +100,13 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         {data.nodeType === "static" &&
                             <div>
-                                <label htmlFor="MappingMessage" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={message}
-                                       onBlur={onBlurEvent} onChange={onChangeMapping}
-                                       placeholder="e.g. pressed / released "/>
-                                <label htmlFor="Mapped Message" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
+                                <label htmlFor="message" className="font-bold"> Message: </label>
+                                <input className="nodrag p-1 w-44 border rounded-md" id="message" name="message" value={message}
                                        onBlur={onBlurEvent} onChange={onChangeMessage}
+                                       placeholder="e.g. pressed / released "/>
+                                <label htmlFor="mappedMessage" className="font-bold"> Mapped Message: </label>
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mappedMessage" name="mapping" value={mapping}
+                                       onBlur={onBlurEvent} onChange={onChangeMapping}
                                        placeholder="e.g. on / off "/>
                             </div>
                         }

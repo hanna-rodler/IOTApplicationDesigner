@@ -1,6 +1,6 @@
 export function getDialog(){
     return {
-        "discover_prefix": "iotempower_json_static_value",
+        "discover_prefix": "iotempower_static_value_export",
         "connection": {
             "keep_alive": 60,
             "client_id": "MQTT-Integrator",
@@ -34,111 +34,7 @@ export function getImportDialog() {
 
 export function getImportTopics() {
     return [
-        {
-            "id": "topic_wIxHz4JrNIgX",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "test01/button1",
-            "commandTopic": "",
-            "subscriptionType": "binary_sensor",
-            "qos": 2,
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        },
-        {
-            "id": "topic_Fpxlk1qYQD3w",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "test01/rfid",
-            "commandTopic": "",
-            "subscriptionType": "new rfid reader",
-            "qos": "",
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        },
-        {
-            "id": "topic_27BFBPvpYFVF",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "temperature/celsius/set",
-            "commandTopic": "temperature/celsius",
-            "subscriptionType": "",
-            "qos": 2,
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        },
-        {
-            "id": "topic_Sb1a35Lx23lc",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "temperature/kelvin/set",
-            "commandTopic": "temperature/kelvin",
-            "subscriptionType": "",
-            "qos": 2,
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        },
-        {
-            "id": "topic_yMQHDEKjoZyR",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "",
-            "commandTopic": "test02/strip1/rgb/set",
-            "subscriptionType": "",
-            "qos": "",
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        },
-        {
-            "id": "topic_640AkT4XXu8e",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "",
-            "commandTopic": "strip/strip1/brightness/set",
-            "subscriptionType": "",
-            "qos": "",
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        },
-        {
-            "id": "topic_XzbmCmLcusus",
-            "data": {
-                "nodeName": "nodeName"
-            },
-            "reportTopic": "",
-            "commandTopic": "temperature/farenheit",
-            "subscriptionType": "",
-            "qos": "",
-            "type": "topic",
-            "position": {
-                "x": 100,
-                "y": 150
-            }
-        }
+        {data: 'none'}
     ]
 }
 
@@ -146,12 +42,14 @@ export function getImportMappings(){
     return [
         {
             "id": "static_3pLsRgknaR",
-            "nodeType": "static",
-            "message": "pressed",
-            "mapped_message": "front red",
-            "qos": "",
-            "retain": "",
-            "type": "mapping",
+            data: {
+                nodeType: "static",
+                message: "pressed",
+                mapping: "frnt red",
+                qos: "",
+                retain: "",
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -159,12 +57,14 @@ export function getImportMappings(){
         },
         {
             "id": "static_Qqpbh4coM8",
-            "nodeType": "static",
-            "message": "released",
-            "mapped_message": "0",
-            "qos": "",
-            "retain": "",
-            "type": "mapping",
+            data: {
+                nodeType: "static",
+                message: "released",
+                mapping: "0",
+                qos: "",
+                retain: "",
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -172,11 +72,13 @@ export function getImportMappings(){
         },
         {
             "id": "value_pvujRwFmHjt",
-            "nodeType": "value",
-            "mapping": "front {{ message }}",
-            "qos": "",
-            "retain": "",
-            "type": "mapping",
+            data: {
+                nodeType: "value",
+                mapping: "front {{ message }}",
+                qos:"",
+                retain: "",
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -184,23 +86,27 @@ export function getImportMappings(){
         },
         {
             "id": "value_Hg8ABqCUdNx",
-            "nodeType": "value",
-            "mapping": "{{ round(float(message), 2) }}",
-            "qos": 2,
-            "retain": true,
-            "type": "mapping",
-            "position": {
+            data: {
+                nodeType: "value",
+                mapping: "{{ round(float(message), 2) }}",
+                qos: "",
+                retain: true,
+               "position": {
+            },
+            type: "mapping",
                 "x": 100,
                 "y": 100
             }
         },
         {
             "id": "value_LhotPd6lxMI",
-            "nodeType": "value",
-            "mapping": "{{ round(float(message) + 273.15, 2) }}",
-            "qos": 1,
-            "retain": true,
-            "type": "mapping",
+            data: {
+                nodeType: "value",
+                mapping: "{{ round(float(message) + 273.15, 2) }}",
+                qos: "",
+                retain: true,
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -208,11 +114,13 @@ export function getImportMappings(){
         },
         {
             "id": "value_rGXGFgc7Ab5",
-            "nodeType": "value",
-            "mapping": "{{ round(float(message) * 1.8 + 32, 2) }}",
-            "qos": 2,
-            "retain": true,
-            "type": "mapping",
+            data: {
+                nodeType: "value",
+                mapping: "{{ round(float(message) * 1.8 + 32, 2) }}",
+                qos: "",
+                retain: true,
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -220,11 +128,13 @@ export function getImportMappings(){
         },
         {
             "id": "value_84VgGHEZ4VP",
-            "nodeType": "value",
-            "mapping": "{{ round(float(message) - 273.15, 2) }}",
-            "qos": 2,
-            "retain": true,
-            "type": "mapping",
+            data: {
+                nodeType: "value",
+                mapping: "{{ round(float(message) - 273.15, 2) }}",
+                qos: "",
+                retain: true,
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -232,11 +142,13 @@ export function getImportMappings(){
         },
         {
             "id": "value_dyO6Z6evNJC",
-            "nodeType": "value",
-            "mapping": "{{ round(float(message), 2) }}",
-            "qos": 1,
-            "retain": true,
-            "type": "mapping",
+            data: {
+                nodeType: "value",
+                mapping: "{{ round(float(message), 2) }}",
+                qos: "",
+                retain: true,
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -244,11 +156,13 @@ export function getImportMappings(){
         },
         {
             "id": "value_x4Utr6SFFXk",
-            "nodeType": "value",
-            "mapping": "{{ round((float(message) - 273.15) * 1.8 + 32, 2) }}",
-            "qos": 2,
-            "retain": true,
-            "type": "mapping",
+            data: {
+                "nodeype": "value",
+                mapping: "{{ round((float(message) - 273.15) * 1.8 + 32, 2) }}",
+                qos: "",
+                retain: true,
+                type: "mapping",
+            },
             "position": {
                 "x": 100,
                 "y": 100
@@ -406,42 +320,51 @@ export function getStaticTestTopics() {
     return [
         {
             "id": "button1",
-            "nodeName": "button1",
-            "reportTopic": "test01/button1",
-            "commandTopic": "xyz",
-            "subscriptionType": "binary_sensor",
-            "qos": 2,
-            "type": "binary_sensor",
+            data: {
+                nodeName: "button1",
+                reportTopic: "test01/button1",
+                commandTopic: "xyz",
+                subsciptionType: "binary_sensor",
+                qos: 2,
+                supressions: 'None',
+            },
+            type: "topic",
             "position": {x: 100, y: 100}
         },
         {
             "id": "button2",
-            "nodeName": "button2",
-            "reportTopic": "button2",
-            "commandTopic": "xyz",
-            "subscriptionType": "test01/button2/binary_sensor",
-            "qos": 2,
-            "type": "binary_sensor",
+            data: {
+                nodeName: "button2",
+                reportTopic: "button2",
+                commandTopic: "xyz",
+                subsciptionType: "test01/button2/binary_sensor",
+                qos: 2,
+            },
+            type: "binary_sensor",
             "position": {x: 100, y: 100}
         },
         {
             "id": "setRGB",
-            "nodeName": "strip1",
-            "reportTopic": "xyz",
-            "commandTopic": "strip/strip1/rgb/set",
-            "qos": '',
-            "subscriptionType": '',
-            "type": "topic",
+            data: {
+                nodeName: "strip1",
+                reportTopic: "xyz",
+                commandTopic: "strip/strip1/rgb/set",
+                qos: '',
+                subscriptionType: '',
+            },
+            type: "topic",
             position: {x: 100, y: 100}
         },
         {
             "id": "setBrightnessReleased",
-            "nodeName": "Strip 1",
-            "reportTopic": "xyz",
-            "commandTopic": "strip/strip1/brightness/set",
-            "qos": '',
-            "subscriptionType": '',
-            "type": "topic",
+            data: {
+                nodeName: "Strip 1",
+                reportTopic: "xyz",
+                commandTopic: "strip/strip1/brightness/set",
+                qos: '',
+                subscriptionType: '',
+            },
+            type: "topic",
             position: {x: 100, y: 100}
         }
     ]
@@ -451,22 +374,26 @@ export function getJsonTestTopics(){
     return [
         {
             "id": "jsonMapping",
-            "nodeName": "jsonMapping",
-            "reportTopic": "mapping/json",
-            "commandTopic": "",
-            "subscriptionType": "",
-            "qos": 0,
-            "type": "topic",
+            data: {
+                nodeName: "jsonMapping",
+                reportTopic: "mapping/json",
+                commandTopic: "",
+                subsciptionType: "",
+                qos: 0,
+            },
+            type: "topic",
             "position": {x: 100, y: 100}
         },
         {
             "id": "onboard",
-            "nodeName": "onboard",
-            "reportTopic": "",
-            "commandTopic": "test02/onboard/set",
-            "subscriptionType": "",
-            "qos": 0,
-            "type": "topic",
+            data: {
+                nodeName: "onboard",
+                reportTopic: "",
+                commandTopic: "test02/onboard/set",
+                subsciptionType: "",
+                qos: 0,
+            },
+            type: "topic",
             "position": {x: 100, y: 100}
         },
     ]
@@ -477,62 +404,72 @@ export function getValueTestTopics(){
     return [
         // {
         //     "id": "double",
-        //     "nodeName": "double_name",
-        //     "reportTopic": "double",
-        //     "commandTopic": "",
-        //     "subscriptionType": "",
+        //     nodeName: "double_name",
+        // /    "reportTopic": "double",
+        // /    "commandTopic":"",
+    //     "subscriptionType:"",
         //     "qos": "",
-        //     "type": "",
+        //     type: "",
         //     "position": {x: 100, y: 100}
         // },
         {
             "id": "tempCels",
-            "nodeName": "tempCels",
-            "reportTopic": "temperature/celsius/set",
-            "commandTopic": "temperature/celsius",
-            "subscriptionType": "button1/binary_sensor",
-            "qos": 2,
-            "type": "topic",
+            data: {
+                nodeName: "tempCels",
+                reportTopic: "temperature/celsius/set",
+                commandTopic: "temperature/celsius",
+                subsciptionType: "button1/binary_sensor",
+                qos: 2,
+                type: "topic",
+            },
             "position": {x: 100, y: 100}
         },
         {
             "id": "tempKelvin",
-            "nodeName": "tempKelN",
-            "reportTopic": "temperature/kelvin/set",
-            "commandTopic": "temperature/kelvin",
-            "subscriptionType": "",
-            "qos": 2,
-            "type": "topic",
+            data: {
+                nodeName: "tempKelN",
+                reportTopic: "temperature/kelvin/set",
+                commandTopic: "temperature/kelvin",
+                subsciptionType: "",
+                qos: 2,
+                type: "topic",
+            },
             "position": {x: 100, y: 100}
         },
         {
             "id": "tempFar",
-            "nodeName": "tempFahrenheit",
-            "reportTopic": "temperature/farenheit/set",
-            "commandTopic": "temperature/farenheit",
-            "subscriptionType": "",
-            "qos": 2,
-            "type": "topic",
+            data: {
+                nodeName: "tempFahrenheit",
+                reportTopic: "temperature/farenheit/set",
+                commandTopic: "temperature/farenheit",
+                subsciptionType: "",
+                qos: 2,
+                type: "topic",
+            },
             "position": {x: 100, y: 100}
         },
         {
             "id": "tempOwn",
-            "nodeName": "tempFahrenheit",
-            "reportTopic": "temperature/myOwnTemp",
-            "commandTopic": "temperature/myOwnTemp",
-            "subscriptionType": "",
-            "qos": '',
-            "type": "topic",
+            data: {
+                nodeName: "tempFahrenheit",
+                reportTopic: "temperature/myOwnTemp",
+                commandTopic: "temperature/myOwnTemp",
+                subsciptionType: "",
+                qos: '',
+                type: "topic",
+            },
             "position": {x: 100, y: 100}
         },
         {
             "id": "kelvinOwn",
-            "nodeName": "tempFahrenheit",
-            "reportTopic": "temperature/kelvin",
-            "commandTopic": "",
-            "subscriptionType": "",
-            "qos": '',
-            "type": "topic",
+            data: {
+                nodeName: "tempFahrenheit",
+                reportTopic: "temperature/kelvin",
+                commandTopic: "",
+                subsciptionType: "",
+                qos: '',
+                type: "topic",
+            },
             "position": {x: 100, y: 100}
         },
 
@@ -558,12 +495,14 @@ export function getStaticMappings(){
     return [
         {
             "id": "staticMapping",
-            "nodeType": "static",
-            "message": "released",
-            "mapped_message": "0",
-            "qos": "",
-            "retain": "",
-            "type": "mapping",
+            data: {
+                nodeType: "static",
+                message: "released",
+                mapping: "0",
+                qos: "",
+                retain: "",
+            },
+            type: "mapping",
             "position": {
                 "x": 100,
                 "y": 100
@@ -571,12 +510,14 @@ export function getStaticMappings(){
         },
         {
             "id": "staticMapping2",
-            "nodeType": "static",
-            "message": "released",
-            "mapped_message": "0",
-            "qos": 1,
-            "retain": "",
-            "type": "mapping",
+            data: {
+                nodeType: "static",
+                message: "released",
+                mapping: "0",
+                qos: 1,
+                retain: "",
+            },
+            type: "mapping",
             "position": {
                 "x": 100,
                 "y": 100
@@ -584,13 +525,15 @@ export function getStaticMappings(){
         },
         {
             "id": "RGBMapping",
-            "nodeType": "static",
-            "message": "pressed",
-            "mapped_message": "front red",
-            "qos": "",
-            "retain": "",
-            "type": "mapping",
-            "position": {
+            data: {
+                nodeType: "static",
+                message: "pressed",
+                mapping: "frnt red",
+                qos: "",
+                retain: "",
+            },
+            type: "mapping",
+            position: {
                 "x": 100,
                 "y": 100
             }
@@ -602,13 +545,19 @@ export function getJsonMappings(){
     return [
         {
             id: 'json_onboard',
-            nodeType: 'json',
+            data: {
+                nodeType: 'json',
+                position: {x: 100, y: 100},
+                mapping: '{% if message.state == "on" %}on{% else if message.state == "off" %}off{% endif %}',
+                qos: 0,
+                retain: false
+            },
             type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{% if message.state == "on" %}on{% else if message.state == "off" %}off{% endif %}',
-            qos: 0,
-            retain: false
-        },
+            position: {
+                "x": 100,
+                "y": 100
+            }
+        }
     ]
 }
 
@@ -617,102 +566,124 @@ export function getValueMappings(){
     return [
         {
             id: 'celsius_celsius',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message), 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message), 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'celsius_kelvin',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message) + 273.15, 2) }}',
-            qos: 1,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message) + 273.15, 2) }}',
+                qos: 1,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'celsius_far',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message) * 1.8 + 32, 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message) * 1.8 + 32, 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'kelvin_celsius',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message) - 273.15, 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message) - 273.15, 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'kelvin_kelvin',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message), 2) }}',
-            qos: 1,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message), 2) }}',
+                qos: 1,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'kelvin_far',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round((float(message) - 273.15) * 1.8 + 32, 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round((float(message) - 273.15) * 1.8 + 32, 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'far_celsius',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round((float(message) - 32) / 1.8, 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round((float(message) - 32) / 1.8, 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'far_kelvin',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round((float(message) - 32) / 1.8 + 273.15, 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round((float(message) - 32) / 1.8 + 273.15, 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'far_far',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message), 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message), 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'own_own',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message), 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message), 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
         {
             id: 'kelvin_own',
-            nodeType: 'value',
-            type: 'mapping',
-            position: {x: 100, y: 100},
-            mapping: '{{ round(float(message), 2) }}',
-            qos: 2,
-            retain: true
+            data: {
+                nodeType: 'value',
+                position: {x: 100, y: 100},
+                mapping: '{{ round(float(message), 2) }}',
+                qos: 2,
+                retain: true
+            },
+            type: 'mapping'
         },
     ]
 }
@@ -917,42 +888,42 @@ export function getStaticEdges(){
             "sourceHandle": "reportTopic",
             "target": "staticMapping",
             "targetHandle": "mappingIn",
-            "id": "reactflow__edge-button1reportTopic-staticMappingmappingIn"
+            "id": "reactflow__edge-button1-staticMapping-staticMappingIn"
         },
         {
             "source": "staticMapping",
             "sourceHandle": "mappingOut",
             "target": "setBrightnessReleased",
             "targetHandle": "commandTopic",
-            "id": "reactflow__edge-staticMappingmappingOut-setBrightnessReleasedcommandTopic"
+            "id": "reactflow__edge-staticMapping-setBrightnessReleased-staticMappingOut"
         },
         {
             "source": "button2",
             "sourceHandle": "reportTopic",
             "target": "staticMapping2",
             "targetHandle": "mappingIn",
-            "id": "reactflow__edge-button1reportTopic-staticMappingmappingIn"
+            "id": "reactflow__edge-button2-staticMapping2-staticMappingmappingIn"
         },
         {
             "source": "staticMapping2",
             "sourceHandle": "mappingOut",
             "target": "setBrightnessReleased",
             "targetHandle": "commandTopic",
-            "id": "reactflow__edge-staticMappingmappingOut-setBrightnessReleasedcommandTopic"
+            "id": "reactflow__edge-staticMapping2-setBrightnessReleased-staticMappingOut"
         },
         {
             "source": "RGBMapping",
             "sourceHandle": "mappingOut",
             "target": "setRGB",
             "targetHandle": "commandTopic",
-            "id": "reactflow__edge-staticMappingmappingOut-setBrightnessReleasedcommandTopic"
+            "id": "reactflow__edge-RGBMapping-setRGB-staticMappingOut"
         },
         {
             "source": "button1",
             "sourceHandle": "reportTopic",
             "target": "RGBMapping",
             "targetHandle": "mappingIn",
-            "id": "reactflow__edge-button1reportTopic-staticMappingmappingIn"
+            "id": "reactflow__edge-button1-RGBMapping-staticMappingIn"
         },
     ]
 }

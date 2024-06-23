@@ -5,9 +5,10 @@ import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-import {addSubcollectionItem, getProjects, getSubcollectionItem, getProjectById} from "../services/api.ts";
+import {addSubcollectionItem, getProjects, getSubcollectionItem, getProjectById, getJsonProject } from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 import { useParams } from 'react-router-dom';
+import {downloadJsonFile} from '../utils/download.ts';
 
 const initialNodes = [
     // Topic Nodes
@@ -248,11 +249,19 @@ export const ProjectPage = () => {
         updateEdgeCollection();
     }
 
+    async function exportProject() {
+        console.log('export ', projectId);
+        const exportData = await getJsonProject(projectId);
+        console.log('export content ', exportData);
+        downloadJsonFile(exportData.file, exportData.fileName);
+    }
+
     return (
         <div className="flex flex-col h-screen w-screen overflow-hidden">
             <TopBar onAddTab={addNewTab} addButton={true}/>
             <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
                 <button className="p-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
+                <button className="p-1 bg-primary text-white rounded-md m-2 px-4 " onClick={exportProject}>Export</button>
                 {isLoading &&
                     <div className="flex justify-center mt-20">
                         <ThreeDot  color="#038C8C" size="medium" text="Loading data" textColor="" />

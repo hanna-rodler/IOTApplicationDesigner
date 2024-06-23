@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { getFileName } from './utils/utils.mjs';
-import {exportToJson, importFromJson, importFromJsonBE} from './jsonHandling.mjs';
+import {exportToJson, exportToJsonOrig, importFromJson, importFromJsonBE} from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs'
 import {MongoClient} from "mongodb";
 
@@ -75,13 +75,41 @@ app.post('/write-mqtt-file', (req, res) => {
     });
 });
 
-app.post('/export', exportToJson);
+app.get('/api/export/:id', exportToJson);
+app.post('/export-test', exportToJsonOrig);
 
 app.post('/import-test', importFromJsonBE);
 app.post('/import', importFromJson);
 
-app.get('/test', (req, res) => {
+app.get('/test2', (req, res) => {
     res.status(200).json('test is successful');
+})
+
+app.get('/test/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log('getting export for project with id ', id);
+
+        const myJsonObj = {
+            "discover_prefix": "iotempower_static_value_export",
+            "connection": {
+                "keep_alive": 60,
+                "client_id": "MQTT-Integrator",
+                "clean_session": true,
+                "will_topic": "will/topic",
+                "will_message": "Last Will",
+                "will_qos": 0,
+                "will_retain": false,
+                "username": "Username",
+                "password": "Password"
+            }
+        }
+
+        res.status(200).json(myJsonObj);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'Failed to export project'});
+    }
 })
 
 

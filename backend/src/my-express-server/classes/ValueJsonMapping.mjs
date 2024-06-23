@@ -20,7 +20,7 @@ export default class ValueJsonMapping {
         this.type = 'mapping';
         this.position = mapping.position !== undefined ? mapping.position : generateRandPosition();
         this.reportTopic = reportTopic;
-        this.id = id !== undefined ? id : 'static_'+generateRandomString(10);
+        this.id = id !== undefined ? id : nodeType+'_'+generateRandomString(10);
     }
 
 
@@ -28,7 +28,7 @@ export default class ValueJsonMapping {
         console.log('value json Mapping', this);
     } 
 
-    getMapping() {
+    getMappingForImport() {
         return {
             id: this.id,
             data: {

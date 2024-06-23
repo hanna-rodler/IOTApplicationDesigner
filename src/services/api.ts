@@ -1,5 +1,6 @@
 import axios from "axios";
 
+const API_BASE_URL = "http://localhost:5000/api/";
 const API_URL = "http://localhost:5000/api/projects/";
 
 /*********************
@@ -131,6 +132,17 @@ export const getSubcollectionItem = async (projectId, subcollection) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting subcollection item:", error);
+    throw error;
+  }
+};
+
+export const getJsonProject = async (projectId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}export/${projectId}`);
+    console.log("response project ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error during export ", error);
     throw error;
   }
 };

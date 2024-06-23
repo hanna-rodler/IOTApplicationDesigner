@@ -26,4 +26,17 @@ export default class Topic {
     display() {
         console.log('topic ', this);
     }
+
+    getTopicWithoutPositionAndCommandTopic(){
+        return {
+            id: this.id,
+            data: {
+                nodeName: this.data.nodeName,
+                reportTopic: this.data.reportTopic,
+                subscriptionType: this.data.subscriptionType,
+                qos: this.data.qos
+            },
+            type: this.type
+        }
+    }
 }

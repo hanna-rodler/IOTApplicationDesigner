@@ -191,7 +191,6 @@ router.get('/:id/:subcollection', async (req, res) => {
         console.log(error);
         res.status(500).json({error: 'Failed to get project'});
     }
-
 })
 
 
