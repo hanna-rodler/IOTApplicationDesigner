@@ -4,6 +4,61 @@ import {ObjectId} from "mongodb";
 const router = Router();
 const PROJECTS_COLLECTION = "projects";
 
+/*****************************
+ sets all projects to inactive
+ ****************************/
+router.put('/set-all-inactive', async (req, res) => {
+    try {
+        await req.db.collection(PROJECTS_COLLECTION).updateMany({}, { $set: { active: false } });
+        res.json({ message: 'All projects set to inactive' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to set all projects to inactive' });
+    }
+});
+
+/*********************************
+ sets a specific project to active
+ ********************************/
+router.put('/:id/set-active', async (req, res) => {
+    try {
+        const projectId = new ObjectId(req.params.id);
+
+        // Set all projects to inactive first
+        await req.db.collection(PROJECTS_COLLECTION).updateMany({}, { $set: { active: false } });
+
+        // Set the selected project to active
+        const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
+            { _id: projectId },
+            { $set: { active: true } }
+        );
+
+        if (result.modifiedCount > 0) {
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: projectId });
+            res.json(updatedProject);
+        } else {
+            res.status(404).json({ error: 'Project not found or not updated' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to set project to active' });
+    }
+});
+
+/*********************************
+ gets the currently active project
+ ********************************/
+router.get('/active', async (req, res) => {
+    try {
+        const activeProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ active: true });
+        res.json(activeProject);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Failed to get active project' });
+    }
+});
+
+
 /************************
  creates a new project
  ***********************/
@@ -14,7 +69,8 @@ router.post('/', async (req, res) => {
             topics: {},
             dialog: req.body.dialog,
             edges: {},
-            mappings: {}
+            mappings: {},
+            active: req.body.active
         };
         const result = await req.db.collection(PROJECTS_COLLECTION).insertOne(project);
         const insertedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: result.insertedId});

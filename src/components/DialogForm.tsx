@@ -41,6 +41,7 @@ const DialogForm = () => {
             const dialogData = convertToValidJson(formData, true);
             projectData["name"] = projectName;
             projectData["dialog"] = dialogData;
+            projectData["active"] = true;
 
             const createdProject = await createProject(projectData);
             console.log(createdProject);

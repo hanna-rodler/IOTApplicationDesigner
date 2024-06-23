@@ -119,5 +119,45 @@ export const getSubcollectionItem = async (projectId, subcollection) => {
     }
 };
 
+/*****************************
+ sets all projects to inactive
+ ****************************/
+export const setAllProjectsInactive = async () => {
+    try {
+        const response = await axios.put(`${API_URL}set-all-inactive`);
+        return response.data;
+    } catch (error) {
+        console.error('Error setting all projects to inactive:', error);
+        throw error;
+    }
+};
+
+/*********************************
+ sets a specific project to active
+ ********************************/
+export const setActiveProject = async (id) => {
+    try {
+        const response = await axios.put(`${API_URL}${id}/set-active`);
+        return response.data;
+    } catch (error) {
+        console.error('Error setting project to active:', error);
+        throw error;
+    }
+};
+
+/*********************************
+ gets the currently active project
+ ********************************/
+export const getActiveProject = async () => {
+    try {
+        const response = await axios.get(`${API_URL}active`);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting active project:', error);
+        throw error;
+    }
+};
+
+
 
 

@@ -5,7 +5,7 @@ import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
+import {addSubcollectionItem, getActiveProject, getProjects, getSubcollectionItem} from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 
 const initialNodes = [
@@ -107,9 +107,6 @@ export const ProjectPage = () => {
             try {
                 const projects = await getProjects();
                 setProjects(projects);
-                if (projects.length > 0) {
-                    setSelectedProject(projects[0]);
-                }
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
@@ -117,7 +114,17 @@ export const ProjectPage = () => {
         fetchProjects();
     }, []);
 
-
+    useEffect(() => {
+        const fetchActiveProject = async () => {
+            try {
+                const activeProject = await getActiveProject();
+                setSelectedProject(activeProject);
+            } catch (error) {
+                console.error('Error fetching active project:', error);
+            }
+        };
+        fetchActiveProject();
+    }, []);
 
     useEffect(() => {
         if (selectedProject) {
