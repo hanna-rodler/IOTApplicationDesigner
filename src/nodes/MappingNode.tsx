@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FiBox} from "react-icons/fi";
 import {FaCode} from "react-icons/fa6";
@@ -18,6 +18,11 @@ function MappingNode({id, data}: NodeProps) {
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
 
 
+    const mappingRef = useRef(mapping);
+    const messageRef = useRef(message);
+    const qosRef = useRef(qos);
+    const retainRef = useRef(retain);
+
     function triggerCustomEvent(eventName, data) {
         const event = new CustomEvent(eventName, {
             bubbles: true,
@@ -26,6 +31,24 @@ function MappingNode({id, data}: NodeProps) {
         });
         window.dispatchEvent(event);
     }
+
+    const deleteNode = useCallback(() => {
+        triggerCustomEvent('deleteNode', {
+            id: id,
+        });
+    }, [id, deleteElements]);
+
+    const updateNode = useCallback(() => {
+        triggerCustomEvent('updateNode', {
+            id: id,
+            data: {
+                mapping: mappingRef.current,
+                reportTopic: messageRef.current,
+                qos: qosRef.current,
+                retain: retainRef.current,
+            },
+        });
+    }, [id]);
 
     const onChangeMapping = (event) => {
         setMapping(event.target.value);
@@ -41,26 +64,6 @@ function MappingNode({id, data}: NodeProps) {
         setTrueRetain(!isTrueRetain)
 
     };
-
-
-    const onBlurEvent = () => {
-        triggerCustomEvent('customEvent', {
-            id: id,
-            data: {
-                nodeType: data.nodeType,
-                message: message,
-                mapping: mapping,
-                qos: qos,
-                retain: retain,
-            },
-        })
-
-    }
-
-    const deleteNode = useCallback(() => {
-        deleteElements({nodes: [{id}]});
-        // Todo: delete node
-    }, [id, deleteElements]);
 
     return (
         <div className="w-56 border-t-4 border-primary pb-4 bg-gray-fieldBg rounded-md text-sm">
@@ -100,14 +103,14 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         {data.nodeType === "static" &&
                             <div>
-                                <label htmlFor="message" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="message" name="message" value={message}
-                                       onBlur={onBlurEvent} onChange={onChangeMessage}
-                                       placeholder="e.g. pressed / released "/>
-                                <label htmlFor="mappedMessage" className="font-bold"> Mapped Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mappedMessage" name="mapping" value={mapping}
-                                       onBlur={onBlurEvent} onChange={onChangeMapping}
-                                       placeholder="e.g. on / off "/>
+                                <label htmlFor="Message" className="font-bold"> Message: </label>
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
+                                       onBlur={updateNode} onChange={onChangeMessage}
+                                       placeholder="e.g. pressed / on "/>
+                                <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={message}
+                                       onBlur={updateNode} onChange={onChangeMapping}
+                                       placeholder="e.g. released / off "/>
                             </div>
                         }
                         {data.nodeType !== "static" &&
@@ -115,7 +118,7 @@ function MappingNode({id, data}: NodeProps) {
                                 <label htmlFor="Mapping" className="font-bold"> Mapping: </label>
                                 <textarea className="nodrag h-16 p-1 w-44 text-xs border rounded-md" id="mapping"
                                           name="mapping" value={mapping}
-                                          onBlur={onBlurEvent} onChange={onChangeMapping}
+                                          onBlur={updateNode} onChange={onChangeMapping}
                                           placeholder="e.g. {% if message <= 8.0 %}on
 {% else % }off{% endif %}"/>
                             </div>
@@ -124,7 +127,7 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
                         <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
-                                onBlur={onBlurEvent} onChange={onChangeQos}>
+                                onBlur={updateNode} onChange={onChangeQos}>
                             <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
@@ -134,7 +137,7 @@ function MappingNode({id, data}: NodeProps) {
                     <div className="mt-2">
                         <label htmlFor="retain" className="font-bold">retain:</label> <br/>
                         <select className=" p-1 w-44 border rounded-md" id="retain" name="retain" value={retain}
-                                onBlur={onBlurEvent} onChange={onChangeRetain}>
+                                onBlur={updateNode} onChange={onChangeRetain}>
                             <option disabled selected hidden> - select an option -</option>
                             <option className="text-xl" >true</option>
                             <option className="text-xl" >false</option>
