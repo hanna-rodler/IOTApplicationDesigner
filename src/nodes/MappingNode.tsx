@@ -42,8 +42,9 @@ function MappingNode({id, data}: NodeProps) {
         triggerCustomEvent('updateNode', {
             id: id,
             data: {
+                nodeType: data.nodeType,
                 mapping: mappingRef.current,
-                reportTopic: messageRef.current,
+                message: messageRef.current,
                 qos: qosRef.current,
                 retain: retainRef.current,
             },
@@ -52,17 +53,23 @@ function MappingNode({id, data}: NodeProps) {
 
     const onChangeMapping = (event) => {
         setMapping(event.target.value);
+        mappingRef.current = event.target.value;
+
     };
     const onChangeMessage = (event) => {
         setMessage(event.target.value);
+        messageRef.current = event.target.value;
+
     };
     const onChangeQos = (event) => {
         setQos(event.target.value);
+        qosRef.current = event.target.value;
+
     };
     const onChangeRetain = (event) => {
         setRetain(event.target.value);
-        setTrueRetain(!isTrueRetain)
-
+        retainRef.current = event.target.value;
+        setTrueRetain(!isTrueRetain);
     };
 
     return (
@@ -104,11 +111,11 @@ function MappingNode({id, data}: NodeProps) {
                         {data.nodeType === "static" &&
                             <div>
                                 <label htmlFor="Message" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
+                                <input className="nodrag p-1 w-44 border rounded-md" id="message" name="message" value={message}
                                        onBlur={updateNode} onChange={onChangeMessage}
                                        placeholder="e.g. pressed / on "/>
                                 <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={message}
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
                                        onBlur={updateNode} onChange={onChangeMapping}
                                        placeholder="e.g. released / off "/>
                             </div>

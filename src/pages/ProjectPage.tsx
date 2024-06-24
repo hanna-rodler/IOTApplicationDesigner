@@ -1,16 +1,28 @@
-import React, {useCallback, useEffect, useState, useRef} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 
-import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes, ReactFlowProvider, useReactFlow} from "reactflow";
-import { useParams } from 'react-router-dom';
+import ReactFlow, {
+    addEdge,
+    applyEdgeChanges,
+    applyNodeChanges,
+    Controls,
+    NodeTypes,
+    ReactFlowProvider,
+    useReactFlow
+} from "reactflow";
+import {useParams} from 'react-router-dom';
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-import {addSubcollectionItem, getProjects, getSubcollectionItem, getProjectById, getJsonProject } from "../services/api.ts";
+import {
+    addSubcollectionItem,
+    getJsonProject,
+    getProjectById,
+    getSubcollectionItem
+} from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
-import "../styles/project-page.css";
 import {generateId} from "../utils/utils.ts";
 import {downloadJsonFile} from '../utils/download.ts';
 
@@ -23,16 +35,15 @@ const edgeTypes = {
     'edge-input': EdgeInput,
 };
 
-export const ProjectPage = () => {
-    const ProjectPageWithoutReactFlowProvider = () => {
-    const { projectId } = useParams<{ projectId: string }>();
+const ProjectPageWithoutReactFlowProvider = () => {
+    const {projectId} = useParams<{ projectId: string }>();
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
-    const { screenToFlowPosition } = useReactFlow();
+    const {screenToFlowPosition} = useReactFlow();
 
 
     // Create refs for nodes and edges
@@ -51,10 +62,6 @@ export const ProjectPage = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const projects = await getProjects(); //TODO: get only  current project 
-               // if (projects.length > 1) {
-               //     setSelectedProject(projects[2]);
-               // }
                 const project = await getProjectById(projectId);
                 console.log('project ', project)
                 setSelectedProject(project);
@@ -95,7 +102,7 @@ export const ProjectPage = () => {
         return Object.keys(obj)
             .filter(key => key !== '_id')
             .map(key => {
-                const { width, height, ...rest } = obj[key];
+                const {width, height, ...rest} = obj[key];
                 return rest;
             });
     };
@@ -168,8 +175,8 @@ export const ProjectPage = () => {
     const addNewTab = () => {
         const newTabName = prompt("Enter name for the new Configuration-Tab:");
         if (newTabName) {
-            setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
-            setActiveTab(tabs.length);
+           /* setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
+            setActiveTab(tabs.length);*/
         }
     };
 
@@ -178,6 +185,7 @@ export const ProjectPage = () => {
             setNodes(prevNodes => {
                 return prevNodes.filter(node => node.id !== event.detail.id);
             });
+            saveItems();
         };
 
         window.addEventListener('deleteNode', handleDelete);
@@ -189,8 +197,6 @@ export const ProjectPage = () => {
 
     useEffect(() => {
         const handleUpdate = (event) => {
-            console.log("Nodes: ", nodes);
-            console.log("Event: ", event.detail);
             setNodes(prevNodes => {
                 return prevNodes.map(node => {
                     if (node.id === event.detail.id) {
@@ -212,62 +218,61 @@ export const ProjectPage = () => {
         };
     }, [nodes]);
 
-        const onDragOver = useCallback((event) => {
+    const onDragOver = useCallback((event) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = "move";
-      }, []);
+    }, []);
 
     const onDrop = useCallback(
-    (event) => {
-        event.preventDefault();
+        (event) => {
+            event.preventDefault();
 
-        const nodeType = event.dataTransfer.getData("nodeType");
-        const nodeName = event.dataTransfer.getData("nodeName");
-        const type = event.dataTransfer.getData("type");
+            const nodeType = event.dataTransfer.getData("nodeType");
+            const nodeName = event.dataTransfer.getData("nodeName");
+            const type = event.dataTransfer.getData("type");
 
-        if (!type || typeof type === 'undefined') return;
-    
-        const position = screenToFlowPosition({
-            x: event.clientX,
-            y: event.clientY,
-        });
-        
-        const newNode = {
-            id: generateId(type, nodeType),
-            data: {},
-            type: type,
-            position: position
-        };
-        
-        if(type === 'mapping') {
-            if(nodeType === 'value' || nodeType === 'json') {
+            if (!type || typeof type === 'undefined') return;
+
+            const position = screenToFlowPosition({
+                x: event.clientX,
+                y: event.clientY,
+            });
+
+            const newNode = {
+                id: generateId(type, nodeType),
+                data: {},
+                type: type,
+                position: position
+            };
+
+            if (type === 'mapping') {
+                if (nodeType === 'value' || nodeType === 'json') {
+                    newNode.data = {
+                        nodeType: nodeType,
+                        mapping: '',
+                        qos: 0,
+                        retain: false
+                    }
+                } else if (nodeType === 'static') {
+                    newNode.data = {
+                        nodeType: 'static',
+                        message: '',
+                        mapping: '',
+                        qos: 0,
+                        retain: false
+                    }
+                }
+            } else if (type === 'topic') {
                 newNode.data = {
-                    nodeType: nodeType,
-                    mapping: '',
-                    qos: 0,
-                    retain: false
+                    nodeName: nodeName,
+                    commandTopic: '',
+                    reportTopic: '',
+                    subscriptionTopic: '',
+                    qos: 0
                 }
             }
-            else if(nodeType === 'static') {
-                newNode.data =  {
-                    nodeType: 'static',
-                    message: '',
-                    mapping: '',
-                    qos: 0,
-                    retain: false
-                }
-            }
-        } else if (type === 'topic') {
-            newNode.data = {
-                nodeName: nodeName,
-                commandTopic: '',
-                reportTopic: '',
-                subscriptionTopic: '',
-                qos: 0
-            }
-        }
-        setNodes((nds) => [...nds, newNode]);
-        saveItems();
+            setNodes((nds) => [...nds, newNode]);
+            saveItems();
         },
         [screenToFlowPosition]
     );
@@ -277,6 +282,9 @@ export const ProjectPage = () => {
         updateEdgeCollection();
     }
 
+    useEffect(() => {
+        saveItems()
+    }, [nodes, edges]);
     async function exportProject() {
         console.log('export ', projectId);
         const exportData = await getJsonProject(projectId);
@@ -286,7 +294,8 @@ export const ProjectPage = () => {
 
     return (
         <div className="project-page-container">
-            <TopBar onAddTab={addNewTab} addButtons={true} onSaveProject={saveItems} onExportProject={exportProject}/>
+            <TopBar onAddTab={addNewTab} addButtons={true} onSaveProject={saveItems}
+                    onExportProject={exportProject}/>
             <div className="react-flow-container" ref={reactFlowWrapper}>
                 {isLoading &&
                     <div className="flex justify-center mt-20">
@@ -308,15 +317,16 @@ export const ProjectPage = () => {
                     <Controls/>
                 </ReactFlow>
             </div>
-            <Sidebar />
+            <Sidebar/>
         </div>
     );
 }
 
+
 export default function ProjectPage() {
     return (
         <ReactFlowProvider>
-            <ProjectPageWithoutReactFlowProvider />
+            <ProjectPageWithoutReactFlowProvider/>
         </ReactFlowProvider>
     )
 }
