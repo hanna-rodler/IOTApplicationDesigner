@@ -56,13 +56,10 @@ const initialNodes = [
             nodeType: 'value',
             mapping: '',
             qos: 0,
-            retain: false
+            retain: false,
         },
         type: 'mapping',
         position: {x: 100, y: 100},
-        mapping: '',
-        qos: '',
-        retain: ''
     },
     {
         id: 'jsonMapping',
@@ -70,13 +67,10 @@ const initialNodes = [
             nodeType: 'json',
             mapping: '',
             qos: 0,
-            retain: false
+            retain: false,
         },
         type: 'mapping',
         position: {x: 100, y: 100},
-        mapping: '',
-        qos: '',
-        retain: ''
     }
 
 ];
@@ -302,9 +296,8 @@ const ProjectPageWithoutReactFlowProvider = () => {
                 qos: 0
             }
         }
-        console.log('new node ', newNode);
-        const newNodes = nodes.concat(newNode);
-        console.log('fake new nodes ', newNodes);
+        setNodes((nds) => [...nds, newNode]);
+        saveItems();
         // TODO: actually add to new nodes
         // example, but that doesn't work here anymore https://reactflow.dev/examples/interaction/drag-and-drop
         },
