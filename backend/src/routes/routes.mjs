@@ -12,13 +12,13 @@ router.post('/', async (req, res) => {
         const project = {
             name: req.body.name,
             topics: {},
-            dialog: {},
+            dialog: req.body.dialog,
             edges: {},
             mappings: {}
         };
         const result = await req.db.collection(PROJECTS_COLLECTION).insertOne(project);
         const insertedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: result.insertedId});
-        res.json(insertedProject);
+        res.status(200).json(insertedProject);
     } catch (error) {
         console.log(error);
         res.status(500).json({error: 'Failed to create project'});
@@ -107,7 +107,7 @@ router.post('/:id/:subcollection', async (req, res) => {
         );
 
         if (result.modifiedCount > 0) {
-            res.json(newItem);
+            res.status(200).json(newItem);
         } else {
             res.status(404).json({error: 'Project not found or item not added'});
         }
@@ -191,7 +191,6 @@ router.get('/:id/:subcollection', async (req, res) => {
         console.log(error);
         res.status(500).json({error: 'Failed to get project'});
     }
-
 })
 
 

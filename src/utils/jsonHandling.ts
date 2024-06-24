@@ -25,7 +25,7 @@ export async function writeMqttFile(
   }
 }
 
-function convertToValidJson(
+export function convertToValidJson(
   formData: FirstDialogue,
   isPrefix: boolean
 ): JSONPrefix | undefined {
