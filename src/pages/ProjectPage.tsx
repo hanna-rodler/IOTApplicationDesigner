@@ -1,11 +1,12 @@
 import React, {useCallback, useEffect, useState, useRef} from "react";
 import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes, ReactFlowProvider, useReactFlow} from "reactflow";
+import { useParams } from 'react-router-dom';
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
+import {addSubcollectionItem, getProjects, getSubcollectionItem, getProjectById } from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
 import "../styles/project-page.css";
@@ -91,6 +92,7 @@ const edgeTypes = {
 };
 
 const ProjectPageWithoutReactFlowProvider = () => {
+    const { projectId } = useParams<{ projectId: string }>();
     const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
@@ -104,11 +106,13 @@ const ProjectPageWithoutReactFlowProvider = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const projects = await getProjects();
-                setProjects(projects);
-                if (projects.length > 0) {
-                    setSelectedProject(projects[0]);
+                const projects = await getProjects(); // TODO: brauchen wir das am Ende noch?
+                if(projects.length > 0) {
+                    setProjects(projects);
                 }
+                const project = await getProjectById(projectId);
+                console.log('project ', project)
+                setSelectedProject(project);
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
