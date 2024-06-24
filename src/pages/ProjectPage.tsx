@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState, useRef} from "react";
 import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Controls, NodeTypes} from "reactflow";
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
@@ -7,82 +7,6 @@ import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
 import {addSubcollectionItem, getProjects, getSubcollectionItem} from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
-
-const initialNodes = [
-    // Topic Nodes
-    {
-        id: 'fridgeNode',
-        data: {
-            nodeName: 'Fridge',
-            commandTopic: 'fridge/temperature/set',
-            reportTopic: 'fridge/temperature',
-            subscriptionTopic: 'test',
-            qos: 2,
-        },
-        type: 'topic',
-        position: {x: 200, y: 200},
-    },
-    {
-        id: 'switchNode',
-        data: {
-            nodeName: 'Switch 1',
-            commandTopic: '',
-            reportTopic: '',
-            subscriptionTopic: '',
-            qos: '',
-        },
-        type: 'topic',
-        position: {x: 250, y: 250},
-    },
-    // Mapping Nodes
-    {
-        id: 'staticMapping',
-        data: {
-            nodeType: 'static',
-            message: 'on',
-            mapping: 'pressed',
-            qos: 2,
-            retain: true
-        },
-        type: 'mapping',
-        position: {x: 100, y: 100},
-    },
-    {
-        id: 'valueMapping',
-        data: {
-            nodeType: 'value',
-            mapping: '',
-            qos: 0,
-            retain: false
-        },
-        type: 'mapping',
-        position: {x: 100, y: 100},
-        mapping: '',
-        qos: '',
-        retain: ''
-    },
-    {
-        id: 'jsonMapping',
-        data: {
-            nodeType: 'json',
-            mapping: '',
-            qos: 0,
-            retain: false
-        },
-        type: 'mapping',
-        position: {x: 100, y: 100},
-        mapping: '',
-        qos: '',
-        retain: ''
-    }
-
-];
-
-const initialEdges = [
-    {id: '1-2', source: '1', target: '2', label: 'to the', type: 'step'},
-    {id: 'test', type: 'edge-input', source: '2', target: 'multiple_Node'},
-    {id: 'test2', source: 'node-1', target: 'multiple_Node', targetHandle: "temperatureFridge", sourceHandle: "b"},
-];
 
 const nodeTypes: NodeTypes = {
     mapping: MappingNode,
@@ -93,14 +17,26 @@ const edgeTypes = {
     'edge-input': EdgeInput,
 };
 
-
 export const ProjectPage = () => {
-    const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
+    // const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    // Create refs for nodes and edges
+    const nodesRef = useRef(nodes);
+    const edgesRef = useRef(edges);
+
+    // Update refs whenever state changes
+    useEffect(() => {
+        nodesRef.current = nodes;
+    }, [nodes]);
+
+    useEffect(() => {
+        edgesRef.current = edges;
+    }, [edges]);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -108,8 +44,7 @@ export const ProjectPage = () => {
                 const projects = await getProjects();
                 setProjects(projects);
                 if (projects.length > 1) {
-                    setSelectedProject(projects[2
-                        ]);
+                    setSelectedProject(projects[2]);
                 }
             } catch (error) {
                 console.error('Error fetching projects:', error);
@@ -117,8 +52,6 @@ export const ProjectPage = () => {
         };
         fetchProjects();
     }, []);
-
-
 
     useEffect(() => {
         if (selectedProject) {
@@ -129,10 +62,9 @@ export const ProjectPage = () => {
                     const mappings = await getSubcollectionItem(selectedProject._id, 'mappings');
                     const edges = await getSubcollectionItem(selectedProject._id, 'edges');
 
-                    setNodes(transformAndCombine(topics, mappings))
-                    setEdges(transformObject(edges))
+                    setNodes(transformAndCombine(topics, mappings));
+                    setEdges(transformObject(edges));
                     setIsLoading(false);
-
                 } catch (error) {
                     console.error('Error fetching nodes:', error);
                 }
@@ -142,10 +74,8 @@ export const ProjectPage = () => {
     }, [selectedProject]);
 
     const transformAndCombine = (topics, mappings) => {
-
         const transformedTopics = transformObject(topics);
         const transformedMappings = transformObject(mappings);
-
         return [...transformedTopics, ...transformedMappings];
     };
 
@@ -159,7 +89,7 @@ export const ProjectPage = () => {
     };
 
     const updateNodeCollection = async () => {
-        console.log(nodes)
+        console.log("Update Nodes", nodesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -168,14 +98,14 @@ export const ProjectPage = () => {
             const topics = [];
             const mappings = [];
 
-            for (const key in nodes) {
-                if (nodes[key].type === "topic") {
-                    topics.push(nodes[key]);
+            for (const key in nodesRef.current) {
+                if (nodesRef.current[key].type === "topic") {
+                    topics.push(nodesRef.current[key]);
                 }
             }
-            for (const key in nodes) {
-                if (nodes[key].type === "mapping") {
-                    mappings.push(nodes[key]);
+            for (const key in nodesRef.current) {
+                if (nodesRef.current[key].type === "mapping") {
+                    mappings.push(nodesRef.current[key]);
                 }
             }
             const addedTopics = await addSubcollectionItem(selectedProject._id, 'topics', topics);
@@ -198,14 +128,13 @@ export const ProjectPage = () => {
     };
 
     const updateEdgeCollection = async () => {
+        console.log("Update Edges", edgesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
         }
-
         try {
-            await addSubcollectionItem(selectedProject._id, 'edges', edges);
-
+            await addSubcollectionItem(selectedProject._id, 'edges', edgesRef.current);
         } catch (error) {
             console.error('Error adding subcollection item:', error);
         }
@@ -213,20 +142,19 @@ export const ProjectPage = () => {
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [setNodes]
+        []
     );
     const onEdgesChange = useCallback(
         (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [setEdges]
+        []
     );
     const onConnect = useCallback(
         (connection) => setEdges((eds) => addEdge(connection, eds)),
-        [setEdges]
+        []
     );
 
-
     const addNewTab = () => {
-        const newTabName = prompt("Enter name for the new Cofiguration-Tab:");
+        const newTabName = prompt("Enter name for the new Configuration-Tab:");
         if (newTabName) {
             setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
             setActiveTab(tabs.length);
@@ -249,8 +177,8 @@ export const ProjectPage = () => {
 
     useEffect(() => {
         const handleUpdate = (event) => {
-            console.log("Nodes: ",nodes)
-            console.log("Event: ", event.detail)
+            console.log("Nodes: ", nodes);
+            console.log("Event: ", event.detail);
             setNodes(prevNodes => {
                 return prevNodes.map(node => {
                     if (node.id === event.detail.id) {
@@ -262,7 +190,6 @@ export const ProjectPage = () => {
                     return node;
                 });
             });
-            console.log("Nodes after insert: ",nodes)
             saveItems();
         };
 
@@ -271,7 +198,7 @@ export const ProjectPage = () => {
         return () => {
             window.removeEventListener('updateNode', handleUpdate);
         };
-    }, [selectedProject, nodes, projects]);
+    }, [nodes]);
 
     function saveItems() {
         updateNodeCollection();
@@ -282,10 +209,10 @@ export const ProjectPage = () => {
         <div className="flex flex-col h-screen w-screen overflow-hidden">
             <TopBar onAddTab={addNewTab} addButton={true}/>
             <div className="flex-grow h-[calc(100vh-120px)] w-full relative">
-                <button className="p-1 bg-primary text-white rounded-md m-2 px-4 " onClick={saveItems}>Save to Db</button>
+                <button className="p-1 bg-primary text-white rounded-md m-2 px-4" onClick={saveItems}>Save to Db</button>
                 {isLoading &&
                     <div className="flex justify-center mt-20">
-                        <ThreeDot  color="#038C8C" size="medium" text="Loading data" textColor="" />
+                        <ThreeDot color="#038C8C" size="medium" text="Loading data" textColor=""/>
                     </div>}
                 <ReactFlow
                     nodes={nodes}

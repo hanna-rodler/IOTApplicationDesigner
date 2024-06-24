@@ -1,10 +1,8 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useState, useRef} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
-
 
 const handleIndent = {top: 130};
 const reportIndent = {top: 80};
-
 
 const isConnectable = true;
 
@@ -15,6 +13,12 @@ function TopicNode({id, data}: NodeProps) {
     const [commandTopic, setCommandTopic] = useState(data.commandTopic);
     const [qos, setQos] = useState(data.qos);
     const [subscritpion, setSubscription] = useState(data.subscriptionTopic);
+
+    const nodeNameRef = useRef(nodeName);
+    const reportTopicRef = useRef(reportTopic);
+    const commandTopicRef = useRef(commandTopic);
+    const qosRef = useRef(qos);
+    const subscriptionRef = useRef(subscritpion);
 
     function triggerCustomEvent(eventName, data) {
         const event = new CustomEvent(eventName, {
@@ -28,52 +32,48 @@ function TopicNode({id, data}: NodeProps) {
     const deleteNode = useCallback(() => {
         triggerCustomEvent('deleteNode', {
             id: id,
-        })
+        });
     }, [id, deleteElements]);
 
     const updateNode = useCallback(() => {
         triggerCustomEvent('updateNode', {
             id: id,
             data: {
-                nodeName: nodeName,
-                commandTopic: commandTopic,
-                reportTopic: reportTopic,
-                subscriptionTopic: subscritpion,
-                qos: qos,
+                nodeName: nodeNameRef.current,
+                commandTopic: commandTopicRef.current,
+                reportTopic: reportTopicRef.current,
+                subscriptionTopic: subscriptionRef.current,
+                qos: qosRef.current,
             },
-        })
-    }, [nodeName, commandTopic, reportTopic, subscritpion, qos]);
-
+        });
+    }, [id]);
 
     const onChangeReport = (event) => {
-        setReportTopic(event.target.value);
+        const value = event.target.value;
+        setReportTopic(value);
+        reportTopicRef.current = value;
     };
     const changeNodeName = (event) => {
-        setNodeName(event.target.value);
+        const value = event.target.value;
+        setNodeName(value);
+        nodeNameRef.current = value;
     };
     const onChangeCommand = (event) => {
-        setCommandTopic(event.target.value);
+        const value = event.target.value;
+        setCommandTopic(value);
+        commandTopicRef.current = value;
     };
     const onChangeSubscription = (event) => {
-        setSubscription(event.target.value);
+        const value = event.target.value;
+        setSubscription(value);
+        subscriptionRef.current = value;
     };
 
     const onChangeQos = (event) => {
-        setQos(event.target.value);
+        const value = event.target.value;
+        setQos(value);
+        qosRef.current = value;
     };
-    // const onBlurEvent = () => {
-    //     triggerCustomEvent('blurEvent', {
-    //         id: id,
-    //         data: {
-    //             nodeName: nodeName,
-    //             commandTopic: commandTopic,
-    //             reportTopic: reportTopic,
-    //             subscriptionTopic: subscritpion,
-    //             qos: qos,
-    //         },
-    //     })
-    //
-    // }
 
     return (
         <div className="bg-gray-fieldBg rounded-md w-48 text-xs">
@@ -88,9 +88,7 @@ function TopicNode({id, data}: NodeProps) {
                 <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
                     <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName}
                            onChange={changeNodeName} onBlur={updateNode}></input>
-
-
-                    <div className=" m-2 " onClick={deleteNode}>X</div>
+                    <div className="m-2" onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2 pl-3">
                     <div>
@@ -110,7 +108,7 @@ function TopicNode({id, data}: NodeProps) {
                     </div>
                     <div className="pb-3">
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-40 border rounded-md " id="qos" name="qos" value={qos}
+                        <select className="p-1 w-40 border rounded-md" id="qos" name="qos" value={qos}
                                 onChange={onChangeQos} onBlur={updateNode}>
                             <option disabled selected value hidden> - select an option -</option>
                             <option className="text-xl">0</option>
@@ -126,11 +124,13 @@ function TopicNode({id, data}: NodeProps) {
                 id="reportTopic"
                 style={reportIndent}
                 isConnectable={isConnectable}
-                className="bg-accent  right-3 p-1"
+                className="bg-accent right-3 p-1"
                 isValidConnection={(connection) => connection.targetHandle === 'mappingIn'}
             />
         </div>
     );
 }
+
+
 
 export default TopicNode;
