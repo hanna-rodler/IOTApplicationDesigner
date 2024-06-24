@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage sidebar visibility
+  const [isOpen, setIsOpen] = useState(true); // State to manage sidebar visibility
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
