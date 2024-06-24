@@ -107,8 +107,9 @@ export const ProjectPage = () => {
             try {
                 const projects = await getProjects();
                 setProjects(projects);
-                if (projects.length > 0) {
-                    setSelectedProject(projects[0]);
+                if (projects.length > 1) {
+                    setSelectedProject(projects[2
+                        ]);
                 }
             } catch (error) {
                 console.error('Error fetching projects:', error);
@@ -158,6 +159,7 @@ export const ProjectPage = () => {
     };
 
     const updateNodeCollection = async () => {
+        console.log(nodes)
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -242,6 +244,32 @@ export const ProjectPage = () => {
 
         return () => {
             window.removeEventListener('deleteNode', handleDelete);
+        };
+    }, [selectedProject, nodes, projects]);
+
+    useEffect(() => {
+        const handleUpdate = (event) => {
+            console.log("Nodes: ",nodes)
+            console.log("Event: ", event.detail)
+            setNodes(prevNodes => {
+                return prevNodes.map(node => {
+                    if (node.id === event.detail.id) {
+                        return {
+                            ...node,
+                            ...event.detail
+                        };
+                    }
+                    return node;
+                });
+            });
+            console.log("Nodes after insert: ",nodes)
+            saveItems();
+        };
+
+        window.addEventListener('updateNode', handleUpdate);
+
+        return () => {
+            window.removeEventListener('updateNode', handleUpdate);
         };
     }, [selectedProject, nodes, projects]);
 

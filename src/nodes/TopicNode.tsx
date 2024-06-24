@@ -31,6 +31,20 @@ function TopicNode({id, data}: NodeProps) {
         })
     }, [id, deleteElements]);
 
+    const updateNode = useCallback(() => {
+        triggerCustomEvent('updateNode', {
+            id: id,
+            data: {
+                nodeName: nodeName,
+                commandTopic: commandTopic,
+                reportTopic: reportTopic,
+                subscriptionTopic: subscritpion,
+                qos: qos,
+            },
+        })
+    }, [nodeName, commandTopic, reportTopic, subscritpion, qos]);
+
+
     const onChangeReport = (event) => {
         setReportTopic(event.target.value);
     };
@@ -47,19 +61,19 @@ function TopicNode({id, data}: NodeProps) {
     const onChangeQos = (event) => {
         setQos(event.target.value);
     };
-    const onBlurEvent = () => {
-        triggerCustomEvent('blurEvent', {
-            id: id,
-            data: {
-                nodeName: nodeName,
-                commandTopic: commandTopic,
-                reportTopic: reportTopic,
-                subscriptionTopic: subscritpion,
-                qos: qos,
-            },
-        })
-
-    }
+    // const onBlurEvent = () => {
+    //     triggerCustomEvent('blurEvent', {
+    //         id: id,
+    //         data: {
+    //             nodeName: nodeName,
+    //             commandTopic: commandTopic,
+    //             reportTopic: reportTopic,
+    //             subscriptionTopic: subscritpion,
+    //             qos: qos,
+    //         },
+    //     })
+    //
+    // }
 
     return (
         <div className="bg-gray-fieldBg rounded-md w-48 text-xs">
@@ -73,7 +87,7 @@ function TopicNode({id, data}: NodeProps) {
             <div>
                 <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
                     <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName}
-                           onChange={changeNodeName} onBlur={onBlurEvent}></input>
+                           onChange={changeNodeName} onBlur={updateNode}></input>
 
 
                     <div className=" m-2 " onClick={deleteNode}>X</div>
@@ -82,22 +96,22 @@ function TopicNode({id, data}: NodeProps) {
                     <div>
                         <label htmlFor="Report Topic" className="font-bold">Report Topic:</label>
                         <input className="p-1 w-36 border rounded-md" id="reportTopic" name="reportTopic"
-                               value={reportTopic} onChange={onChangeReport} onBlur={onBlurEvent}/>
+                               value={reportTopic} onChange={onChangeReport} onBlur={updateNode}/>
                     </div>
                     <div className="mt-2 pb-3">
                         <label htmlFor="Command Topic" className="font-bold">Command Topic:</label>
                         <input className="p-1 w-36 border rounded-md" id="commandTopic" name="commandTopic"
-                               value={commandTopic} onChange={onChangeCommand} onBlur={onBlurEvent}/>
+                               value={commandTopic} onChange={onChangeCommand} onBlur={updateNode}/>
                     </div>
                     <div className="pb-3">
                         <label htmlFor="SubsciptionType" className="font-bold">Subscription Type:</label>
                         <input className="p-1 w-36 border rounded-md" id="subscriptionType" name="subscriptionType"
-                               value={subscritpion} onChange={onChangeSubscription} onBlur={onBlurEvent}/>
+                               value={subscritpion} onChange={onChangeSubscription} onBlur={updateNode}/>
                     </div>
                     <div className="pb-3">
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
                         <select className="p-1 w-40 border rounded-md " id="qos" name="qos" value={qos}
-                                onChange={onChangeQos} onBlur={onBlurEvent}>
+                                onChange={onChangeQos} onBlur={updateNode}>
                             <option disabled selected value hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
