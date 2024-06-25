@@ -10,13 +10,13 @@ function TopicNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
     const [nodeName, setNodeName] = useState(data.nodeName);
     const [reportTopic, setReportTopic] = useState(data.reportTopic);
-    const [commandTopics, setCommandTopics] = useState(data.commandTopic);
+    const [commandTopics, setCommandTopics] = useState([data.commandTopic]);
     const [qos, setQos] = useState(data.qos);
     const [subscritpion, setSubscription] = useState(data.subscriptionTopic);
   
     const nodeNameRef = useRef(nodeName);
     const reportTopicRef = useRef(reportTopic);
-    const commandTopicRef = useRef(commandTopic);
+    const commandTopicRef = useRef(commandTopics);
     const qosRef = useRef(qos);
     const subscriptionRef = useRef(subscritpion);
 
@@ -60,11 +60,7 @@ function TopicNode({id, data}: NodeProps) {
         setNodeName(value);
         nodeNameRef.current = value;
     };
-    const onChangeCommand = (event) => {
-        const value = event.target.value;
-        setCommandTopic(value);
-        commandTopicRef.current = value;
-    };
+
     const onChangeSubscription = (event) => {
         const value = event.target.value;
         setSubscription(value);
@@ -89,6 +85,7 @@ function TopicNode({id, data}: NodeProps) {
             updatedCommandTopics[index] = newCommandTopic;
             return updatedCommandTopics;
         });
+        commandTopicRef.current = commandTopics;
     };
 
     function handleCommandTopicRemove(index) {
@@ -97,6 +94,13 @@ function TopicNode({id, data}: NodeProps) {
             updatedCommandTopics.splice(index, 1)
             return updatedCommandTopics;
         });
+
+        const updatedCommandTopics = [...commandTopics];
+        updatedCommandTopics.splice(index, 1)
+        commandTopicRef.current =  updatedCommandTopics;
+        console.log("HandleRemove Ref: ", commandTopicRef.current)
+
+        updateNode();
     };
 
 
@@ -118,18 +122,57 @@ function TopicNode({id, data}: NodeProps) {
                         <label htmlFor="Command Topic" className="font-bold">Command Topic: <button
                             onClick={addCommandTopic}><FaPlus/></button></label>
                         {commandTopics.map((topic, index) => (
-                            <div>
-                                <Handle className="bg-accent p-1 left-1"
-                                        type="target"
-                                        position={Position.Left}
-                                        style={{top: 130 + (26 * index)}}
-                                        id={"commandTopic" + index}
-                                        isValidConnection={(connection) => connection.sourceHandle === 'mappingOut'}
-                                />
-                                <input className="p-1 w-36 border rounded-md" name="commandTopic"
-                                       id={"commandTopic" + index}
-                                       value={topic} onChange={handleCommandTopicChange} onBlur={onBlurCommand}/>
-                                <button onClick={() => handleCommandTopicRemove(index)}><FaMinus/></button>
+                            <div key={index}>
+                                {/* Example of accessing commandTopic as array or object */}
+                                {Array.isArray(topic) ? (
+                                    topic.map((item, idx) => (
+                                        <div key={idx}>
+                                            <Handle
+                                                className="bg-accent p-1 left-1"
+                                                type="target"
+                                                position={Position.Left}
+                                                style={{ top: 105 + 26 * index }}
+                                                id={`commandTopic${idx}`}
+                                                isValidConnection={(connection) =>
+                                                    connection.sourceHandle === "mappingOut"
+                                                }
+                                            />
+                                            <input
+                                                className="p-1 w-36 border rounded-md"
+                                                name="commandTopic"
+                                                id={`commandTopic${idx}`}
+                                                value={item}
+                                                onChange={(event) => handleCommandTopicChange(event, idx)}
+                                                onBlur={updateNode}                                            />
+                                            <button onClick={() => handleCommandTopicRemove(idx)}>
+                                                <FaMinus />
+                                            </button>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>
+                                        <Handle
+                                            className="bg-accent p-1 left-1"
+                                            type="target"
+                                            position={Position.Left}
+                                            style={{ top: 105 + 26 * index }}
+                                            id={`commandTopic${index}`}
+                                            isValidConnection={(connection) =>
+                                                connection.sourceHandle === "mappingOut"
+                                            }
+                                        />
+                                        <input
+                                            className="p-1 w-36 border rounded-md"
+                                            name="commandTopic"
+                                            id={`commandTopic${index}`}
+                                            value={topic}
+                                            onChange={(event) => handleCommandTopicChange(event, index)}
+                                            onBlur={updateNode}                                        />
+                                        <button onClick={() => handleCommandTopicRemove(index)}>
+                                            <FaMinus />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

@@ -257,7 +257,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             } else if (type === 'topic') {
                 newNode.data = {
                     nodeName: nodeName,
-                    commandTopic: '',
+                    commandTopic: [],
                     reportTopic: '',
                     subscriptionTopic: '',
                     qos: 0
