@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomeScreen } from "./pages/HomeScreen";
-import { ProjectPage } from "./pages/ProjectPage";
+import ProjectPage from "./pages/ProjectPage";
 import { SetupPage } from "./pages/SetupPage";
 
 
@@ -17,9 +17,9 @@ function App() {
         <Provider store={store}>
           <BrowserRouter>
             <Routes>
-                <Route path="/" Component={HomeScreen} />
-                <Route path="/project/:id" Component={ProjectPage} />
-                <Route path="/setup" Component={SetupPage} />
+              <Route path="/" Component={HomeScreen} />
+              <Route path="/project/:projectId" Component={ProjectPage} />
+              <Route path="/setup" Component={SetupPage} />
             </Routes>
           </BrowserRouter>
         </Provider>
