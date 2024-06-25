@@ -40,13 +40,11 @@ const ProjectPageWithoutReactFlowProvider = () => {
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
-    const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null); // State to hold the selected edge ID
+    const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const {screenToFlowPosition} = useReactFlow();
 
-
-    // Create refs for nodes and edges
     const nodesRef = useRef(nodes);
     const edgesRef = useRef(edges);
 
@@ -75,7 +73,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     useEffect(() => {
         if (selectedProject) {
             const fetchNodes = async () => {
-                console.log("Fetching nodes for project:", selectedProject);
                 try {
                     const topics = await getSubcollectionItem(selectedProject._id, 'topics');
                     const mappings = await getSubcollectionItem(selectedProject._id, 'mappings');
@@ -108,7 +105,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     };
 
     const updateNodeCollection = async () => {
-        console.log("Update Nodes", nodesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -147,7 +143,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     };
 
     const updateEdgeCollection = async () => {
-        console.log("Update Edges", edgesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -187,9 +182,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             });
             saveItems();
         };
-
         window.addEventListener('deleteNode', handleDelete);
-
         return () => {
             window.removeEventListener('deleteNode', handleDelete);
         };
@@ -210,9 +203,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             });
             saveItems();
         };
-
         window.addEventListener('updateNode', handleUpdate);
-
         return () => {
             window.removeEventListener('updateNode', handleUpdate);
         };
@@ -306,8 +297,8 @@ const ProjectPageWithoutReactFlowProvider = () => {
     }, [handleKeyDown]);
 
     const handleEdgeClick = (event, edge) => {
-        event.stopPropagation(); // Prevents React Flow from handling the click
-        setSelectedEdgeId(edge.id); // Set the selected edge ID
+        event.stopPropagation();
+        setSelectedEdgeId(edge.id);
     };
     return (
         <div className="project-page-container">
