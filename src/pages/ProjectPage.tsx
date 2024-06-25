@@ -5,8 +5,15 @@ import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
-import {addSubcollectionItem, getActiveProject, getProjects, getSubcollectionItem} from "../services/api.ts";
+import {
+    addSubcollectionItem,
+    getActiveProject,
+    getProjectById,
+    getProjects,
+    getSubcollectionItem
+} from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
+import {useNavigate, useParams} from "react-router-dom";
 
 const initialNodes = [
     // Topic Nodes
@@ -95,12 +102,16 @@ const edgeTypes = {
 
 
 export const ProjectPage = () => {
-    const [tabs, setTabs] = useState([{name: 'Tab 1', nodes: initialNodes, edges: initialEdges}]);
+    const { id } = useParams();
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [tabs, setTabs] = useState([]); // State to manage tabs
+    const [activeTab, setActiveTab] = useState(0); // State to manage active tab index
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -115,16 +126,18 @@ export const ProjectPage = () => {
     }, []);
 
     useEffect(() => {
-        const fetchActiveProject = async () => {
+        const fetchProjectById = async () => {
             try {
-                const activeProject = await getActiveProject();
-                setSelectedProject(activeProject);
+                const project = await getProjectById(id);
+                setSelectedProject(project);
             } catch (error) {
-                console.error('Error fetching active project:', error);
+                console.error(`Error fetching project with ID ${id}:`, error);
             }
         };
-        fetchActiveProject();
-    }, []);
+        if (id) {
+            fetchProjectById();
+        }
+    }, [id]);
 
     useEffect(() => {
         if (selectedProject) {
@@ -229,13 +242,8 @@ export const ProjectPage = () => {
         [setEdges]
     );
 
-
     const addNewTab = () => {
-        const newTabName = prompt("Enter name for the new Cofiguration-Tab:");
-        if (newTabName) {
-            setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
-            setActiveTab(tabs.length);
-        }
+        navigate("/setup");
     };
 
     useEffect(() => {

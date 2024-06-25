@@ -44,8 +44,7 @@ const DialogForm = () => {
             projectData["active"] = true;
 
             const createdProject = await createProject(projectData);
-            console.log(createdProject);
-            navigate('/project');
+            navigate('/project/'+createdProject._id);
 
             //const response = await writeMqttFile({ projectName, ...formData }, true);
            // console.log(response.message);
