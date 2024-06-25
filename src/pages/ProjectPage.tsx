@@ -307,7 +307,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
         const element = document.querySelector(".react-flow-container");
 
         if (element) {
-            const screenshot = await html2canvas(document.body);
+            const screenshot = await html2canvas(element);
             const screenshotDataUrl = screenshot.toDataURL("image/png");
 
             localStorage.setItem(`projectScreenshot-${projectId}`, screenshotDataUrl);
