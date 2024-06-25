@@ -14,6 +14,7 @@ import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
+
 import {
     addSubcollectionItem,
     getJsonProject,
