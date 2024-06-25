@@ -26,6 +26,7 @@ import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
 import {generateId} from "../utils/utils.ts";
 import {downloadJsonFile} from '../utils/download.ts';
+import html2canvas from "html2canvas";
 
 const nodeTypes: NodeTypes = {
     mapping: MappingNode,
@@ -302,8 +303,20 @@ const ProjectPageWithoutReactFlowProvider = () => {
         navigate("/setup");
     };
 
-    const openProject = () => {
-        navigate("/projects");
+    const openProject = async () => {
+        const element = document.querySelector(".react-flow-container");
+
+        if (element) {
+            const screenshot = await html2canvas(document.body);
+            const screenshotDataUrl = screenshot.toDataURL("image/png");
+
+            localStorage.setItem(`projectScreenshot-${projectId}`, screenshotDataUrl);
+
+            navigate("/projects");
+        } else {
+            console.error("Element with class 'react-flow-container' not found");
+        }
+
     };
 
     return (

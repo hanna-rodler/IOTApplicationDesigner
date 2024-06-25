@@ -12,6 +12,7 @@ interface Props {
   onSaveProject: () => void;
   onAddTab: () => void;
   addButtons: boolean;
+  onOpenProject: () => void;
 }
 
 const TopBar: React.FC<Props> = ({ onAddTab, onOpenProject, addButtons, onSaveProject, onExportProject }) => {
