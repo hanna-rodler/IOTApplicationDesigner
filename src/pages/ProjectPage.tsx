@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-
 import ReactFlow, {
     addEdge,
     applyEdgeChanges,
@@ -41,12 +40,11 @@ const ProjectPageWithoutReactFlowProvider = () => {
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
+    const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const {screenToFlowPosition} = useReactFlow();
 
-
-    // Create refs for nodes and edges
     const nodesRef = useRef(nodes);
     const edgesRef = useRef(edges);
 
@@ -75,7 +73,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     useEffect(() => {
         if (selectedProject) {
             const fetchNodes = async () => {
-                console.log("Fetching nodes for project:", selectedProject);
                 try {
                     const topics = await getSubcollectionItem(selectedProject._id, 'topics');
                     const mappings = await getSubcollectionItem(selectedProject._id, 'mappings');
@@ -108,7 +105,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     };
 
     const updateNodeCollection = async () => {
-        console.log("Update Nodes", nodesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -147,7 +143,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     };
 
     const updateEdgeCollection = async () => {
-        console.log("Update Edges", edgesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -175,8 +170,8 @@ const ProjectPageWithoutReactFlowProvider = () => {
     const addNewTab = () => {
         const newTabName = prompt("Enter name for the new Configuration-Tab:");
         if (newTabName) {
-           /* setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
-            setActiveTab(tabs.length);*/
+            /* setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
+             setActiveTab(tabs.length);*/
         }
     };
 
@@ -187,9 +182,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             });
             saveItems();
         };
-
         window.addEventListener('deleteNode', handleDelete);
-
         return () => {
             window.removeEventListener('deleteNode', handleDelete);
         };
@@ -210,9 +203,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             });
             saveItems();
         };
-
         window.addEventListener('updateNode', handleUpdate);
-
         return () => {
             window.removeEventListener('updateNode', handleUpdate);
         };
@@ -292,6 +283,23 @@ const ProjectPageWithoutReactFlowProvider = () => {
         downloadJsonFile(exportData.file, exportData.fileName);
     }
 
+    const handleKeyDown = useCallback((event) => {
+        if (event.key === 'Delete') {
+            setEdges((eds) => eds.filter(edge => edge.id !== selectedEdgeId));
+            saveItems();
+        }
+    }, [saveItems]);
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
+    const handleEdgeClick = (event, edge) => {
+        event.stopPropagation();
+        setSelectedEdgeId(edge.id);
+    };
     return (
         <div className="project-page-container">
             <TopBar onAddTab={addNewTab} addButtons={true} onSaveProject={saveItems}
@@ -313,6 +321,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
                     onDrop={onDrop}
                     fitView
                     edgesUpdatable={true}
+                    onEdgeClick={handleEdgeClick}
                 >
                     <Controls/>
                 </ReactFlow>
