@@ -125,23 +125,28 @@ router.put('/:id/:subcollection', async (req, res) => {
         const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
         if (!validSubcollections.includes(subcollection)) {
-            return res.status(400).json({error: 'Invalid subcollection'});
+            return res.status(400).json({ error: 'Invalid subcollection' });
         }
 
         const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
-            {_id: new ObjectId(req.params.id)},
-            {$set: {[subcollection]: req.body}}
+            { _id: new ObjectId(req.params.id) },
+            { $set: { [subcollection]: req.body } }
         );
 
         if (result.modifiedCount > 0) {
-            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: new ObjectId(req.params.id)});
-            res.json(updatedProject);
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            return res.json(updatedProject);
         } else {
-            res.status(404).json({error: 'Project not found or item not updated'});
+            const existingProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            if (existingProject) {
+                return res.json(existingProject);
+            } else {
+                return res.status(404).json({ error: 'Project not found' });
+            }
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({error: 'Failed to update item in subcollection'});
+        console.error('Error updating item in subcollection:', error);
+        return res.status(500).json({ error: 'Failed to update item in subcollection' });
     }
 });
 
@@ -200,12 +205,7 @@ router.get('/:id/:subcollection', async (req, res) => {
  **************************************/
 router.put('/:id/name/update', async (req, res) => {
     try {
-        console.log("Received PUT request to update name");
-        console.log("Request Params ID:", req.params.id);
-        console.log("Request Body:", req.body);
-
         const name = req.body.name;
-
         if (typeof name !== 'string') {
             return res.status(400).json({ error: 'Name must be a string' });
         }
@@ -214,19 +214,25 @@ router.put('/:id/name/update', async (req, res) => {
             { _id: new ObjectId(req.params.id) },
             { $set: { name: name } }
         );
-        console.log("Update Result:", result);
 
-        if (result.modifiedCount > 0) {
+        if (result.matchedCount > 0) {
             const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
-            console.log("Updated Project:", updatedProject);
             res.json(updatedProject);
         } else {
-            res.status(404).json({ error: 'Project not found or name not updated' });
+            const existingProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            if (existingProject) {
+                res.json(existingProject);
+            } else {
+                res.status(404).json({ error: 'Project not found' });
+            }
         }
     } catch (error) {
-        console.log(error);
+        console.error('Error updating project name:', error);
         res.status(500).json({ error: 'Failed to update project name' });
     }
 });
+
+
+
 
 export default router;

@@ -30,12 +30,29 @@ const DialogForm = () => {
         password: '',
     });
 
+    const transformFetchedData = (dialog) => {
+        return {
+            discover_prefix: dialog.discover_prefix || '',
+            keep_alive: dialog.connection?.keep_alive || 60,
+            client_id: dialog.connection?.client_id || '',
+            clean_session: dialog.connection?.clean_session || true,
+            will_message: dialog.connection?.will_message || '',
+            will_topic: dialog.connection?.will_topic || '',
+            will_qos: dialog.connection?.will_qos || 0,
+            will_retain: dialog.connection?.will_retain || false,
+            username: dialog.connection?.username || '',
+            password: dialog.connection?.password || '',
+        };
+    };
+
     useEffect(() => {
         if (projectId) {
             const fetchProjectData = async () => {
                 try {
                     const dialog = await getSubcollectionItem(projectId, 'dialog');
-                    setFormData(dialog || {});
+                    if (dialog) {
+                        setFormData(transformFetchedData(dialog));
+                    }
                 } catch (error) {
                     console.error('Error fetching project data:', error);
                 }
@@ -76,24 +93,33 @@ const DialogForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const convertedData = convertToValidJson(formData, true);
+
         try {
             const projectData = {
                 name: projectName,
-                dialog: convertToValidJson(formData, true),
+                dialog: convertedData,
             };
 
             if (projectId) {
-                await updateProjectName(projectId, projectName);
-                await updateSubcollectionItem(projectId, "dialog", projectData.dialog);
+                const updateNameResponse = await updateProjectName(projectId, projectName);
+                console.log("Project name updated:", updateNameResponse);
+
+                const updateDialogResponse = await updateSubcollectionItem(projectId, "dialog", convertedData);
+                console.log("Dialog subcollection updated:", updateDialogResponse);
+
                 navigate('/project/' + projectId);
             } else {
                 const createdProject = await createProject(projectData);
+
                 navigate('/project/' + createdProject._id);
             }
         } catch (error) {
-            console.error('Error writing JSON file:', error);
+            console.error('Error submitting form:', error);
         }
     };
+
 
     return (
         <>
