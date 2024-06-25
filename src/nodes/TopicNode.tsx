@@ -1,10 +1,8 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useState, useRef} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FaMinus, FaPlus} from "react-icons/fa";
 
-
 const reportIndent = {top: 80};
-
 
 const isConnectable = true;
 
@@ -15,41 +13,69 @@ function TopicNode({id, data}: NodeProps) {
     const [commandTopics, setCommandTopics] = useState(data.commandTopic);
     const [qos, setQos] = useState(data.qos);
     const [subscritpion, setSubscription] = useState(data.subscriptionTopic);
+  
+    const nodeNameRef = useRef(nodeName);
+    const reportTopicRef = useRef(reportTopic);
+    const commandTopicRef = useRef(commandTopic);
+    const qosRef = useRef(qos);
+    const subscriptionRef = useRef(subscritpion);
 
-    const changeNodeName = useCallback((evt) => {
-        setNodeName(evt.target.value)
-    }, [])
-
-    const onChangeReport = useCallback((evt) => {
-        setReportTopic(evt.target.value)
-    }, [])
-
-    const onChangeSubscription = useCallback((evt) => {
-        setSubscription(evt.target.value)
-    }, [])
-    const onChangeQos = useCallback((evt) => {
-        setQos(evt.target.value)
-        //     Todo: save qos
-    }, [])
-
-    const onBlurReport = useCallback((evt) => {
-        // const nodeData = {reportTopic: evt.target.value}
-        //     Todo: save reportTopic
-
-    }, []);
-
-    const onBlurCommand = useCallback((evt) => {
-        //     Todo: save commandTopics
-    }, []);
-
-    const onBlurSubscription = useCallback((evt) => {
-        // evt.target.value
-        //     Todo: save subscription
-    }, []);
-
+    function triggerCustomEvent(eventName, data) {
+        const event = new CustomEvent(eventName, {
+            bubbles: true,
+            cancelable: true,
+            detail: data,
+        });
+        window.dispatchEvent(event);
+    }
+  
     const deleteNode = useCallback(() => {
-        //     Todo: delete Node from db
+        if (window.confirm('Are you sure you want to delete this node?')) {
+            triggerCustomEvent('deleteNode', {
+                id: id,
+            });
+        }
     }, [id, deleteElements]);
+
+    const updateNode = useCallback(() => {
+        triggerCustomEvent('updateNode', {
+            id: id,
+            data: {
+                nodeName: nodeNameRef.current,
+                commandTopic: commandTopicRef.current,
+                reportTopic: reportTopicRef.current,
+                subscriptionTopic: subscriptionRef.current,
+                qos: qosRef.current,
+            },
+        });
+    }, [id]);
+
+    const onChangeReport = (event) => {
+        const value = event.target.value;
+        setReportTopic(value);
+        reportTopicRef.current = value;
+    };
+    const changeNodeName = (event) => {
+        const value = event.target.value;
+        setNodeName(value);
+        nodeNameRef.current = value;
+    };
+    const onChangeCommand = (event) => {
+        const value = event.target.value;
+        setCommandTopic(value);
+        commandTopicRef.current = value;
+    };
+    const onChangeSubscription = (event) => {
+        const value = event.target.value;
+        setSubscription(value);
+        subscriptionRef.current = value;
+    };
+
+    const onChangeQos = (event) => {
+        const value = event.target.value;
+        setQos(value);
+        qosRef.current = value;
+    };
 
     function addCommandTopic() {
         setCommandTopics(prevArr => [...prevArr, ''])
@@ -79,16 +105,14 @@ function TopicNode({id, data}: NodeProps) {
             <div>
                 <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
                     <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName}
-                           onChange={changeNodeName}></input>
-
-
-                    <div className=" m-2 " onClick={deleteNode}>X</div>
+                           onChange={changeNodeName} onBlur={updateNode}></input>
+                    <div className="m-2" onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2 pl-3">
                     <div>
                         <label htmlFor="Report Topic" className="font-bold">Report Topic:</label>
                         <input className="p-1 w-36 border rounded-md" id="reportTopic" name="reportTopic"
-                               value={reportTopic} onChange={onChangeReport} onBlur={onBlurReport}/>
+                        value={reportTopic} onChange={onChangeReport} onBlur={updateNode}/>
                     </div>
                     <div className="mt-2 pb-3">
                         <label htmlFor="Command Topic" className="font-bold">Command Topic: <button
@@ -112,12 +136,12 @@ function TopicNode({id, data}: NodeProps) {
                     <div className="pb-3">
                         <label htmlFor="SubsciptionType" className="font-bold">Subscription Type:</label>
                         <input className="p-1 w-36 border rounded-md" id="subscriptionType" name="subscriptionType"
-                               value={subscritpion} onChange={onChangeSubscription} onBlur={onBlurSubscription}/>
+                               value={subscritpion} onChange={onChangeSubscription} onBlur={updateNode}/>
                     </div>
                     <div className="pb-3">
                         <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-40 border rounded-md " id="qos" name="qos" value={qos}
-                                onChange={onChangeQos}>
+                        <select className="p-1 w-40 border rounded-md" id="qos" name="qos" value={qos}
+                                onChange={onChangeQos} onBlur={updateNode}>
                             <option disabled selected value hidden> - select an option -</option>
                             <option className="text-xl">0</option>
                             <option className="text-xl">1</option>
@@ -132,11 +156,13 @@ function TopicNode({id, data}: NodeProps) {
                 id="reportTopic"
                 style={reportIndent}
                 isConnectable={isConnectable}
-                className="bg-accent  right-3 p-1"
+                className="bg-accent right-3 p-1"
                 isValidConnection={(connection) => connection.targetHandle === 'mappingIn'}
             />
         </div>
     );
 }
+
+
 
 export default TopicNode;
