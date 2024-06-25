@@ -316,13 +316,16 @@ const ProjectPageWithoutReactFlowProvider = () => {
         } else {
             console.error("Element with class 'react-flow-container' not found");
         }
-
     };
+
+    const editProject = () => {
+        navigate(`/setup/${projectId}`);
+    }
 
     return (
         <div className="project-page-container">
-            <TopBar onAddTab={addNewTab} onOpenProject={openProject} addButtons={true}
-                    onSaveProject={saveItems} onExportProject={exportProject}/>
+            <TopBar onAddTab={addNewTab} onOpenProject={openProject} onEditProject={editProject}
+                    addButtons={true} onSaveProject={saveItems} onExportProject={exportProject}/>
             <div className="react-flow-container" ref={reactFlowWrapper}>
                 {isLoading &&
                     <div className="flex justify-center mt-20">

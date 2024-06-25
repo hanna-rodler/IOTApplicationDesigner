@@ -28,7 +28,7 @@ export function ProjectListPage() {
     }, []);
 
     const handleClick = () => {
-        navigate("/");
+        navigate(-1);
     };
 
     return (
@@ -37,7 +37,7 @@ export function ProjectListPage() {
             <div className="min-h-screen bg-gray-100 p-4">
                 <div className="container mx-auto mt-6">
                     <div className="flex justify-center items-center mb-3">
-                        <h1 className="text-2xl font-bold">Select an existing Project!</h1>
+                        <h1 className="text-2xl font-bold">Click on an existing Project to open it!</h1>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-3">
                         {projects.map((project) => (

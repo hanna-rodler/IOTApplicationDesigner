@@ -13,9 +13,10 @@ interface Props {
   onAddTab: () => void;
   addButtons: boolean;
   onOpenProject: () => void;
+  onEditProject: () => void;
 }
 
-const TopBar: React.FC<Props> = ({ onAddTab, onOpenProject, addButtons, onSaveProject, onExportProject }) => {
+const TopBar: React.FC<Props> = ({ onAddTab, onOpenProject, onEditProject, addButtons, onSaveProject, onExportProject }) => {
           return (
             <div className="bg-secondary text-white font-bold text-[30px] h-topBar flex justify-between items-center relative z-5">
               <NavLink className="flex items-center gap-2 ml-2"  to="/">
@@ -28,7 +29,7 @@ const TopBar: React.FC<Props> = ({ onAddTab, onOpenProject, addButtons, onSavePr
                       <BiExport className="navBarBtn" onClick={onExportProject} data-tooltip-id="exportBtn" data-tooltip-content="Export"/>
                       <Tooltip id="exportBtn" className="customTooltip"/>
 
-                      <BiEdit className="navBarBtn" data-tooltip-id="editBtn" data-tooltip-content="Edit"/>
+                      <BiEdit className="navBarBtn" onClick={onEditProject} data-tooltip-id="editBtn" data-tooltip-content="Edit"/>
                       <Tooltip id="editBtn" place="bottom" className="customTooltip"/>
 
                       <BiSave className="navBarBtn" data-tooltip-id="saveBtn" data-tooltip-content="Save" onClick={onSaveProject}/>
@@ -41,7 +42,7 @@ const TopBar: React.FC<Props> = ({ onAddTab, onOpenProject, addButtons, onSavePr
                       <Tooltip id="addBtn" place="bottom-end" className="customTooltip"/>
                   </div>
                   )}
-          </div>
+              </div>
             </div>
           );
 };

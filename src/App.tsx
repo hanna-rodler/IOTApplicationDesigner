@@ -21,6 +21,7 @@ function App() {
               <Route path="/" Component={HomeScreen} />
               <Route path="/project/:projectId" Component={ProjectPage} />
               <Route path="/setup" Component={SetupPage} />
+              <Route path="/setup/:projectId" Component={SetupPage} />
               <Route path="/projects" Component={ProjectListPage} />
             </Routes>
           </BrowserRouter>

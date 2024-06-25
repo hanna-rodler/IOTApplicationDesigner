@@ -1,13 +1,21 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import TopBar from "./TopBar";
 import { writeMqttFile, convertToValidJson } from "../utils/jsonHandling";
 import { FirstDialogue } from "../types/jsonTypes";
-import {createProject} from "../services/api";
-import { useNavigate } from 'react-router-dom';
+import {
+    createProject,
+    getProjectById,
+    getSubcollectionItem,
+    updateProjectName,
+    updateSubcollectionItem
+} from "../services/api";
+import {useNavigate, useParams} from 'react-router-dom';
 
 
 const DialogForm = () => {
     const navigate = useNavigate();
+    const { projectId } = useParams();
+
     const [projectName, setProjectName] = useState('');
     const [formData, setFormData] = useState<FirstDialogue>({
         discover_prefix: '',
@@ -21,6 +29,38 @@ const DialogForm = () => {
         username: '',
         password: '',
     });
+
+    useEffect(() => {
+        if (projectId) {
+            const fetchProjectData = async () => {
+                try {
+                    const dialog = await getSubcollectionItem(projectId, 'dialog');
+                    setFormData(dialog || {});
+                } catch (error) {
+                    console.error('Error fetching project data:', error);
+                }
+            };
+            fetchProjectData();
+        }
+    }, [projectId]);
+
+    useEffect(() => {
+        if (projectId) {
+            const fetchProjectName = async () => {
+                try {
+                    const project = await getProjectById(projectId);
+                    setProjectName(project.name || '');
+                } catch (error) {
+                    console.error('Error fetching project data:', error);
+                }
+            };
+            fetchProjectName();
+        }
+    }, [projectId]);
+
+    const handleClick = () => {
+        navigate(-1)
+    };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -37,17 +77,19 @@ const DialogForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const projectData = {};
-            const dialogData = convertToValidJson(formData, true);
-            projectData["name"] = projectName;
-            projectData["dialog"] = dialogData;
-            projectData["active"] = true;
+            const projectData = {
+                name: projectName,
+                dialog: convertToValidJson(formData, true),
+            };
 
-            const createdProject = await createProject(projectData);
-            navigate('/project/'+createdProject._id);
-
-            //const response = await writeMqttFile({ projectName, ...formData }, true);
-           // console.log(response.message);
+            if (projectId) {
+                await updateProjectName(projectId, projectName);
+                await updateSubcollectionItem(projectId, "dialog", projectData.dialog);
+                navigate('/project/' + projectId);
+            } else {
+                const createdProject = await createProject(projectData);
+                navigate('/project/' + createdProject._id);
+            }
         } catch (error) {
             console.error('Error writing JSON file:', error);
         }
@@ -173,12 +215,19 @@ const DialogForm = () => {
                                 <label className="text-gray-700">Will Retain</label>
                             </div>
                         </div>
-                        <div className="col-span-1 md:col-span-2 flex justify-center">
+                        <div className="col-span-1 md:col-span-2 flex justify-center gap-5">
                             <button
                                 type="submit"
                                 className="secondaryBtn"
                             >
                                 Submit
+                            </button>
+                            <button
+                                type="button"
+                                className="secondaryBtn"
+                                onClick={handleClick}
+                            >
+                                Go Back
                             </button>
                         </div>
                     </form>
