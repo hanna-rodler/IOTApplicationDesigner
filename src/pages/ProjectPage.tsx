@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-
 import ReactFlow, {
     addEdge,
     applyEdgeChanges,
@@ -41,6 +40,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
+    const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null); // State to hold the selected edge ID
     const [isLoading, setIsLoading] = useState(true);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const {screenToFlowPosition} = useReactFlow();
@@ -175,8 +175,8 @@ const ProjectPageWithoutReactFlowProvider = () => {
     const addNewTab = () => {
         const newTabName = prompt("Enter name for the new Configuration-Tab:");
         if (newTabName) {
-           /* setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
-            setActiveTab(tabs.length);*/
+            /* setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
+             setActiveTab(tabs.length);*/
         }
     };
 
@@ -292,6 +292,23 @@ const ProjectPageWithoutReactFlowProvider = () => {
         downloadJsonFile(exportData.file, exportData.fileName);
     }
 
+    const handleKeyDown = useCallback((event) => {
+        if (event.key === 'Delete') {
+            setEdges((eds) => eds.filter(edge => edge.id !== selectedEdgeId));
+            saveItems();
+        }
+    }, [saveItems]);
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
+    const handleEdgeClick = (event, edge) => {
+        event.stopPropagation(); // Prevents React Flow from handling the click
+        setSelectedEdgeId(edge.id); // Set the selected edge ID
+    };
     return (
         <div className="project-page-container">
             <TopBar onAddTab={addNewTab} addButtons={true} onSaveProject={saveItems}
@@ -313,6 +330,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
                     onDrop={onDrop}
                     fitView
                     edgesUpdatable={true}
+                    onEdgeClick={handleEdgeClick}
                 >
                     <Controls/>
                 </ReactFlow>
