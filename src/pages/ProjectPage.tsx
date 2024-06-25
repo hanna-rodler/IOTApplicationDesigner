@@ -9,7 +9,7 @@ import ReactFlow, {
     ReactFlowProvider,
     useReactFlow
 } from "reactflow";
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
@@ -18,7 +18,6 @@ import MappingNode from "../nodes/MappingNode.tsx";
 import {
     addSubcollectionItem,
     getJsonProject,
-    getActiveProject,
     getProjectById,
     getProjects,
     getSubcollectionItem
@@ -27,7 +26,6 @@ import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
 import {generateId} from "../utils/utils.ts";
 import {downloadJsonFile} from '../utils/download.ts';
-import {useNavigate, useParams} from "react-router-dom";
 
 const nodeTypes: NodeTypes = {
     mapping: MappingNode,
@@ -64,16 +62,16 @@ const ProjectPageWithoutReactFlowProvider = () => {
     }, [edges]);
 
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchProject = async () => {
             try {
                 const project = await getProjectById(projectId);
                 console.log('project ', project)
                 setSelectedProject(project);
             } catch (error) {
-                console.error('Error fetching projects:', error);
+                console.error(`Error fetching project with ID ${projectId}:`, error);
             }
         };
-        fetchProjects();
+        fetchProject();
     }, []);
 
     useEffect(() => {
@@ -87,20 +85,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
         };
         fetchProjects();
     }, []);
-
-    useEffect(() => {
-        const fetchProjectById = async () => {
-            try {
-                const project = await getProjectById(id);
-                setSelectedProject(project);
-            } catch (error) {
-                console.error(`Error fetching project with ID ${id}:`, error);
-            }
-        };
-        if (id) {
-            fetchProjectById();
-        }
-    }, [id]);
 
     useEffect(() => {
         if (selectedProject) {
@@ -201,10 +185,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
         (connection) => setEdges((eds) => addEdge(connection, eds)),
         []
     );
-
-    const addNewTab = () => {
-        navigate("/setup");
-    };
 
     useEffect(() => {
         const handleDelete = (event) => {
@@ -318,10 +298,18 @@ const ProjectPageWithoutReactFlowProvider = () => {
         downloadJsonFile(exportData.file, exportData.fileName);
     }
 
+    const addNewTab = () => {
+        navigate("/setup");
+    };
+
+    const openProject = () => {
+        navigate("/projects");
+    };
+
     return (
         <div className="project-page-container">
-            <TopBar onAddTab={addNewTab} addButtons={true} onSaveProject={saveItems}
-                    onExportProject={exportProject}/>
+            <TopBar onAddTab={addNewTab} onOpenProject={openProject} addButtons={true}
+                    onSaveProject={saveItems} onExportProject={exportProject}/>
             <div className="react-flow-container" ref={reactFlowWrapper}>
                 {isLoading &&
                     <div className="flex justify-center mt-20">

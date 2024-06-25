@@ -1,7 +1,7 @@
 import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
-import { GoPlus } from "react-icons/go";
+import { GoPlus, GoFileDirectory } from "react-icons/go";
 import UploadBtn from '../components/UploadBtn'; 
 import {NavLink} from "react-router-dom";
 
@@ -28,6 +28,10 @@ export function HomeScreen() {
             <NavLink to="/setup" className="secondaryBtn sm:mr-6 min-w-14">
               <GoPlus className="iconBtn" />
               Start new project
+            </NavLink>
+            <NavLink to="/projects" className="secondaryBtn sm:mr-6 min-w-14">
+              <GoFileDirectory className="iconBtn" />
+              Open project
             </NavLink>
             <UploadBtn />
           </div>
