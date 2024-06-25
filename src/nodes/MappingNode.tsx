@@ -33,9 +33,12 @@ function MappingNode({id, data}: NodeProps) {
     }
 
     const deleteNode = useCallback(() => {
-        triggerCustomEvent('deleteNode', {
-            id: id,
-        });
+        if (window.confirm('Are you sure you want to delete this node?')) {
+
+            triggerCustomEvent('deleteNode', {
+                id: id,
+            });
+        }
     }, [id, deleteElements]);
 
     const updateNode = useCallback(() => {
