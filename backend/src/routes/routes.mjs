@@ -25,7 +25,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-
 /*********************
  gets all projects
  ********************/
@@ -96,7 +95,7 @@ router.post('/:id/:subcollection', async (req, res) => {
         const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
         if (!validSubcollections.includes(subcollection)) {
-            return res.status(400).json({error: 'Invalid subcollection!'});
+            return res.status(400).json({error: 'Invalid subcollection in post!'});
         }
 
         const newItem = {...req.body, _id: new ObjectId()};
@@ -126,25 +125,32 @@ router.put('/:id/:subcollection', async (req, res) => {
         const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
         if (!validSubcollections.includes(subcollection)) {
-            return res.status(400).json({error: 'Invalid subcollection'});
+            return res.status(400).json({ error: 'Invalid subcollection' });
         }
 
         const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
-            {_id: new ObjectId(req.params.id)},
-            {$set: {[subcollection]: req.body}}
+            { _id: new ObjectId(req.params.id) },
+            { $set: { [subcollection]: req.body } }
         );
 
         if (result.modifiedCount > 0) {
-            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: new ObjectId(req.params.id)});
-            res.json(updatedProject);
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            return res.json(updatedProject);
         } else {
-            res.status(404).json({error: 'Project not found or item not updated'});
+            const existingProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            if (existingProject) {
+                return res.json(existingProject);
+            } else {
+                return res.status(404).json({ error: 'Project not found' });
+            }
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({error: 'Failed to update item in subcollection'});
+        console.error('Error updating item in subcollection:', error);
+        return res.status(500).json({ error: 'Failed to update item in subcollection' });
     }
 });
+
+
 
 /******************************************
  deletes an item from a subcollection
@@ -155,7 +161,7 @@ router.delete('/:id/:subcollection', async (req, res) => {
         const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
         if (!validSubcollections.includes(subcollection)) {
-            return res.status(400).json({error: 'Invalid subcollection'});
+            return res.status(400).json({error: 'Invalid subcollection in delete'});
         }
 
         const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
@@ -180,7 +186,7 @@ router.get('/:id/:subcollection', async (req, res) => {
     const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
     if (!validSubcollections.includes(subcollection)) {
-        return res.status(400).json({error: 'Invalid subcollection!'});
+        return res.status(400).json({error: 'Invalid subcollection in get!'});
     }
 
     try {
@@ -195,50 +201,38 @@ router.get('/:id/:subcollection', async (req, res) => {
 
 
 /****************************************
- updates an item in a subcollection
- **************************************
- router.put('/:id/:subcollection/:subId', async (req, res) => {
- try {
- const subcollection = req.params.subcollection;
- const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
+ updates the name property of a project
+ **************************************/
+router.put('/:id/name/update', async (req, res) => {
+    try {
+        const name = req.body.name;
+        if (typeof name !== 'string') {
+            return res.status(400).json({ error: 'Name must be a string' });
+        }
 
- if (!validSubcollections.includes(subcollection)) {
- return res.status(400).json({ error: 'Invalid subcollection' });
- }
+        const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: { name: name } }
+        );
 
- const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
- { _id: new ObjectId(req.params.id), [`${subcollection}._id`]: new ObjectId(req.params.subId) },
- { $set: { [`${subcollection}.$`]: req.body } }
- );
- res.json(result);
- } catch (error) {
- console.log(error);
- res.status(500).json({ error: 'Failed to update item in subcollection' });
- }
- });
+        if (result.matchedCount > 0) {
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            res.json(updatedProject);
+        } else {
+            const existingProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            if (existingProject) {
+                res.json(existingProject);
+            } else {
+                res.status(404).json({ error: 'Project not found' });
+            }
+        }
+    } catch (error) {
+        console.error('Error updating project name:', error);
+        res.status(500).json({ error: 'Failed to update project name' });
+    }
+});
 
- /******************************************
- deletes an item from a subcollection
- ****************************************
- router.delete('/:id/:subcollection/:subId', async (req, res) => {
- try {
- const subcollection = req.params.subcollection;
- const validSubcollections = ['topics', 'dialog', 'edges', 'mappings'];
 
- if (!validSubcollections.includes(subcollection)) {
- return res.status(400).json({ error: 'Invalid subcollection' });
- }
 
- const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
- { _id: new ObjectId(req.params.id) },
- { $pull: { [subcollection]: { _id: new ObjectId(req.params.subId) } } }
- );
- res.json(result);
- } catch (error) {
- console.log(error);
- res.status(500).json({ error: 'Failed to delete item from subcollection' });
- }
- });
- */
 
 export default router;

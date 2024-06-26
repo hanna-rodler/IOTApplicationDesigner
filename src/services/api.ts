@@ -71,16 +71,9 @@ export const deleteProject = async (id) => {
 /*******************************
  adds an item to a subcollection
  ******************************/
-export const addSubcollectionItem = async (
-  projectId,
-  subcollection,
-  itemData
-) => {
+export const addSubcollectionItem = async (projectId, subcollection, itemData) => {
   try {
-    const response = await axios.post(
-      `${API_URL}${projectId}/${subcollection}`,
-      itemData
-    );
+    const response = await axios.post(`${API_URL}${projectId}/${subcollection}`, itemData);
     return response.data;
   } catch (error) {
     console.error("Error adding subcollection item:", error);
@@ -91,16 +84,9 @@ export const addSubcollectionItem = async (
 /**********************************
  updates an item in a subcollection
  *********************************/
-export const updateSubcollectionItem = async (
-  projectId,
-  subcollection,
-  itemData
-) => {
+export const updateSubcollectionItem = async (projectId, subcollection, itemData) => {
   try {
-    const response = await axios.put(
-      `${API_URL}${projectId}/${subcollection}`,
-      itemData
-    );
+    const response = await axios.put(`${API_URL}${projectId}/${subcollection}`, itemData);
     return response.data;
   } catch (error) {
     console.error("Error updating subcollection item:", error);
@@ -136,6 +122,24 @@ export const getSubcollectionItem = async (projectId, subcollection) => {
   }
 };
 
+/**********************************
+ updates the name property of a project
+ *********************************/
+export const updateProjectName = async (projectId, name) => {
+    try {
+        const response = await axios.put(`${API_URL}${projectId}/name/update`, { name }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating project name:", error);
+        throw error;
+    }
+};
+
+/********************
+ gets a JSON project
+ ********************/
 export const getJsonProject = async (projectId) => {
   try {
     const response = await axios.get(`${API_BASE_URL}export/${projectId}`);
@@ -146,3 +150,5 @@ export const getJsonProject = async (projectId) => {
     throw error;
   }
 };
+
+

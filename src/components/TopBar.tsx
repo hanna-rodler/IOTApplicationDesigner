@@ -9,9 +9,11 @@ interface Props {
     onSaveProject: () => void;
     onAddTab: () => void;
     addButtons: boolean;
+    onOpenProject: () => void;
+    onEditProject: () => void;
 }
 
-const TopBar: React.FC<Props> = ({onAddTab, addButtons, onSaveProject, onExportProject}) => {
+const TopBar: React.FC<Props> = ({onAddTab, onOpenProject, onEditProject, addButtons, onSaveProject, onExportProject}) => {
     const [isSaved, setIsSaved] = useState(false);
 
     const handleSave = () => {
@@ -35,7 +37,7 @@ const TopBar: React.FC<Props> = ({onAddTab, addButtons, onSaveProject, onExportP
                                   data-tooltip-id="exportBtn" data-tooltip-content="Export"/>
                         <Tooltip id="exportBtn" className="customTooltip"/>
 
-                        <BiEdit className="navBarBtn focus:outline-none" data-tooltip-id="editBtn"
+                        <BiEdit className="navBarBtn focus:outline-none" onClick={onEditProject} data-tooltip-id="editBtn"
                                 data-tooltip-content="Edit"/>
                         <Tooltip id="editBtn" place="bottom" className="customTooltip"/>
 
@@ -44,18 +46,17 @@ const TopBar: React.FC<Props> = ({onAddTab, addButtons, onSaveProject, onExportP
                         />
                         <Tooltip id="saveBtn" place="bottom" className="customTooltip"/>
 
-                        <BiFolderOpen className="ml-8 navBarBtn focus:outline-none" data-tooltip-id="openBtn"
+                        <BiFolderOpen className="ml-8 navBarBtn focus:outline-none" onClick={onOpenProject} data-tooltip-id="openBtn"
                                       data-tooltip-content="Open Project"/>
                         <Tooltip id="openBtn" place="bottom-end" className="customTooltip"/>
 
-                        <BiFolderPlus className="navBarBtn focus:outline-none" onClick={onAddTab}
-                                      data-tooltip-id="addBtn" data-tooltip-content="New Project"/>
-                        <Tooltip id="addBtn" place="bottom-end" className="customTooltip"/>
-                    </div>
-                )}
+                        <BiFolderPlus className="navBarBtn focus:outline-none" onClick={onAddTab} data-tooltip-id="addBtn" data-tooltip-content="New Project"/>
+                      <Tooltip id="addBtn" place="bottom-end" className="customTooltip"/>
+                  </div>
+                  )}
+              </div>
             </div>
-        </div>
-    );
+          );
 };
 
 export default TopBar;
