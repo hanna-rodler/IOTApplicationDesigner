@@ -82,7 +82,7 @@ function MappingNode({id, data}: NodeProps) {
                     position={Position.Left}
                     style={reportIndent}
                     id="mappingIn"
-                    isValidConnection={(connection) => connection.targetHandle === 'reportTopic'}
+                    isValidConnection={(connection) => connection.targetHandle === 'reportTopic' || connection.sourceHandle === 'reportTopic'}
             />
             <div>
                 <div className="flex text-black rounded-md m-2 text-lg justify-between ">
@@ -155,16 +155,32 @@ function MappingNode({id, data}: NodeProps) {
                     </div>
                 </div>
             </div>
-            <Handle
+            {data.nodeType === "static" &&
+                <Handle
                 type="source"
                 position={Position.Right}
                 id="mappingOut"
-                style={reportIndent}
+                style={{ top: 130 }}
                 isConnectable={isConnectable}
                 className="bg-accent  right-2 p-1"
-                isValidConnection={(connection) => connection.targetHandle === 'commandTopic'}
-            />
-        </div>
+                isValidConnection={(connection) => {const regex = /^commandTopic\d*$/;
+                    return regex.test(connection.targetHandle);}}
+            />}
+            {data.nodeType !== "static" &&
+                <Handle
+                    type="source"
+                    position={Position.Right}
+                    id="mappingOut"
+                    style={reportIndent}
+                    isConnectable={isConnectable}
+                    className="bg-accent  right-2 p-1"
+                    isValidConnection={(connection) => {const regex = /^commandTopic\d*$/;
+                        return regex.test(connection.targetHandle);}}
+                />
+            }
+
+
+                </div>
     );
 }
 
