@@ -42,16 +42,16 @@ const TopBar: React.FC<Props> = ({onAddTab, onOpenProject, onEditProject, addBut
                         <Tooltip id="editBtn" place="bottom" className="customTooltip"/>
 
                         <BiSave className={`navBarBtn focus:outline-none ${isSaved ? 'save-success' : ''}`}
-                                data-tooltip-id="saveBtn" data-tooltip-content="Save" onClick={handleSave}
-                        />
+                                data-tooltip-id="saveBtn" data-tooltip-content="Save" onClick={handleSave}/>
                         <Tooltip id="saveBtn" place="bottom" className="customTooltip"/>
 
                         <BiFolderOpen className="ml-8 navBarBtn focus:outline-none" onClick={onOpenProject} data-tooltip-id="openBtn"
                                       data-tooltip-content="Open Project"/>
                         <Tooltip id="openBtn" place="bottom-end" className="customTooltip"/>
 
-                        <BiFolderPlus className="navBarBtn focus:outline-none" onClick={onAddTab} data-tooltip-id="addBtn" data-tooltip-content="New Project"/>
-                      <Tooltip id="addBtn" place="bottom-end" className="customTooltip"/>
+                        <BiFolderPlus className="navBarBtn focus:outline-none" onClick={onAddTab} data-tooltip-id="addBtn"
+                                      data-tooltip-content="New Project"/>
+                        <Tooltip id="addBtn" place="bottom-end" className="customTooltip"/>
                   </div>
                   )}
               </div>

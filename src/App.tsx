@@ -9,12 +9,9 @@ import ProjectPage from "./pages/ProjectPage";
 import {ProjectListPage} from "./pages/ProjectListPage";
 import { SetupPage } from "./pages/SetupPage";
 
-
 function App() {
-
   return (
       <Fragment>
-
         <Provider store={store}>
           <BrowserRouter>
             <Routes>
