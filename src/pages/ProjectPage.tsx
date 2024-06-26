@@ -164,7 +164,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
         []
     );
     const onConnect = useCallback(
-        (connection) => setEdges((eds) => addEdge(connection, eds)),
+        (connection) => setEdges((eds) => addEdge({...connection, type: 'smoothstep'}, eds)),
         []
     );
 
