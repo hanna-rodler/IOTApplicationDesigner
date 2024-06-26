@@ -76,7 +76,7 @@ h5 {
 }
 
 .sidebar {
-  height: calc(100vh - 4.9rem);
+  height: calc(100vh - 3.1rem);
   top: 3.1rem;
   @apply border-l border-gray-fieldBorder;
 }
