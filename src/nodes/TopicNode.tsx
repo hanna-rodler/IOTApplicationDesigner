@@ -10,7 +10,7 @@ function TopicNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
     const [nodeName, setNodeName] = useState(data.nodeName);
     const [reportTopic, setReportTopic] = useState(data.reportTopic);
-    const [commandTopics, setCommandTopics] = useState([data.commandTopic]);
+    const [commandTopics, setCommandTopics] = useState(data.commandTopic);
     const [qos, setQos] = useState(data.qos);
     const [subscritpion, setSubscription] = useState(data.subscriptionTopic);
   
@@ -85,7 +85,10 @@ function TopicNode({id, data}: NodeProps) {
             updatedCommandTopics[index] = newCommandTopic;
             return updatedCommandTopics;
         });
-        commandTopicRef.current = commandTopics;
+        const updatedCommandTopics = [...commandTopics];
+        updatedCommandTopics[index] = newCommandTopic;
+        commandTopicRef.current = updatedCommandTopics;
+        updateNode();
     };
 
     function handleCommandTopicRemove(index) {
@@ -131,7 +134,7 @@ function TopicNode({id, data}: NodeProps) {
                                                 className="bg-accent p-1 left-1"
                                                 type="target"
                                                 position={Position.Left}
-                                                style={{ top: 105 + 26 * index }}
+                                                style={{ top: 134 + 26 * index }}
                                                 id={`commandTopic${idx}`}
                                                 isValidConnection={(connection) =>
                                                     connection.sourceHandle === "mappingOut"
@@ -143,7 +146,8 @@ function TopicNode({id, data}: NodeProps) {
                                                 id={`commandTopic${idx}`}
                                                 value={item}
                                                 onChange={(event) => handleCommandTopicChange(event, idx)}
-                                                onBlur={updateNode}                                            />
+                                                onBlur={updateNode}
+                                            />
                                             <button onClick={() => handleCommandTopicRemove(idx)}>
                                                 <FaMinus />
                                             </button>
@@ -155,7 +159,7 @@ function TopicNode({id, data}: NodeProps) {
                                             className="bg-accent p-1 left-1"
                                             type="target"
                                             position={Position.Left}
-                                            style={{ top: 105 + 26 * index }}
+                                            style={{ top: 134 + 26 * index }}
                                             id={`commandTopic${index}`}
                                             isValidConnection={(connection) =>
                                                 connection.sourceHandle === "mappingOut"
