@@ -155,16 +155,30 @@ function MappingNode({id, data}: NodeProps) {
                     </div>
                 </div>
             </div>
-            <Handle
+            {data.nodeType === "static" &&
+                <Handle
                 type="source"
                 position={Position.Right}
                 id="mappingOut"
-                style={reportIndent}
+                style={{ top: 130 }}
                 isConnectable={isConnectable}
                 className="bg-accent  right-2 p-1"
                 isValidConnection={(connection) => connection.targetHandle === 'commandTopic'}
-            />
-        </div>
+            />}
+            {data.nodeType !== "static" &&
+                <Handle
+                    type="source"
+                    position={Position.Right}
+                    id="mappingOut"
+                    style={reportIndent}
+                    isConnectable={isConnectable}
+                    className="bg-accent  right-2 p-1"
+                    isValidConnection={(connection) => connection.targetHandle === 'commandTopic'}
+                />
+            }
+
+
+                </div>
     );
 }
 
