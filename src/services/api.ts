@@ -150,5 +150,3 @@ export const getJsonProject = async (projectId) => {
     throw error;
   }
 };
-
-
