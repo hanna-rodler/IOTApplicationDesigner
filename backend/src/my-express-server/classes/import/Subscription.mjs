@@ -1,7 +1,7 @@
 import StaticMapping from './StaticMapping.mjs';
-import ValueJsonMapping from './ValueJsonMapping.mjs';
-import Topic from './Topic.mjs';
-import {createEdgeIn, createEdgeOut} from './Edges.mjs';
+import ValueJsonMapping from '../ValueJsonMapping.mjs';
+import Topic from '../Topic.mjs';
+import {createEdgeIn, createEdgeOut} from '../Edges.mjs';
 
 export default class Subscription {
     constructor(subscription, reportTopic){
@@ -14,14 +14,35 @@ export default class Subscription {
         this.valueMappings = [];
         this.commandTopics = [];
         if(subscription.static !== undefined) {
+            console.log('static subscription: ', subscription.static);
             const staticMappings = Array.isArray(subscription.static) ? subscription.static : [subscription.static]
             for(let mapping of staticMappings){
-                this.staticMappings.push(new StaticMapping(mapping, this.reportTopic));
+                if(Array.isArray(mapping.message_mapping)) {
+                    // e.g.
+                    // "mapped_topic": "mapping/value",
+                    // message_mapping  [
+                    //     { message: 'pressed', mapped_message: 'on' },
+                    //     { message: 'released', mapped_message: 'off' }
+                    //   ]
+                    for(let msgMappingObj of mapping.message_mapping) {
+                        const tempMapping = {
+                            mapped_topic: mapping.mapped_topic,
+                            message_mapping: {
+                                message: msgMappingObj.message,
+                                mapped_message: msgMappingObj.mapped_message
+                            }
+                        }
+                        this.staticMappings.push(new StaticMapping(tempMapping, this.reportTopic))
+                    }
+                } else {
+                    this.staticMappings.push(new StaticMapping(mapping, this.reportTopic));
+                }
                 this.commandTopics.push(mapping.mapped_topic);
             }
         }
         if(subscription.json !== undefined) {
             const jsonMappings = Array.isArray(subscription.json) ? subscription.json : [subscription.json]
+            // TODO: msgMappingObj wie bei static.
             for(let mapping of jsonMappings){
                 this.jsonMappings.push(new ValueJsonMapping(mapping, 'json', this.reportTopic));
                 this.commandTopics.push(mapping.mapped_topic);

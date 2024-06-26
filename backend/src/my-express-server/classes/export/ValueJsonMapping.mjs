@@ -13,7 +13,6 @@ export default class ValueJsonMapping {
         console.log('value json Mapping', this);
     }
 
-// TODO: json and value wildcard topic
     renderForJson(targetTopic) {
         console.log('renderingJsonValueMapping')
         let valueJsonMapping = {

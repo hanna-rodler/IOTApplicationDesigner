@@ -1,6 +1,6 @@
 import Subscription from './Subscription.mjs';
-import Topic from './Topic.mjs';
-import {removeDuplicates} from '../utils/utils.mjs';
+import Topic from '../Topic.mjs';
+import {removeDuplicates} from '../../utils/utils.mjs';
 
 export default class MappingLevel {
     constructor(topic_levels, plugins = undefined) {
@@ -25,6 +25,8 @@ export default class MappingLevel {
     parseTopicLevel(topic_level, name = ''){
         console.log('topic_level ', topic_level);
         if(Array.isArray(topic_level)) {
+            console.log('\t\ttopic level is array');
+            // case that there is subscription & topic level 
             for(let level of topic_level){
                 if('track_name' in level && name !== '') {
                     level.track_name += name +'/';
@@ -43,12 +45,34 @@ export default class MappingLevel {
             } else {
                 topic_level.track_name = name;
             }
-            if('topic_level' in topic_level){
-                this.parseTopicLevel(topic_level.topic_level, topic_level.track_name);
+            // in rare cases, there is a sub topic_level and subscription in the same topic_level
+            if('topic_level' in topic_level && 'subscription' in topic_level) {
+                console.log('\t\tthere is a nested subscription and a topic_level on same level');
+                this.parseSubscriptionAndTopicLevelOnSameLevel(topic_level);
             } else {
-                this.parseSubscription(topic_level)
+                // usually there is either a sub topic_level or a subscription in a topic_level
+                if('topic_level' in topic_level){
+                    console.log('\t\tone topic_level (not array)');
+                    this.parseTopicLevel(topic_level.topic_level, topic_level.track_name);
+                } else if('subscription' in topic_level) {
+                    console.log('\t\tone subscription (not array)')
+                    this.parseSubscription(topic_level)
+                }
             }
         }
+    }
+
+    parseSubscriptionAndTopicLevelOnSameLevel(topic) {
+        console.log('same level: ', topic);
+        // create own subscription and topic level, so they can be rendered seperately.
+        // subscriptionPart already has full track_name. Nothing needs to be added later on so it gets name ''.
+        const subscriptionPart = {
+            name: '',
+            subscription: topic.subscription,
+            track_name: topic.track_name.substr(0, topic.track_name.length -1)
+        }
+        this.parseSubscription(subscriptionPart);
+        this.parseTopicLevel(topic.topic_level, topic.track_name);
     }
 
     parseSubscription(topic) {

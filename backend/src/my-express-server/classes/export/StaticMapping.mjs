@@ -10,7 +10,7 @@ export default class StaticMapping {
         this.retain = mapping.data.retain,
         this.id = mapping.id;
         this.position = mapping.position;
-        this.commandTopic = undefined,
+        this.commandTopic = undefined, // TODO: can remove?
         this.reportTopic = undefined
     }
 

@@ -5,6 +5,7 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
     const mappingType = mapping.nodeType;
     if(subscriptionExists) {
         // TODO: evl. check for higher qos or type? wrsl eh nicht. FE: don't allow same reportTopic.
+        console.log('already existing subscription: ', subscription);
         if(hasMappingType(subscription, mappingType)) {
             const mappingTypeValue = transformExistingMappingTypeToArray(subscription, mappingType);
             mappingTypeValue.push(mapping.renderForJson(targetTopic));
