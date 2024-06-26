@@ -24,10 +24,10 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`bg-sidebar sidebar fixed right-0 top-navHeight ${sidebarWidth} ${sidebarPadding} overflow-x-hidden transition-all duration-300`}
+      className={`bg-sidebar sidebar fixed right-0 ${sidebarWidth} ${sidebarPadding} overflow-x-hidden transition-all duration-300`}
     >
       {/* Sidebar Content */}
-      <div className="">
+      <div>
         <div className="text-sm mb-4">
           Drag and drop the mappings and topics into the editor.
         </div>

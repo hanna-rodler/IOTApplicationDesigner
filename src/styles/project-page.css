@@ -14,7 +14,7 @@
 .react-flow-container {
     flex-grow: 1;
     flex-direction: row;
-    height: calc(100vh - 120px); /* Adjust this based on the combined height of your TopBar and TabNavigation */
+    height: calc(100vh - 3.125rem); /* Adjust this based on the combined height of your TopBar and TabNavigation */
     /* width: 100%; */
     position: relative;
 }

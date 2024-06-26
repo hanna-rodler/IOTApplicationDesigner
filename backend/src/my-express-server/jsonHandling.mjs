@@ -5,12 +5,9 @@ import TestDataLoader from './testData/testDataLoader.mjs'
 import {renderMappingsToJson} from './utils/nodeMapping.mjs';
 import fs from 'fs';
 import Dialog from './classes/Dialog.mjs';
-import MappingLevel from './classes/MappingLevel.mjs';
+import MappingLevel from './classes/import/MappingLevel.mjs';
 import ExportHandler from './classes/export/ExportHandler.mjs';
 import axios from 'axios';
-import express from 'express';
-
-const router = express.Router();
 
 
 const __filename = fileURLToPath(import.meta.url);

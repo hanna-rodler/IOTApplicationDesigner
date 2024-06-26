@@ -12,7 +12,7 @@ function TopicNode({id, data}: NodeProps) {
     const [reportTopic, setReportTopic] = useState(data.reportTopic);
     const [commandTopic, setCommandTopic] = useState(data.commandTopic);
     const [qos, setQos] = useState(data.qos);
-    const [subscritpion, setSubscription] = useState(data.subscriptionTopic);
+    const [subscritpion, setSubscription] = useState(data.subscriptionType);
 
     const nodeNameRef = useRef(nodeName);
     const reportTopicRef = useRef(reportTopic);
@@ -42,7 +42,7 @@ function TopicNode({id, data}: NodeProps) {
                 nodeName: nodeNameRef.current,
                 commandTopic: commandTopicRef.current,
                 reportTopic: reportTopicRef.current,
-                subscriptionTopic: subscriptionRef.current,
+                subscriptionType: subscriptionRef.current,
                 qos: qosRef.current,
             },
         });
