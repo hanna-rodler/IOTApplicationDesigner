@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import TopBar from "./TopBar";
-import { writeMqttFile, convertToValidJson } from "../utils/jsonHandling";
+import { convertToValidJson } from "../utils/jsonHandling";
 import { FirstDialogue } from "../types/jsonTypes";
 import {
     createProject,
