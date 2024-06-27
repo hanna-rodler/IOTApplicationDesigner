@@ -14,6 +14,6 @@ export const createEdgeOut = (mappingId, commandTopic) => ({
     source: mappingId,
     sourceHandle: 'mappingOut',
     target: commandTopic,
-    targetHandle: 'commandTopic0',
+    targetHandle: 'commandTopic',
     type: 'smoothstep'
 })
