@@ -38,7 +38,7 @@ const TopBar: React.FC<Props> = ({onAddTab, onOpenProject, onEditProject, addBut
                         <Tooltip id="exportBtn" className="customTooltip"/>
 
                         <BiEdit className="navBarBtn focus:outline-none" onClick={onEditProject} data-tooltip-id="editBtn"
-                                data-tooltip-content="Edit"/>
+                                data-tooltip-content="Edit Project Dialog"/>
                         <Tooltip id="editBtn" place="bottom" className="customTooltip"/>
 
                         <BiSave className={`navBarBtn focus:outline-none ${isSaved ? 'save-success' : ''}`}
