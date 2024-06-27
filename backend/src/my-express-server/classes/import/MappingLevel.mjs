@@ -1,6 +1,7 @@
 import Subscription from './Subscription.mjs';
 import Topic from '../Topic.mjs';
 import {removeDuplicates} from '../../utils/utils.mjs';
+import {type} from "os";
 
 export default class MappingLevel {
     constructor(topic_levels, plugins = undefined) {
@@ -18,9 +19,10 @@ export default class MappingLevel {
     }
 
     parseTopicLevels(){
-        if(this.topic_levels )
-        this.parseTopicLevel(this.topic_levels);
-    } 
+        if(this.topic_levels) {
+            this.parseTopicLevel(this.topic_levels);
+        }
+    }
 
     parseTopicLevel(topic_level, name = ''){
         console.log('topic_level ', topic_level);
@@ -77,9 +79,9 @@ export default class MappingLevel {
 
     parseSubscription(topic) {
         const reportTopic = topic.track_name + topic.name;
-        
+
         const subscription = new Subscription(topic.subscription, reportTopic);
-        
+
         const renderedEdges = subscription.renderEdges();
         this.edges = this.edges.concat(renderedEdges);
 
@@ -104,25 +106,34 @@ export default class MappingLevel {
             // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping
             for(let edge of this.edges) {
                 if(edge.targetHandle === 'commandTopic') {
-                    const commandTopic = edge.target;
+                    let commandTopic = edge.target;
+                    if(typeof commandTopic === 'string'){
+                        commandTopic = [commandTopic]
+                    }
+                    console.log("DEBUG: CommandTopic ", commandTopic);
                     const topic = getTopicByCommandTopic(this.topics, commandTopic);
-                    edge.target = topic.id;
+                    if (topic) {
+                        edge.target = topic.id;
+                    } else {
+                        console.error(`No topic found for command topic: ${commandTopic}`);
+                    }
                 }
             }
             return this.edges;
         } else {
             this.renderTopics();
-            this.renderEdges();
+            return this.renderEdges();
         }
     }
 }
 
 function getTopicByCommandTopic(topics, commandTopic) {
     for(let topic of topics) {
-        if(topic.data.commandTopic === commandTopic) {
+        if(topic.data.commandTopic.includes(commandTopic[0])) {
             return topic;
         }
     }
+    return null; // Return null if no topic is found
 }
 
 function renderMissingTopics(allCommandTopics, topics) {
@@ -136,7 +147,7 @@ function createMissingTopics(missingCommandTopicNames){
     const missingTopics = [];
     // create the topics for that commandTopic
     for(let commandTopic of missingCommandTopicNames){
-        const topic = new Topic({commandTopic: commandTopic});
+        const topic = new Topic({commandTopic: [commandTopic]});
         missingTopics.push(topic);
     }
     return missingTopics;
@@ -144,31 +155,5 @@ function createMissingTopics(missingCommandTopicNames){
 
 function getMissingCommandTopicNames(allCommandTopics, topics){
     allCommandTopics = removeDuplicates(allCommandTopics);
-
-    // let matchedCommandTopics = [];
-    // for(let commandTopic of allCommandTopics){
-    //     for(let topic of topics){
-    //         const reportTopic = topic.data.reportTopic;
-    //         const reportTopicParts = reportTopic.split('/');
-    //         reportTopicParts.pop();
-    //         // TODO: besprechen, ob das so ist. ansonsten müsste ich immer einzelne Topics ausspielen.
-    //         if(reportTopicParts.join('/') === commandTopic) {
-    //             console.log(commandTopic, ' matched ', reportTopicParts.join('/'));
-    //             topic.data.commandTopic = commandTopic;
-    //             matchedCommandTopics.push(commandTopic);
-    //         }
-    //     }
-    // }
-
-    // matchedCommandTopics = removeDuplicates(matchedCommandTopics)
-    // console.log('\nmatched command Topics ', matchedCommandTopics);
-    // edges $t = topicid, $m = mappingId, $c = commandTopic
-    
-    // look for matching report Topic in this.commandTopics; ?
-    
-    // look for all the command Topics that weren't added to a topic
-    // const missingCommandTopicNames = allCommandTopics.filter(commandTopic => !matchedCommandTopics.includes(commandTopic));
-    // console.log('missing ', missingCommandTopicNames);
-    // return missingCommandTopicNames;
     return allCommandTopics;
 }

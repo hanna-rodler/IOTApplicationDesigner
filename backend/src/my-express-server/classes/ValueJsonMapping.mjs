@@ -4,7 +4,7 @@ export default class ValueJsonMapping {
     constructor2(mapping, nodeType, reportTopic) {
         this.nodeType = nodeType;
         this.mapping = mapping.mapping_template;
-        this.commandTopic = mapping.mapped_topic;
+        this.commandTopic = [mapping.mapped_topic];
         this.reportTopic = reportTopic;
         this.id = this.nodeType + '_' + generateRandomString(11);
     }
@@ -16,7 +16,7 @@ export default class ValueJsonMapping {
             qos: mapping.qos !== undefined ? mapping.qos : '',
             retain: mapping.retain !== undefined ? mapping.retain : ''
         }        
-        this.commandTopic = mapping.mapped_topic;
+        this.commandTopic = [mapping.mapped_topic];
         this.type = 'mapping';
         this.position = mapping.position !== undefined ? mapping.position : generateRandPosition();
         this.reportTopic = reportTopic;

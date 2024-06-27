@@ -6,6 +6,7 @@ export const createEdgeIn = (topicId, mappingId) => ({
     sourceHandle: 'reportTopic',
     target: mappingId,
     targetHandle: 'mappingIn',
+    type: 'smoothstep'
 })
 
 export const createEdgeOut = (mappingId, commandTopic) => ({
@@ -14,4 +15,5 @@ export const createEdgeOut = (mappingId, commandTopic) => ({
     sourceHandle: 'mappingOut',
     target: commandTopic,
     targetHandle: 'commandTopic',
+    type: 'smoothstep'
 })
