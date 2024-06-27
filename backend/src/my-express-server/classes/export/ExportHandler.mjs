@@ -10,6 +10,9 @@ export default class MappingLevel {
         this.reactFlowTopics = new TopicsMap(reactFlowTopics, 'topics');
         this.edgesMapper = new EdgesMapper(reactFlowEdges);
         this.reactFlowMappings = new MappingsMap(reactFlowMappings);
+        console.log('edgesMapper ', this.edgesMapper);
+        console.log('mappings ', this.reactFlowMappings);
+        console.log('-- created all maps ---');
         
         this.mappedEdgesWithContents = this.edgesMapper.getMappedEdgesWithContent(this.reactFlowTopics, this.reactFlowMappings);
         console.log('mapped edges with contents', this.mappedEdgesWithContents);

@@ -1,4 +1,4 @@
-import Edge from '../Edge.mjs';
+import Edge from './Edge.mjs';
 import MappedEdge from '../MappedEdge.mjs';
 
 export default class EdgesMapper {
@@ -24,7 +24,8 @@ export default class EdgesMapper {
 }
 
 function getMappedEdges(edgesMap) {
-    const halfMappedEdges = getHalfMappedEdges(edgesMap);
+    const halfMappedEdges = getHalfMappedEdges(edgesMap)
+    console.log('halfMappedEdges ', halfMappedEdges);
     const mappedEdges = mapEdges(halfMappedEdges);
     return mappedEdges;
 }
@@ -53,6 +54,7 @@ function mapEdges(halfMappedEdges) {
         }
 
         // try to find matching edge
+        console.log('currentEdge ', currentEdge);
         const matchingIndex = halfMappedEdges.findIndex(edge => edge.mappingId === currentEdge.mappingId);
 
         if (matchingIndex !== -1) {
