@@ -1,7 +1,7 @@
 import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
-import { GoPlus } from "react-icons/go";
+import { GoPlus, GoFileDirectory } from "react-icons/go";
 import UploadBtn from '../components/UploadBtn'; 
 import {NavLink} from "react-router-dom";
 
@@ -13,21 +13,22 @@ export function HomeScreen() {
         <div className="lg:w-5/12 order-2 lg:order-first lg:mt-0 mt-12  mx-10 lg:mb-0 mb-10 sm:mx-14 lg:mx-0">
           <h1 className="text-center lg:text-left">Create your Home</h1>
           <div className="text-center lg:text-left">
-            Lorem ipsum ... ein möglicher Erklärtext zu IoT Configurator. Built
-            with SNode. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-            duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-            ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
-            eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+              Welcome to our Internet of Things Configurator, your essential tool for setting up and managing
+              IoT networks effortlessly. Our configurator utilizes JSON format to seamlessly configure nodes,
+              ensuring compatibility and ease of integration across various devices and platforms. Once
+              configured, you can conveniently export MQTT JSON, enabling smooth communication and data
+              exchange within your IoT ecosystem. Whether you're a developer, engineer, or IoT enthusiast, our
+              tool empowers you to streamline configuration processes and maximize the potential of your
+              connected devices. Dive into the future of IoT configuration with us today!
           </div>
           <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
             <NavLink to="/setup" className="secondaryBtn sm:mr-6 min-w-14">
               <GoPlus className="iconBtn" />
               Start new project
+            </NavLink>
+            <NavLink to="/projects" className="secondaryBtn sm:mr-6 min-w-14">
+              <GoFileDirectory className="iconBtn" />
+              Open project
             </NavLink>
             <UploadBtn />
           </div>

@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-
 import ReactFlow, {
     addEdge,
     applyEdgeChanges,
@@ -9,22 +8,25 @@ import ReactFlow, {
     ReactFlowProvider,
     useReactFlow
 } from "reactflow";
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
 import MappingNode from "../nodes/MappingNode.tsx";
+
 import {
     addSubcollectionItem,
     getJsonProject,
     getProjectById,
+    getProjects,
     getSubcollectionItem
 } from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
 import {generateId} from "../utils/utils.ts";
 import {downloadJsonFile} from '../utils/download.ts';
+import html2canvas from "html2canvas";
 
 const nodeTypes: NodeTypes = {
     mapping: MappingNode,
@@ -41,16 +43,16 @@ const ProjectPageWithoutReactFlowProvider = () => {
     const [edges, setEdges] = useState([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [selectedProject, setSelectedProject] = useState<any | null>(null);
+    const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const {screenToFlowPosition} = useReactFlow();
 
+    const navigate = useNavigate();
 
-    // Create refs for nodes and edges
     const nodesRef = useRef(nodes);
     const edgesRef = useRef(edges);
 
-    // Update refs whenever state changes
     useEffect(() => {
         nodesRef.current = nodes;
     }, [nodes]);
@@ -60,11 +62,23 @@ const ProjectPageWithoutReactFlowProvider = () => {
     }, [edges]);
 
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchProject = async () => {
             try {
                 const project = await getProjectById(projectId);
                 console.log('project ', project)
                 setSelectedProject(project);
+            } catch (error) {
+                console.error(`Error fetching project with ID ${projectId}:`, error);
+            }
+        };
+        fetchProject();
+    }, []);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const projects = await getProjects();
+                setProjects(projects);
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
@@ -75,7 +89,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     useEffect(() => {
         if (selectedProject) {
             const fetchNodes = async () => {
-                console.log("Fetching nodes for project:", selectedProject);
                 try {
                     const topics = await getSubcollectionItem(selectedProject._id, 'topics');
                     const mappings = await getSubcollectionItem(selectedProject._id, 'mappings');
@@ -108,7 +121,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     };
 
     const updateNodeCollection = async () => {
-        console.log("Update Nodes", nodesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -147,7 +159,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
     };
 
     const updateEdgeCollection = async () => {
-        console.log("Update Edges", edgesRef.current);
         if (!selectedProject) {
             console.error('No selected project to update');
             return;
@@ -168,17 +179,9 @@ const ProjectPageWithoutReactFlowProvider = () => {
         []
     );
     const onConnect = useCallback(
-        (connection) => setEdges((eds) => addEdge(connection, eds)),
+        (connection) => setEdges((eds) => addEdge({...connection, type: 'smoothstep'}, eds)),
         []
     );
-
-    const addNewTab = () => {
-        const newTabName = prompt("Enter name for the new Configuration-Tab:");
-        if (newTabName) {
-           /* setTabs((prevTabs) => [...prevTabs, {name: newTabName, nodes: initialNodes, edges: initialEdges}]);
-            setActiveTab(tabs.length);*/
-        }
-    };
 
     useEffect(() => {
         const handleDelete = (event) => {
@@ -187,9 +190,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             });
             saveItems();
         };
-
         window.addEventListener('deleteNode', handleDelete);
-
         return () => {
             window.removeEventListener('deleteNode', handleDelete);
         };
@@ -210,9 +211,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             });
             saveItems();
         };
-
         window.addEventListener('updateNode', handleUpdate);
-
         return () => {
             window.removeEventListener('updateNode', handleUpdate);
         };
@@ -265,7 +264,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             } else if (type === 'topic') {
                 newNode.data = {
                     nodeName: nodeName,
-                    commandTopic: '',
+                    commandTopic: [''],
                     reportTopic: '',
                     subscriptionTopic: '',
                     qos: 0
@@ -292,10 +291,50 @@ const ProjectPageWithoutReactFlowProvider = () => {
         downloadJsonFile(exportData.file, exportData.fileName);
     }
 
+    const addNewTab = () => {
+        navigate("/setup");
+    };
+
+    const openProject = async () => {
+        const element = document.querySelector(".react-flow-container");
+
+        if (element) {
+            const screenshot = await html2canvas(element);
+            const screenshotDataUrl = screenshot.toDataURL("image/png");
+
+            localStorage.setItem(`projectScreenshot-${projectId}`, screenshotDataUrl);
+
+            navigate("/projects");
+        } else {
+            console.error("Element with class 'react-flow-container' not found");
+        }
+    };
+
+    const editProject = () => {
+        navigate(`/setup/${projectId}`);
+    }
+
+    const handleKeyDown = useCallback((event) => {
+        if (event.key === 'Delete') {
+            setEdges((eds) => eds.filter(edge => edge.id !== selectedEdgeId));
+            saveItems();
+        }
+    }, [saveItems]);
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
+    const handleEdgeClick = (event, edge) => {
+        event.stopPropagation();
+        setSelectedEdgeId(edge.id);
+    };
     return (
         <div className="project-page-container">
-            <TopBar onAddTab={addNewTab} addButtons={true} onSaveProject={saveItems}
-                    onExportProject={exportProject}/>
+            <TopBar onAddTab={addNewTab} onOpenProject={openProject} onEditProject={editProject}
+                    addButtons={true} onSaveProject={saveItems} onExportProject={exportProject}/>
             <div className="react-flow-container" ref={reactFlowWrapper}>
                 {isLoading &&
                     <div className="flex justify-center mt-20">
@@ -313,6 +352,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
                     onDrop={onDrop}
                     fitView
                     edgesUpdatable={true}
+                    onEdgeClick={handleEdgeClick}
                 >
                     <Controls/>
                 </ReactFlow>
