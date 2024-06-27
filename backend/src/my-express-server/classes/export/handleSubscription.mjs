@@ -6,14 +6,16 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
     if(subscriptionExists) {
         // TODO: evl. check for higher qos or type? wrsl eh nicht. FE: don't allow same reportTopic.
         console.log('already existing subscription: ', subscription);
-        if(hasMappingType(subscription, mappingType)) {
+        if(mappingType in subscription) {
+            // subscription already has mappingType
             const mappingTypeValue = transformExistingMappingTypeToArray(subscription, mappingType);
             mappingTypeValue.push(mapping.renderForJson(targetTopic));
             // console.log('added ', mappingTypeValue);
             subscription[mappingType] = mappingTypeValue;
             return subscription;
         } else {
-            // add mappingType. e.g. subscription.static exists, add subscription.value
+            // add new mappingType to subscription
+            // e.g. if subscription.static exists, add subscription.value
             console.info('add mapping type to subscription');
             subscription[mappingType] = mapping.renderForJson(targetTopic);
         }
@@ -46,11 +48,4 @@ function transformExistingMappingTypeToArray(subscription, mappingType) {
         // If it's neither an array nor an object, return an empty array
         return null;
     }
-}
-
-function hasMappingType(subscription, mappingType) {
-    // TODO: implement and test for double mapping type in 1 subscription.
-    // Check if the subscription object has the specified mappingType
-    return true;
-    //return Object.values(subscription).some(value => typeof value === 'object' && value.hasOwnProperty(mappingType));
 }

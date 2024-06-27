@@ -17,7 +17,6 @@ export default class EdgesMapper {
 
     getMappedEdgesWithContent(topicsMap, mappingsMap) {
         const mappedEdges = getMappedEdges(this.edgesMap);
-        console.log('mappedEdges ', mappedEdges);
         const edgesWithContents = getEdgesWithContents(mappedEdges, topicsMap, mappingsMap);
         return edgesWithContents;
     }
@@ -25,7 +24,6 @@ export default class EdgesMapper {
 
 function getMappedEdges(edgesMap) {
     const halfMappedEdges = getHalfMappedEdges(edgesMap)
-    console.log('halfMappedEdges ', halfMappedEdges);
     const mappedEdges = mapEdges(halfMappedEdges);
     return mappedEdges;
 }
@@ -63,7 +61,7 @@ function mapEdges(halfMappedEdges) {
 
             // merge the edges
             const mappedEdge = mergeHalfMappedEdges(currentEdge, matchingEdge);
-            mappedEdges.push(new MappedEdge(mappedEdge.mappingId, mappedEdge.sourceTopicId, mappedEdge.targetTopicId));
+            mappedEdges.push(new MappedEdge(mappedEdge.mappingId, mappedEdge.sourceTopicId, mappedEdge.targetTopicId, mappedEdge.commandTopicNr));
         } else {
             console.error('No matching edge found for mappingId:', currentEdge.mappingId);
         }
@@ -72,13 +70,17 @@ function mapEdges(halfMappedEdges) {
 }
 
 function mergeHalfMappedEdges(currentEdge, matchingEdge) {
+    console.log('currentEdge ', currentEdge);
+    console.log('matchingEdge ', matchingEdge);
     const mappedEdge = { mappingId: currentEdge.mappingId };
-    if ('sourceTopicId' in currentEdge && 'targetTopicId' in matchingEdge) {
+    if ('sourceTopicId' in currentEdge && 'targetTopicId' in matchingEdge && 'commandTopicNr' in matchingEdge) {
         mappedEdge.sourceTopicId = currentEdge.sourceTopicId;
         mappedEdge.targetTopicId = matchingEdge.targetTopicId;
-    } else if ('sourceTopicId' in matchingEdge && 'targetTopicId' in currentEdge) {
+        mappedEdge.commandTopicNr = matchingEdge.commandTopicNr;
+    } else if ('sourceTopicId' in matchingEdge && 'targetTopicId' in currentEdge && 'commandTopicNr' in currentEdge) {
         mappedEdge.sourceTopicId = matchingEdge.sourceTopicId;
         mappedEdge.targetTopicId = currentEdge.targetTopicId;
+        mappedEdge.commandTopicNr = currentEdge.commandTopicNr;
     }
     return mappedEdge;
 }
@@ -117,5 +119,5 @@ function getTargetTopic(edge, topicsMap) {
     if (!targetTopic) {
         console.error('No target topic found for targetTopicId:', edge.targetTopicId);
     }
-    return { id: targetTopic.id, commandTopic: targetTopic.commandTopic };
+    return { id: targetTopic.id, commandTopic: targetTopic.commandTopic[edge.commandTopicNr] };
 }

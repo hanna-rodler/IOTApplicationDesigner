@@ -3,7 +3,10 @@ export default class Topic {
         this.id = topic.id;
         this.nodeName = topic.data.nodeName;
         this.reportTopic = topic.data.reportTopic;
-        this.commandTopic = topic.data.commandTopic;
+        this.commandTopic = []; // TODO change to commandTopics
+        for(let commandTopic of topic.data.commandTopic) {
+            this.commandTopic.push(commandTopic);
+        }
         this.subscriptionType = topic.data.subscriptionType;
         this.qos = topic.data.qos;
         this.type = topic.type;
