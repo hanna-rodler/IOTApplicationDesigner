@@ -70,7 +70,11 @@ export default class MappingLevel {
                         }
                         console.log('existing part Topic Level ', existingTopicLevel);
                     } else {
-                        console.log(' :////');
+                        // add topic_level to topic. e.g. topic_level has subscription, but not a topic_level.
+                        console.log(' topic level has subscription but not topic level');
+                        const subTopicLevelName = topicLevelName.replace(matchingTopicLevelName+'/', '');
+                        const newTopicLevel = createNestedTopicLevel(subTopicLevelName, sourceTopic, mapping, targetTopic);
+                        existingTopicLevel.topic_level = newTopicLevel;
                     }
                 }
                 // console.log('merged subscription ', mergedSubscription);

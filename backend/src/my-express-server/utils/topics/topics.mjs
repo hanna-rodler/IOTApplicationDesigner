@@ -107,7 +107,7 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
                         //     { name: 'celsius', topic_level: [Object] },
                         //     { name: 'kelvin' }
                         //   ]
-                        console.log(' found ', item);
+                        return item;
                     }
                 }
             }
