@@ -11,30 +11,20 @@ export function removeMatchingTopicLevelNameFromName(matchingTopicLevelName, top
 }
 
 export function findMatchingTopicLevelName(name, topicLevelNames) {
-    // Split the name into parts
     const nameParts = name.split('/');
     console.log('looking for name ', name, ' in ', topicLevelNames);
 
-    // check for full name
-    for (let topic of topicLevelNames) {
-        if (name === topic) {
-            console.log('full name match found');
-            return name; // Return the full name if there is a complete match
-        }
-    }
+    const possibleMatches = [];
 
-    // Iterate through each topic level name in the array
     for (let topic of topicLevelNames) {
-        // Split the topic level name into parts
         const topicParts = topic.split('/');
 
-        // Check if the name matches the topic level name
+        // for full match
         if (name === topic) {
-            console.log('full name match found');
-            return name; // Return the full name if there is a complete match
+            return name;
         }
 
-        // Initialize an array to hold the matching parts
+        // array to hold the possible matching parts
         let matchingParts = [];
 
         // Compare each part
@@ -48,11 +38,17 @@ export function findMatchingTopicLevelName(name, topicLevelNames) {
 
         // If any matching parts are found, return the matching part of the name
         if (matchingParts.length > 0) {
-            return matchingParts.join('/');
+            possibleMatches.push(matchingParts.join('/'))
         }
     }
 
-    // If no matches are found, return an empty string
+    // find the longest of all possible matches
+    if (possibleMatches.length > 0) {
+        const longest = possibleMatches.reduce((max, obj) => (obj.length > max.length ? obj: max), possibleMatches[0]);
+        return longest;
+    }
+
+    // no matches found
     return '';
 }
 

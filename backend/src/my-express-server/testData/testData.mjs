@@ -400,7 +400,6 @@ export function getJsonTestTopics(){
 }
 
 export function getValueTestTopics(){
-    // TODO: wildcard mapping value.json erstes.
     return [
         // {
         //     "id": "double",

@@ -32,7 +32,6 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
     return subscription;
 }
 
-// TODO: json and value wildcard topic
 function renderMapping(mapping, targetTopic) {
     const mappingType = mapping.nodeType;
     if(mappingType === 'static') {
