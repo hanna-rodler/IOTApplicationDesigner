@@ -10,12 +10,12 @@ export default class Topic {
         } else if(data.reportTopic !== undefined) {
             name = getNodeName(data.reportTopic)
         } else if (data.commandTopic !== undefined) {
-            name = getNodeName(data.commandTopic);
+            name = getNodeName(data.commandTopic[0]);
         }
         this.data = {
             nodeName: name,
             reportTopic: data.reportTopic !== undefined ? data.reportTopic : '',
-            commandTopic: data.commandTopic !== undefined ? data.commandTopic : '',
+            commandTopic: data.commandTopic !== undefined ? data.commandTopic : [''],
             subscriptionType: data.type !== undefined ? data.type : '',
             qos: data.qos !== undefined ? data.qos : '',
         }
