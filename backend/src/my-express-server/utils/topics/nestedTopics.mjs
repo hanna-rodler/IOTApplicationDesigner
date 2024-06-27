@@ -1,4 +1,4 @@
-import { renderSubscriptionPart } from './../handleSubscription.mjs';
+import { renderSubscriptionPart } from '../../classes/export/handleSubscription.mjs';
 
 export function createNestedTopicLevel(name, sourceTopic, mapping, targetTopic) {
     let topicLevel = {}

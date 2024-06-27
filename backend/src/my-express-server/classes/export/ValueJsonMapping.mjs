@@ -14,7 +14,6 @@ export default class ValueJsonMapping {
     }
 
     renderForJson(targetTopic) {
-        console.log('renderingJsonValueMapping')
         let valueJsonMapping = {
             mapped_topic: targetTopic.commandTopic,
             mapping_template: this.mapping,

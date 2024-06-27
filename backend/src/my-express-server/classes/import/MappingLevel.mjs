@@ -1,5 +1,5 @@
 import Subscription from './Subscription.mjs';
-import Topic from '../Topic.mjs';
+import Topic from './Topic.mjs';
 import {removeDuplicates} from '../../utils/utils.mjs';
 import {type} from "os";
 
@@ -105,7 +105,7 @@ export default class MappingLevel {
         if(this.allTopicsRendered){
             // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping
             for(let edge of this.edges) {
-                if(edge.targetHandle === 'commandTopic') {
+                if(edge.targetHandle === 'commandTopic0') {
                     let commandTopic = edge.target;
                     if(typeof commandTopic === 'string'){
                         commandTopic = [commandTopic]

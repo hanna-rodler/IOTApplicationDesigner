@@ -1,7 +1,7 @@
 import StaticMapping from './StaticMapping.mjs';
-import ValueJsonMapping from '../ValueJsonMapping.mjs';
-import Topic from '../Topic.mjs';
-import {createEdgeIn, createEdgeOut} from '../Edges.mjs';
+import ValueJsonMapping from './ValueJsonMapping.mjs';
+import Topic from './Topic.mjs';
+import {createEdgeIn, createEdgeOut} from './Edges.mjs';
 
 export default class Subscription {
     constructor(subscription, reportTopic){
@@ -25,16 +25,20 @@ export default class Subscription {
                     //     { message: 'released', mapped_message: 'off' }
                     //   ]
                     for(let msgMappingObj of mapping.message_mapping) {
+                        console.log('array msg mapping');
                         const tempMapping = {
                             mapped_topic: mapping.mapped_topic,
                             message_mapping: {
                                 message: msgMappingObj.message,
-                                mapped_message: msgMappingObj.mapped_message
+                                mapped_message: msgMappingObj.mapped_message,
+                                qos: msgMappingObj.qos !== undefined ? msgMappingObj.qos : '',
+                                retain: msgMappingObj.retain !== undefined ? msgMappingObj.retain : ''
                             }
                         }
                         this.staticMappings.push(new StaticMapping(tempMapping, this.reportTopic))
                     }
                 } else {
+                    console.log('simple msg mapping');
                     this.staticMappings.push(new StaticMapping(mapping, this.reportTopic));
                 }
                 this.commandTopics.push(mapping.mapped_topic);

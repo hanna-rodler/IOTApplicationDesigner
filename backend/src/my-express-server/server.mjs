@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { getFileName } from './utils/utils.mjs';
-import {exportToJson, exportToJsonOrig, importFromJson, importFromJsonBE} from './jsonHandling.mjs';
+import {exportToJson, importFromJson, importFromJsonBE} from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs'
 import {MongoClient} from "mongodb";
 
@@ -76,7 +76,6 @@ app.post('/write-mqtt-file', (req, res) => {
 });
 
 app.get('/api/export/:id', exportToJson);
-app.post('/export-test', exportToJsonOrig);
 
 app.post('/import-test', importFromJsonBE);
 app.post('/import', importFromJson);

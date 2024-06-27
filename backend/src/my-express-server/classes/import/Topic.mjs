@@ -1,4 +1,4 @@
-import { generateRandomString, getNodeName, generateRandPosition } from "../utils/utils.mjs";
+import { generateRandomString, getNodeName, generateRandPosition } from "../../utils/utils.mjs";
 
 export default class Topic {
     constructor(data, id = undefined, position = undefined) {

@@ -1,4 +1,4 @@
-import { generateRandomString, generateRandPosition } from "../utils/utils.mjs";
+import { generateRandomString, generateRandPosition } from "../../utils/utils.mjs";
 
 export default class ValueJsonMapping {
     constructor2(mapping, nodeType, reportTopic) {

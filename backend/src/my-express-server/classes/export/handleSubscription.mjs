@@ -1,6 +1,7 @@
 import { isObjectEmpty } from "../../utils/utils.mjs";
-// TODO: for json
+
 export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscription = {}) {
+    console.log('render export subscription');
     const subscriptionExists = !isObjectEmpty(subscription);
     const mappingType = mapping.nodeType;
     if(subscriptionExists) {

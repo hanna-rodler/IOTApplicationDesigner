@@ -1,5 +1,5 @@
 import Edge from './Edge.mjs';
-import MappedEdge from '../MappedEdge.mjs';
+import MappedEdge from './MappedEdge.mjs';
 
 export default class EdgesMapper {
     constructor(edges) {
