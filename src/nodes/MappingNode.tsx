@@ -3,8 +3,7 @@ import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FiBox} from "react-icons/fi";
 import {FaCode} from "react-icons/fa6";
 import {LuFileJson2} from "react-icons/lu";
-import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
-
+import {RiArrowDownDoubleFill, RiArrowUpDoubleFill} from "react-icons/ri";
 
 
 const reportIndent = {top: 80};
@@ -18,24 +17,28 @@ function MappingNode({id, data}: NodeProps) {
     const [qos, setQos] = useState(data.qos);
     const [retain, setRetain] = useState(data.retain);
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
-    const [supression, setSupression] = useState(data.supressions);
-    const [isSupressionNeeded, setIsSupressionNeeded] = useState(false);
+    const [suppression, setSuppression] = useState(data.suppressions);
+    const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
 
-    // validateSupression(supression);
-    function validateSupression(supr) {
-        if (supr.isEmpty || supr === '') {
-            setSupression("None")
-        } else {
-            setSupression(supr)
-        }
-    }
+    // function validateSuppression(supr) {
+    //     if (supr.trim() == "") {
+    //         setSuppression("None")
+    //         suppressionRef.current = "None"
+    //     } else {
+    //         setSuppression(supr)
+    //         suppressionRef.current = supr
+    //     }
+    //     console.log(suppressionRef.current)
+    //     console.log(supr.trim() == "")
+    //
+    // }
 
     const mappingRef = useRef(mapping);
     const messageRef = useRef(message);
     const qosRef = useRef(qos);
     const retainRef = useRef(retain);
-    const supressionRef = useRef(supression);
-  
+    const suppressionRef = useRef(suppression);
+
 
     function triggerCustomEvent(eventName, data) {
         const event = new CustomEvent(eventName, {
@@ -46,11 +49,6 @@ function MappingNode({id, data}: NodeProps) {
         window.dispatchEvent(event);
     }
 
-    const onBlurSupression = useCallback((evt) => {
-        validateSupression(evt.target.value)
-        // Todo: save supression
-    }, []);
-
     const deleteNode = useCallback(() => {
         if (window.confirm('Are you sure you want to delete this node?')) {
 
@@ -60,8 +58,8 @@ function MappingNode({id, data}: NodeProps) {
         }
     }, [id, deleteElements]);
 
-    function toggleSupression() {
-        setIsSupressionNeeded(!isSupressionNeeded)
+    function toggleOptions() {
+        setIsOptionsExpanded(!isOptionsExpanded)
     }
 
     const updateNode = useCallback(() => {
@@ -73,7 +71,7 @@ function MappingNode({id, data}: NodeProps) {
                 message: messageRef.current,
                 qos: qosRef.current,
                 retain: retainRef.current,
-                supression: supressionRef.current
+                suppression: suppressionRef.current
             },
         });
     }, [id]);
@@ -95,9 +93,10 @@ function MappingNode({id, data}: NodeProps) {
         retainRef.current = event.target.value;
         setTrueRetain(!isTrueRetain);
     };
-     const onChangeSupression = (event) => {
-        setSupression(evt.target.value);
-        supressionRef.current = event.target.value
+    const onChangeSuppression = (event) => {
+        setSuppression(event.target.value)
+        suppressionRef.current = event.target.value
+        // validateSuppression(event.target.value);
     };
 
     return (
@@ -139,11 +138,13 @@ function MappingNode({id, data}: NodeProps) {
                         {data.nodeType === "static" &&
                             <div>
                                 <label htmlFor="Message" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="message" name="message" value={message}
+                                <input className="nodrag p-1 w-44 border rounded-md" id="message" name="message"
+                                       value={message}
                                        onBlur={updateNode} onChange={onChangeMessage}
                                        placeholder="e.g. pressed / on "/>
                                 <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping" value={mapping}
+                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping"
+                                       value={mapping}
                                        onBlur={updateNode} onChange={onChangeMapping}
                                        placeholder="e.g. released / off "/>
                             </div>
@@ -158,11 +159,21 @@ function MappingNode({id, data}: NodeProps) {
 {% else % }off{% endif %}"/>
                             </div>
                         }
-                        {!isSupressionNeeded &&
-                            <button className="bg-primary text-white p-1 mt-1 rounded-md w-44" onClick={toggleSupression}> <div className="flex"><RiArrowDownDoubleFill className="m-1"/>Extend Options</div></button>
+                        {!isOptionsExpanded &&
+                            <button className="bg-primary text-white p-1 mt-1 rounded-md w-44" onClick={toggleOptions}>
+                                <div className="flex"><RiArrowDownDoubleFill className="m-1"/>Extend Options</div>
+                            </button>
                         }
-                        {isSupressionNeeded &&
+                        {isOptionsExpanded &&
                             <div>
+                                {data.nodeType !== "static" &&
+                                    <div>
+                                        <label htmlFor="Suppression" className="font-bold"> Suppression: </label>
+                                        <input className="nodrag p-1 w-44 border rounded-md" id="suppression"
+                                               name="suppression" value={suppression}
+                                               onBlur={updateNode} onChange={onChangeSuppression}/>
+                                    </div>
+                                }
                                 <div>
                                     <label htmlFor="qos" className="font-bold">qos:</label> <br/>
                                     <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
@@ -175,14 +186,18 @@ function MappingNode({id, data}: NodeProps) {
                                 </div>
                                 <div className="mt-2">
                                     <label htmlFor="retain" className="font-bold">retain:</label> <br/>
-                                    <select className=" p-1 w-44 border rounded-md" id="retain" name="retain" value={retain}
+                                    <select className=" p-1 w-44 border rounded-md" id="retain" name="retain"
+                                            value={retain}
                                             onBlur={updateNode} onChange={onChangeRetain}>
                                         <option disabled selected hidden> - select an option -</option>
-                                        <option className="text-xl" >true</option>
-                                        <option className="text-xl" >false</option>
+                                        <option className="text-xl">true</option>
+                                        <option className="text-xl">false</option>
                                     </select>
                                 </div>
-                                <button className="bg-primary text-white p-1 mt-2 rounded-md w-44" onClick={toggleSupression}><div className="flex"> <RiArrowUpDoubleFill className="m-1"/> Reduce Options</div></button>
+                                <button className="bg-primary text-white p-1 mt-2 rounded-md w-44"
+                                        onClick={toggleOptions}>
+                                    <div className="flex"><RiArrowUpDoubleFill className="m-1"/> Reduce Options</div>
+                                </button>
                             </div>
 
                         }
@@ -191,15 +206,17 @@ function MappingNode({id, data}: NodeProps) {
             </div>
             {data.nodeType === "static" &&
                 <Handle
-                type="source"
-                position={Position.Right}
-                id="mappingOut"
-                style={{ top: 130 }}
-                isConnectable={isConnectable}
-                className="bg-accent  right-2 p-1"
-                isValidConnection={(connection) => {const regex = /^commandTopic\d*$/;
-                    return regex.test(connection.targetHandle);}}
-            />}
+                    type="source"
+                    position={Position.Right}
+                    id="mappingOut"
+                    style={{top: 130}}
+                    isConnectable={isConnectable}
+                    className="bg-accent  right-2 p-1"
+                    isValidConnection={(connection) => {
+                        const regex = /^commandTopic\d*$/;
+                        return regex.test(connection.targetHandle);
+                    }}
+                />}
             {data.nodeType !== "static" &&
                 <Handle
                     type="source"
@@ -208,13 +225,15 @@ function MappingNode({id, data}: NodeProps) {
                     style={reportIndent}
                     isConnectable={isConnectable}
                     className="bg-accent  right-2 p-1"
-                    isValidConnection={(connection) => {const regex = /^commandTopic\d*$/;
-                        return regex.test(connection.targetHandle);}}
+                    isValidConnection={(connection) => {
+                        const regex = /^commandTopic\d*$/;
+                        return regex.test(connection.targetHandle);
+                    }}
                 />
             }
 
 
-                </div>
+        </div>
     );
 }
 
