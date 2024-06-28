@@ -6,6 +6,7 @@ export default {
       screens: {
           'xs': '450px',
           'max-1515': {'max': '1515px'},
+          'max-1280': {'max': '1280px'},
           'max-633': {'max': '633px'},
           'max-475': {'max': '475px'},
       },
