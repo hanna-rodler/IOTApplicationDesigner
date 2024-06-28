@@ -3,6 +3,8 @@ import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FiBox} from "react-icons/fi";
 import {FaCode} from "react-icons/fa6";
 import {LuFileJson2} from "react-icons/lu";
+import { RiArrowDownDoubleFill, RiArrowUpDoubleFill } from "react-icons/ri";
+
 
 
 const reportIndent = {top: 80};
@@ -16,12 +18,24 @@ function MappingNode({id, data}: NodeProps) {
     const [qos, setQos] = useState(data.qos);
     const [retain, setRetain] = useState(data.retain);
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
+    const [supression, setSupression] = useState(data.supressions);
+    const [isSupressionNeeded, setIsSupressionNeeded] = useState(false);
 
+    // validateSupression(supression);
+    function validateSupression(supr) {
+        if (supr.isEmpty || supr === '') {
+            setSupression("None")
+        } else {
+            setSupression(supr)
+        }
+    }
 
     const mappingRef = useRef(mapping);
     const messageRef = useRef(message);
     const qosRef = useRef(qos);
     const retainRef = useRef(retain);
+    const supressionRef = useRef(supression);
+  
 
     function triggerCustomEvent(eventName, data) {
         const event = new CustomEvent(eventName, {
@@ -32,6 +46,11 @@ function MappingNode({id, data}: NodeProps) {
         window.dispatchEvent(event);
     }
 
+    const onBlurSupression = useCallback((evt) => {
+        validateSupression(evt.target.value)
+        // Todo: save supression
+    }, []);
+
     const deleteNode = useCallback(() => {
         if (window.confirm('Are you sure you want to delete this node?')) {
 
@@ -40,6 +59,10 @@ function MappingNode({id, data}: NodeProps) {
             });
         }
     }, [id, deleteElements]);
+
+    function toggleSupression() {
+        setIsSupressionNeeded(!isSupressionNeeded)
+    }
 
     const updateNode = useCallback(() => {
         triggerCustomEvent('updateNode', {
@@ -50,6 +73,7 @@ function MappingNode({id, data}: NodeProps) {
                 message: messageRef.current,
                 qos: qosRef.current,
                 retain: retainRef.current,
+                supression: supressionRef.current
             },
         });
     }, [id]);
@@ -57,22 +81,23 @@ function MappingNode({id, data}: NodeProps) {
     const onChangeMapping = (event) => {
         setMapping(event.target.value);
         mappingRef.current = event.target.value;
-
     };
     const onChangeMessage = (event) => {
         setMessage(event.target.value);
         messageRef.current = event.target.value;
-
     };
     const onChangeQos = (event) => {
         setQos(event.target.value);
         qosRef.current = event.target.value;
-
     };
     const onChangeRetain = (event) => {
         setRetain(event.target.value);
         retainRef.current = event.target.value;
         setTrueRetain(!isTrueRetain);
+    };
+     const onChangeSupression = (event) => {
+        setSupression(evt.target.value);
+        supressionRef.current = event.target.value
     };
 
     return (
@@ -133,25 +158,34 @@ function MappingNode({id, data}: NodeProps) {
 {% else % }off{% endif %}"/>
                             </div>
                         }
-                    </div>
-                    <div>
-                        <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
-                                onBlur={updateNode} onChange={onChangeQos}>
-                            <option disabled selected hidden> - select an option -</option>
-                            <option className="text-xl">0</option>
-                            <option className="text-xl">1</option>
-                            <option className="text-xl">2</option>
-                        </select>
-                    </div>
-                    <div className="mt-2">
-                        <label htmlFor="retain" className="font-bold">retain:</label> <br/>
-                        <select className=" p-1 w-44 border rounded-md" id="retain" name="retain" value={retain}
-                                onBlur={updateNode} onChange={onChangeRetain}>
-                            <option disabled selected hidden> - select an option -</option>
-                            <option className="text-xl" >true</option>
-                            <option className="text-xl" >false</option>
-                        </select>
+                        {!isSupressionNeeded &&
+                            <button className="bg-primary text-white p-1 mt-1 rounded-md w-44" onClick={toggleSupression}> <div className="flex"><RiArrowDownDoubleFill className="m-1"/>Extend Options</div></button>
+                        }
+                        {isSupressionNeeded &&
+                            <div>
+                                <div>
+                                    <label htmlFor="qos" className="font-bold">qos:</label> <br/>
+                                    <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
+                                            onBlur={updateNode} onChange={onChangeQos}>
+                                        <option disabled selected hidden> - select an option -</option>
+                                        <option className="text-xl">0</option>
+                                        <option className="text-xl">1</option>
+                                        <option className="text-xl">2</option>
+                                    </select>
+                                </div>
+                                <div className="mt-2">
+                                    <label htmlFor="retain" className="font-bold">retain:</label> <br/>
+                                    <select className=" p-1 w-44 border rounded-md" id="retain" name="retain" value={retain}
+                                            onBlur={updateNode} onChange={onChangeRetain}>
+                                        <option disabled selected hidden> - select an option -</option>
+                                        <option className="text-xl" >true</option>
+                                        <option className="text-xl" >false</option>
+                                    </select>
+                                </div>
+                                <button className="bg-primary text-white p-1 mt-2 rounded-md w-44" onClick={toggleSupression}><div className="flex"> <RiArrowUpDoubleFill className="m-1"/> Reduce Options</div></button>
+                            </div>
+
+                        }
                     </div>
                 </div>
             </div>
