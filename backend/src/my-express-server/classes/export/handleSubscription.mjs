@@ -1,19 +1,43 @@
 import { isObjectEmpty } from "../../utils/utils.mjs";
 
 export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscription = {}) {
-    console.log('render export subscription');
     const subscriptionExists = !isObjectEmpty(subscription);
     const mappingType = mapping.nodeType;
     if(subscriptionExists) {
         // TODO: evl. check for higher qos or type? wrsl eh nicht. FE: don't allow same reportTopic.
-        console.log('already existing subscription: ', subscription);
+        console.log('already existing subscription');
         if(mappingType in subscription) {
             // subscription already has mappingType
-            const mappingTypeValue = transformExistingMappingTypeToArray(subscription, mappingType);
-            mappingTypeValue.push(mapping.renderForJson(targetTopic));
-            // console.log('added ', mappingTypeValue);
-            subscription[mappingType] = mappingTypeValue;
-            return subscription;
+            if(mappedTopicExists(subscription, mappingType, targetTopic)) {
+                // subscription already has mappingType and mapped_topic
+                console.log('add to mapped_topic - transform message mapping to array');
+                const newMessageMapping = {
+                    message: mapping.message,
+                    mapped_message: mapping.mapped_message
+                }
+                // push new message_mapping to already existing message_mapping array
+                if(Array.isArray(subscription[mappingType].message_mapping)) {
+                    subscription[mappingType].message_mapping.push(newMessageMapping);
+                } else {
+                    // create new MessageMapping array
+                    const newSubscription = {
+                        mapped_topic: subscription[mappingType].mapped_topic,
+                        message_mapping: [
+                            subscription[mappingType].message_mapping,
+                            newMessageMapping
+                        ]
+                    }
+                    subscription[mappingType] = newSubscription;
+                }                
+            } else {
+                // subscription has mappingType but not the mapped_topic yet
+                console.log('mapped_topic does not match command topic')
+                const mappingTypeValue = transformExistingMappingTypeToArray(subscription, mappingType);
+                mappingTypeValue.push(mapping.renderForJson(targetTopic));
+                // console.log('added ', mappingTypeValue);
+                subscription[mappingType] = mappingTypeValue;
+                return subscription;
+            }
         } else {
             // add new mappingType to subscription
             // e.g. if subscription.static exists, add subscription.value
@@ -49,4 +73,12 @@ function transformExistingMappingTypeToArray(subscription, mappingType) {
         // If it's neither an array nor an object, return an empty array
         return null;
     }
+}
+
+function mappedTopicExists(subscription, mappingType, targetTopic) {
+    if(subscription[mappingType].mapped_topic === targetTopic.commandTopic) {
+        console.log('subscription mapping type ', subscription[mappingType], 'matches ', targetTopic.commandTopic);
+        return true
+    }
+    return false;
 }

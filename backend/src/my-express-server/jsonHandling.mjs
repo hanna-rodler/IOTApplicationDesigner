@@ -19,7 +19,9 @@ export const exportToJson = async (req, res) => {
         const project = projectResponse.data;
         // const testdataLoader = new TestDataLoader('staticAndValue');
         // const {dialog, topics, edges, mappings} = testdataLoader.getTestData();
-        const dialog = project.dialog;
+        const { _id, ...dialogWithout_id } = project.dialog;
+        const dialog = dialogWithout_id;
+        console.log('dialog ', dialog);
         const fileName = project.name;
         const topics = project.topics;
         const edges = project.edges;

@@ -8,7 +8,6 @@ export default class TopicsMap {
             .filter(([key, value]) => key !== '_id')
             .map(([key, value]) => value);
             
-        console.log('topicsArray', topicsArray)
         this.topics = new Map();
         for(let topic of topicsArray) {
             this.topics.set(topic.id, new Topic(topic))
