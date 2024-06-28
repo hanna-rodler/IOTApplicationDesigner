@@ -25,6 +25,11 @@ h1 {
   @apply mb-7 font-semibold xl:text-5xl text-4xl;
 }
 
+h5 {
+  @apply text-2xl mb-3 pb-0.5;
+  border-bottom: 2px solid #C0C0C0;
+}
+
 .primaryBtn {
   border: 1px solid var(--primary);
   padding: 0.5rem;
@@ -44,6 +49,10 @@ h1 {
   @apply fileBtn text-black border-dashed  ;
 }
 
+.navBarBtn {
+  @apply cursor-pointer self-center w-[33px] h-[33px]
+}
+
 .secondaryBtn:hover, 
 .secondaryBtn:focus {
   box-shadow: 2 2 2 2em var(--topbar);
@@ -52,94 +61,6 @@ h1 {
 
 .iconBtn {
   @apply flex self-center mr-2 text-2xl;
-}
-
-.react-flow__devtools {
-  --border-radius: 4px;
-  --highlight-color: rgba(238, 58, 115, 1);
-  --font: monospace, sans-serif;
-
-  border-radius: var(--border-radius);
-  font-size: 11px;
-  font-family: var(--font);
-}
-
-.react-flow__devtools button {
-  background: white;
-  border: none;
-  padding: 5px 15px;
-  color: #222;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: var(--font);
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
-}
-
-.react-flow__devtools button:hover {
-  background: var(--highlight-color);
-  opacity: 0.8;
-  color: white;
-}
-
-.react-flow__devtools button.active {
-  background: var(--highlight-color);
-  color: white;
-}
-
-.react-flow__devtools button:first-child {
-  border-radius: var(--border-radius) 0 0 var(--border-radius);
-}
-
-.react-flow__devtools button:last-child {
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
-  border-right: none;
-}
-
-.react-flow__devtools-changelogger {
-  pointer-events: none;
-  position: relative;
-  top: 50px;
-  left: 20px;
-  font-family: var(--font);
-}
-
-.react-flow__devtools-title {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.react-flow__devtools-nodeinspector {
-  pointer-events: none;
-  font-family: monospace, sans-serif;
-  font-size: 10px;
-}
-
-.react-flow__devtools-nodeinfo {
-  top: 5px;
-}
-
-.react-flow-container {
-  width: 100vw;
-  height: 100vh;
-}
-
-.dndflow {
-  flex-direction: column;
-  display: flex;
-  flex-grow: 1;
-  height: 100%;
-}
-
-.sidebar {
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
-}
-
-.dndflow aside .description {
-  margin-bottom: 10px;
 }
 
 .nodeBtn {
@@ -151,6 +72,26 @@ h1 {
   align-items: center;
   cursor: grab;
   color: white;
-  @apply bg-secondary rounded-btn;
+  @apply bg-secondary rounded-btn text-base;
 }
 
+.sidebar {
+  height: calc(100vh - 3.125rem);
+  top: 3.125rem;
+  @apply border-l border-gray-fieldBorder;
+}
+
+@media screen and (min-width: 768px) {
+  .project-page-container {
+    flex-direction: row;
+  }
+}
+
+.react-tooltip {
+  @apply z-20
+}
+
+.customTooltip {
+  font-size: 0.85rem !important;
+  font-style: normal !important;
+}
