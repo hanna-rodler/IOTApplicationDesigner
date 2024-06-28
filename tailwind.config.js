@@ -5,6 +5,9 @@ export default {
     extend: {
       screens: {
           'xs': '450px',
+          'max-1515': {'max': '1515px'},
+          'max-633': {'max': '633px'},
+          'max-475': {'max': '475px'},
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
