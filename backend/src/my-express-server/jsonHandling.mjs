@@ -105,7 +105,6 @@ function parseJsonImportFile(file) {
     const dialog = new Dialog(jsonFile.discover_prefix, jsonFile.connection);
     // dialog can be sent to DB 1:1;
 
-    console.log('react flow mappedEdges ', jsonFile.reactFlow.mappedEdges);
     const mappingLevel = new MappingLevel(jsonFile.mapping.topic_level, jsonFile.reactFlow, jsonFile.mapping.plugins);
     mappingLevel.parseTopicLevels();
     
@@ -113,7 +112,8 @@ function parseJsonImportFile(file) {
     
     const edges = mappingLevel.renderEdges();
     const mappings = mappingLevel.renderMappings();
-    
+
+    const projectName = jsonFile.reactFlow.projectName !== undefined ? jsonFile.reactFlow.projectName : 'New Project';    
 
     return {
         dialog: dialog,
@@ -121,6 +121,6 @@ function parseJsonImportFile(file) {
         mappings: mappings,
         topics: topics,
         isImport: true,
-        name: 'New Project'
+        name: projectName
     }
 }

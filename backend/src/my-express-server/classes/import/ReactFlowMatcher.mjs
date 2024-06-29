@@ -10,7 +10,7 @@ export default class ReactFlowMatcher {
 
     matchNodeNameAndPositionToTopics(topics) {
         for(let topic of topics) {
-            const topicToMatch = this.lookForMatchingTopic(topic);
+            const topicToMatch = this.getTopicByReportTopic(topic.data.reportTopic);
             if(topicToMatch !== null){
                 topic.data.nodeName = topicToMatch.nodeName;
                 topic.position = topicToMatch.position;
@@ -24,7 +24,6 @@ export default class ReactFlowMatcher {
 
     matchOrCreateMissingTopicNames(missingCommandTopicNames, topics) {
         for(let commandTopic of missingCommandTopicNames) {
-            // console.log('checking if ', commandTopic, ' is in ReactFlow');
             const matchingTopic = this.getTopicByCommandTopic(commandTopic);
             if(matchingTopic !== null) {
                 // check for report topic
@@ -38,8 +37,6 @@ export default class ReactFlowMatcher {
                                 topic.data.commandTopic.push(commandTopic);
                                 this.needToUpdateEdgesCommantTopicNr = true;
                                 this.topicsForUpdatingEdgesCommandTopicNr.push({topicId: topic.id, commandTopic: commandTopic, commandTopicNr: topic.data.commandTopic.length-1});
-                                // TODO: try with more commandTopics
-                                // and try with multiple mappings to commandTopic1
                             }
                         }
                     }
@@ -58,23 +55,16 @@ export default class ReactFlowMatcher {
         return topics;
     }
 
-    lookForMatchingTopic(topic) {
-        const reportTopic = topic.data.reportTopic;
-        const commandTopic = topic.data.commandTopic[0];
+    /**
+     * 
+     * @param {Topic.data.reportTopic} topic 
+     * @returns 
+     */
+    getTopicByReportTopic(reportTopic) {
         if(reportTopic !== '') {
             for(let topicToMatch of this.reactFlowContent.topics) {
                 if(topicToMatch.reportTopic === reportTopic) {
                     return topicToMatch;
-                }
-            }
-        } else if(commandTopic !== '') { // TODO: commandTopic not needed. make just reportTopic.
-            console.log('looking for commandTopic ', commandTopic);
-            for(let topicToMatch of this.reactFlowContent.topics) {
-                for(let commandTopicToMatch of topicToMatch.commandTopic) {
-                    // import topics only have a commandTopic at 0 at this point.
-                    if(commandTopicToMatch === commandTopic) {
-                        return topicToMatch;
-                    }
                 }
             }
         }
@@ -92,17 +82,16 @@ export default class ReactFlowMatcher {
         return null;
     }
 
-    // TODO: add reason why needed.
+    // it is only possible to rearrange the edges here. The reason is because before, the topics were not matched according to how they were in reactFlow.
+    // by standard when importing, each topic only has 1 commandTopic - so edge.targetHandle = 'commandTopic0' is correct.
+    // but when the topics are matched according to how they were in reactFlow, the topics can have multiple commandTopics. So edge.targetHandle = 'commandTopic0' isn't correct anymore and the commandTopicNumber of the edge.targetHandle needs to be updated.
     updateEdgeMapping(edges) {
-        for(let obj of this.topicsForUpdatingEdgesCommandTopicNr) {
-            console.log('need to change this::::: ', obj);
+        for(let updateNeeded of this.topicsForUpdatingEdgesCommandTopicNr) {
             for(let edge of edges) {
-                // TODO: continue here: what if two edges have the same target?
-                if(edge.targetHandle === 'commandTopic0' && edge.target === obj.commandTopic) {
-                    console.log('edge before update', edge);
-                    edge.target = obj.topicId;
-                    edge.targetHandle = 'commandTopic'+obj.commandTopicNr;
-                    console.log('edge after update', edge);
+                if(edge.targetHandle === 'commandTopic0' && edge.target === updateNeeded.commandTopic || edge.target[0] === updateNeeded.commandTopic) {
+                    edge.target = updateNeeded.topicId;
+                    edge.targetHandle = 'commandTopic'+updateNeeded.commandTopicNr;
+                    console.log('updated edge CommandTopic Nr', edge);
                 }
             }
         }
@@ -117,7 +106,6 @@ export default class ReactFlowMatcher {
             let commandTopicNr = null;
             // look for matching source and target Topics in edges.
             for(let edge of edges) {
-                console.log('edge target ', edge);
                 if(edge.targetHandle === 'mappingIn' && edge.target === mapping.id) {
                     sourceTopic = getTopicById(topics, edge.source)
                 } else if(edge.sourceHandle === 'mappingOut' && edge.source === mapping.id) {
@@ -127,7 +115,11 @@ export default class ReactFlowMatcher {
             }
             if(sourceTopic !== null && targetTopic !== null && commandTopicNr !== null) {
                 const mappedEdge = this.findMatchingMappedEdge(sourceTopic, targetTopic, commandTopicNr, mapping);
-                mapping.position = mappedEdge.position;
+                if(mappedEdge !== null) {
+                    mapping.position = mappedEdge.position;
+                } else {
+                    console.log('no matching mappedEdge for mapping ', mapping);
+                }
             } else {
                 console.log('no matching mappedEdge for mapping ', mapping);
             }
@@ -136,6 +128,16 @@ export default class ReactFlowMatcher {
         return mappings
     }
 
+    /**
+     * Go through reactFlow.mappedEdges and find the correct mappedEdge
+     * based on - nodeType, - sourceReportTopic, - targetCommandTopic and further content if needed: - mapping for value and json mappings - message and mapped_message for static mapppings
+     * 
+     * @param {Topic} sourceTopic 
+     * @param {Topic} targetTopic 
+     * @param {number} commandTopicNr 
+     * @param {*} mapping 
+     * @returns the matched mappedEdge of reactFlow in the imported json
+     */
     findMatchingMappedEdge(sourceTopic, targetTopic, commandTopicNr, mapping) {
         const matchedMappedEdges = [];
         const nodeType = mapping.data.nodeType;
