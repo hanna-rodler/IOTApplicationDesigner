@@ -86,7 +86,7 @@ function MappingNode({id, data}: NodeProps) {
     };
 
     return (
-        <div className="w-56 border-t-4 border-primary pb-4 bg-cardBg  rounded-md text-sm drop-shadow-md">
+        <div className="w-56 border-t-4 border-primary pb-4 bg-cardBg  rounded-md text-sm shadow-card">
             <Handle className="bg-accent p-1 left-1"
                     type="target"
                     position={Position.Left}

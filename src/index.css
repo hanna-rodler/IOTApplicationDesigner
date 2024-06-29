@@ -106,3 +106,13 @@ h5 {
   font-size: 0.85rem !important;
   font-style: normal !important;
 }
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 0.15rem;
+  stroke: #221300;
+}
+
+.react-flow__edge .react-flow__edge-path {
+  stroke-width: 0.1rem;
+  stroke: #F28705;
+}

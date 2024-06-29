@@ -108,7 +108,7 @@ function TopicNode({id, data}: NodeProps) {
 
 
     return (
-        <div className="bg-cardBg rounded-md w-48 text-sm drop-shadow-md">
+        <div className="bg-cardBg rounded-md w-48 text-sm shadow-card">
             <div>
                 <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
                     <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName}
