@@ -1,15 +1,7 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 import Dialog from './classes/Dialog.mjs';
 import MappingLevel from './classes/import/MappingLevel.mjs';
 import ExportHandler from './classes/export/ExportHandler.mjs';
 import axios from 'axios';
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 
 export const exportToJson = async (req, res) => {
     try {
@@ -17,11 +9,8 @@ export const exportToJson = async (req, res) => {
         console.log('getting export for project with id ', id);
         const projectResponse = await axios.get(`http://localhost:5000/api/projects/${id}`)
         const project = projectResponse.data;
-        // const testdataLoader = new TestDataLoader('staticAndValue');
-        // const {dialog, topics, edges, mappings} = testdataLoader.getTestData();
         const { _id, ...dialogWithout_id } = project.dialog;
         const dialog = dialogWithout_id;
-        console.log('dialog ', dialog);
         const fileName = project.name;
         const topics = project.topics;
         const edges = project.edges;
@@ -42,7 +31,7 @@ export const exportToJson = async (req, res) => {
             res.status(500).json({message: 'topics, edges or mappings are empty'});
         }
     } catch(error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({error: 'Failed to export project with error '.error.response});
     }
 }

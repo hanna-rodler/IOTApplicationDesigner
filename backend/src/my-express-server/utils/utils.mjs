@@ -1,15 +1,3 @@
-export function getFileName(discover_prefix) {
-    if(discover_prefix !== '') {
-        return discover_prefix + '.json';
-    } else {
-        const currentDateTime = new Date();
-        // Format the date and time as a string
-        const formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', '_').replaceAll(':', '-');
-
-        return formattedDateTime + '.json';
-    }
-}
-
 export function removeDuplicates(arr) {
     return [...new Set(arr)]
 }
