@@ -36,6 +36,17 @@ h5 {
   @apply rounded-btn bg-primary text-white;
 }
 
+.inputField {
+  @apply p-1 border border-gray-fieldBorder rounded-md bg-gray-fieldBg
+}
+
+.topicInputField {
+  @apply inputField w-36
+}
+
+.mappingInputField {
+  @apply inputField w-44
+}
 
 .fileBtn {
   @apply flex rounded-btn border-2 p-4 justify-center cursor-pointer border-secondary self-center;
@@ -78,7 +89,7 @@ h5 {
 .sidebar {
   height: calc(100vh - 3.125rem);
   top: 3.125rem;
-  @apply border-l border-gray-fieldBorder;
+  @apply border-l border-gray-fieldBorder bg-sidebar fixed right-0 overflow-x-hidden transition-all duration-300;
 }
 
 @media screen and (min-width: 768px) {
