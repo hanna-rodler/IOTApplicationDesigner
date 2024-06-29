@@ -35,6 +35,7 @@ export const exportToJson = async (req, res) => {
         if(topics && edges && mappings){
             const exportHandler = new ExportHandler(topics, edges, mappings);
             mqttJson.mapping.topic_level = exportHandler.renderedTopicLevels;
+            mqttJson.reactFlow = exportHandler.renderReactFlowJson(fileName);
         
             res.status(200).json({ fileName: fileName, file: mqttJson});
         } else {
@@ -104,14 +105,15 @@ function parseJsonImportFile(file) {
     const dialog = new Dialog(jsonFile.discover_prefix, jsonFile.connection);
     // dialog can be sent to DB 1:1;
 
-    const mapping = new MappingLevel(jsonFile.mapping.topic_level, jsonFile.mapping.plugins);
-    mapping.parseTopicLevels();
-    const mappings = mapping.mappings;
-    console.log('mappings for import', mappings);
+    console.log('react flow mappedEdges ', jsonFile.reactFlow.mappedEdges);
+    const mappingLevel = new MappingLevel(jsonFile.mapping.topic_level, jsonFile.reactFlow, jsonFile.mapping.plugins);
+    mappingLevel.parseTopicLevels();
     
-    const topics = mapping.renderTopics();
-
-    const edges = mapping.renderEdges();
+    let topics = mappingLevel.renderTopics();
+    
+    const edges = mappingLevel.renderEdges();
+    const mappings = mappingLevel.renderMappings();
+    
 
     return {
         dialog: dialog,

@@ -85,5 +85,14 @@ export function makeSingleEntryAccessibleById(objectsArray){
 export function getCommandTopicNumber(commandTopicString) {
     const regex = /commandTopic(\d+)/;
     const match = commandTopicString.match(regex);
-    return match ? match[1] : null;
+    return match ? parseInt(match[1]) : null;
+}
+
+export function getTopicById(topics, id) {
+    for(let topic of topics) {
+        if(topic.id === id) {
+            return topic
+        }
+    }
+    return null;
 }

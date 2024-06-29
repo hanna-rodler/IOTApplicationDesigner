@@ -25,7 +25,6 @@ export default class Subscription {
                     //     { message: 'released', mapped_message: 'off' }
                     //   ]
                     for(let msgMappingObj of mapping.message_mapping) {
-                        console.log('array msg mapping');
                         const tempMapping = {
                             mapped_topic: mapping.mapped_topic,
                             message_mapping: {
@@ -38,7 +37,6 @@ export default class Subscription {
                         this.staticMappings.push(new StaticMapping(tempMapping, this.reportTopic))
                     }
                 } else {
-                    console.log('simple msg mapping');
                     this.staticMappings.push(new StaticMapping(mapping, this.reportTopic));
                 }
                 this.commandTopics.push(mapping.mapped_topic);

@@ -13,4 +13,14 @@ export default class TopicsMap {
             this.topics.set(topic.id, new Topic(topic))
         }
     }
+
+    renderForReactFlowJson() {
+        const topics = []
+        for(const [id, topic] of this.topics) {
+            console.log(`${id}: ${topic}`);
+            topics.push(topic.renderForReactFlowJson())
+        }
+        console.log('react flow topics ', topics);
+        return topics;
+    }
 }

@@ -96,6 +96,39 @@ export default class MappingLevel {
         }
         return topicLevels;
     }
+
+    renderReactFlowJson(projectName) {
+        const reactFlow = {
+            projectName: projectName,
+            topics: this.reactFlowTopics.renderForReactFlowJson(),
+            mappedEdges: renderMappedEdgesForReactFlow(this.mappedEdgesWithContents)
+        }
+        console.log('mappedEdges With Contents ', this.mappedEdgesWithContents);
+        return reactFlow;
+    }
+}
+
+function renderMappedEdgesForReactFlow(mappedEdgesWithContents) {
+    const mappedEdges = [];
+    for(let mappedEdge of mappedEdgesWithContents) {
+        let reactFlowMappedEdge = {
+            nodeType: mappedEdge.mapping.nodeType,
+            sourceReportTopic: mappedEdge.sourceTopic.reportTopic,
+            targetCommandTopic: mappedEdge.targetTopic.commandTopic,
+            position: mappedEdge.mapping.position
+        }
+        if(mappedEdge.mapping.nodeType === 'static') {
+            console.log('static, mappedEdge ', mappedEdge);
+            reactFlowMappedEdge.message = mappedEdge.mapping.message;
+            reactFlowMappedEdge.mapped_message = mappedEdge.mapping.mapped_message;
+        } else {
+            console.log('value / json', mappedEdge);
+            reactFlowMappedEdge.mapping = mappedEdge.mapping.mapping;
+        }
+        // TODO: here multiple command topics?
+        mappedEdges.push(reactFlowMappedEdge);
+    }
+    return mappedEdges;
 }
 
 
