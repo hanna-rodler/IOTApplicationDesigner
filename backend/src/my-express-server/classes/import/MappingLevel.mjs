@@ -2,9 +2,10 @@ import Subscription from './Subscription.mjs';
 import Topic from './Topic.mjs';
 import {removeDuplicates} from '../../utils/utils.mjs';
 import {type} from "os";
+import ReactFlowMatcher from './ReactFlowMatcher.mjs';
 
 export default class MappingLevel {
-    constructor(topic_levels, plugins = undefined) {
+    constructor(topic_levels, reactFlowJson = undefined, plugins = undefined) {
         this.plugins = plugins !== undefined ? plugins : [];
         this.topic_levels = topic_levels;
         this.topics = [];
@@ -12,6 +13,13 @@ export default class MappingLevel {
         this.mappings = [];
         this.allCommandTopics = [];
         this.allTopicsRendered = false;
+        this.reactFlowJson = reactFlowJson;
+        if(this.reactFlowJson !== undefined) {
+            this.allMappingsRendered = false;
+            this.reactFlowMatcher = new ReactFlowMatcher(reactFlowJson);
+        } else {
+            this.allMappingsRendered = true;
+        }
     }
 
     display(){
@@ -25,9 +33,9 @@ export default class MappingLevel {
     }
 
     parseTopicLevel(topic_level, name = ''){
-        console.log('topic_level ', topic_level);
+        // console.log('topic_level ', topic_level);
         if(Array.isArray(topic_level)) {
-            console.log('\t\ttopic level is array');
+            // console.log('\t\ttopic level is array');
             // case that there is subscription & topic level 
             for(let level of topic_level){
                 if('track_name' in level && name !== '') {
@@ -49,15 +57,13 @@ export default class MappingLevel {
             }
             // in rare cases, there is a sub topic_level and subscription in the same topic_level
             if('topic_level' in topic_level && 'subscription' in topic_level) {
-                console.log('\t\tthere is a nested subscription and a topic_level on same level');
+                // console.log('\t\tthere is a nested subscription and a topic_level on same level');
                 this.parseSubscriptionAndTopicLevelOnSameLevel(topic_level);
             } else {
                 // usually there is either a sub topic_level or a subscription in a topic_level
                 if('topic_level' in topic_level){
-                    console.log('\t\tone topic_level (not array)');
                     this.parseTopicLevel(topic_level.topic_level, topic_level.track_name);
                 } else if('subscription' in topic_level) {
-                    console.log('\t\tone subscription (not array)')
                     this.parseSubscription(topic_level)
                 }
             }
@@ -65,7 +71,6 @@ export default class MappingLevel {
     }
 
     parseSubscriptionAndTopicLevelOnSameLevel(topic) {
-        console.log('same level: ', topic);
         // create own subscription and topic level, so they can be rendered seperately.
         // subscriptionPart already has full track_name. Nothing needs to be added later on so it gets name ''.
         const subscriptionPart = {
@@ -92,32 +97,62 @@ export default class MappingLevel {
 
         this.allCommandTopics = this.allCommandTopics.concat(subscription.getCommandTopics());
     }
+    
+    renderMappings() {
+        if(this.allMappingsRendered) {
+            return this.mappings;
+        } else {
+            this.renderEdges();
+            return this.mappings;
+        }
+    }
 
     renderTopics() {
         // additionally create the topics that wouldn't have a matching topic in the edges.
-        const missingTopics = renderMissingTopics(this.allCommandTopics, this.topics);
+        const missingCommandTopicNames = getMissingCommandTopicNames(this.allCommandTopics, this.topics);
+
+        // json import has reactFlow Data (got exported once from ReactFlow. maybe got changed.)
+        if(this.reactFlowJson !== undefined) {
+            // match name and position to topic. also merge topics
+            this.topics = this.reactFlowMatcher.matchNodeNameAndPositionToTopics(this.topics);
+            this.topics = this.reactFlowMatcher.matchOrCreateMissingTopicNames(missingCommandTopicNames, this.topics);
+            if(this.reactFlowMatcher.needToUpdateEdgesCommantTopicNr) {
+                this.edges = this.reactFlowMatcher.updateEdgeMapping(this.edges);
+            }
+
+            // console.log('matched to reactFlow ', this.topics);
+        } else {
+            console.log('render without reactFlowJson. createMissingTopics');
+            const missingTopics = createMissingTopics(missingCommandTopicNames, this.topics);
+            if(missingTopics.length !== 0) {
+                this.topics = this.topics.concat(missingTopics);
+            }
+        }
         this.allTopicsRendered = true; // not checking missingTopics for length because theoretically there could be no missing topics.
-        this.topics = this.topics.concat(missingTopics);
         return this.topics;
     }
 
     renderEdges(){
         if(this.allTopicsRendered){
-            // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping
+            // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping in ReactFlow.
             for(let edge of this.edges) {
+                // 'commandTopic0' okay, because the edges are only matched to topics with 1 command topic. topics with multiple commandTopics  ('commandTopic1') can only happen if they are matched via reactFlowJson. - edges are handled there.
                 if(edge.targetHandle === 'commandTopic0') {
                     let commandTopic = edge.target;
                     if(typeof commandTopic === 'string'){
                         commandTopic = [commandTopic]
                     }
-                    console.log("DEBUG: CommandTopic ", commandTopic);
-                    const topic = getTopicByCommandTopic(this.topics, commandTopic);
+                    const topic = getTopicByFirstCommandTopic(this.topics, commandTopic);
                     if (topic) {
                         edge.target = topic.id;
                     } else {
                         console.error(`No topic found for command topic: ${commandTopic}`);
                     }
                 }
+            }
+            if(this.reactFlowJson !== undefined && this.reactFlowJson.mappedEdges !== null) {
+                this.mappings = this.reactFlowMatcher.updateMappingsPositionByMappedEdges(this.mappings, this.edges, this.topics);
+                this.allMappingsRendered = true; // to make sure mappings get updated By ReactFlow if present;
             }
             return this.edges;
         } else {
@@ -127,20 +162,13 @@ export default class MappingLevel {
     }
 }
 
-function getTopicByCommandTopic(topics, commandTopic) {
+function getTopicByFirstCommandTopic(topics, commandTopic) {
     for(let topic of topics) {
         if(topic.data.commandTopic.includes(commandTopic[0])) {
             return topic;
         }
     }
     return null; // Return null if no topic is found
-}
-
-function renderMissingTopics(allCommandTopics, topics) {
-    // remove duplicates
-    const missingCommandTopicNames = getMissingCommandTopicNames(allCommandTopics, topics);
-
-    return createMissingTopics(missingCommandTopicNames);
 }
 
 function createMissingTopics(missingCommandTopicNames){
@@ -153,7 +181,7 @@ function createMissingTopics(missingCommandTopicNames){
     return missingTopics;
 }
 
-function getMissingCommandTopicNames(allCommandTopics, topics){
+function getMissingCommandTopicNames(allCommandTopics){
     allCommandTopics = removeDuplicates(allCommandTopics);
     return allCommandTopics;
 }

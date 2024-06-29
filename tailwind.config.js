@@ -18,6 +18,7 @@ export default {
         semibold: 600,
       },
       fontSize: {
+        xs: "0.6rem",
         sm: "0.8rem",
         base: "1rem",
         xl: "1.25rem",
@@ -44,9 +45,6 @@ export default {
         sidebar: "#F4F4F4",
         appBg: "#F8F9FB",
         cardBg: "#FEFEFE", // card background
-        orange: {
-          edge: "#F4F4F4",
-        },
         topbar: "#012E40",
       },
       maxHeight: {
@@ -63,6 +61,9 @@ export default {
         btn: "5px",
         top: "5px 5px 0px 0px",
       },
+      boxShadow: {
+        'card': '0 3px 4px 0px rgba(0, 0, 0, 0.25)',
+      }
     },
   },
   plugins: [],

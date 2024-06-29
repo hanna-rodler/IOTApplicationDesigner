@@ -52,7 +52,6 @@ function mapEdges(halfMappedEdges) {
         }
 
         // try to find matching edge
-        console.log('currentEdge ', currentEdge);
         const matchingIndex = halfMappedEdges.findIndex(edge => edge.mappingId === currentEdge.mappingId);
 
         if (matchingIndex !== -1) {
@@ -70,8 +69,6 @@ function mapEdges(halfMappedEdges) {
 }
 
 function mergeHalfMappedEdges(currentEdge, matchingEdge) {
-    console.log('currentEdge ', currentEdge);
-    console.log('matchingEdge ', matchingEdge);
     const mappedEdge = { mappingId: currentEdge.mappingId };
     if ('sourceTopicId' in currentEdge && 'targetTopicId' in matchingEdge && 'commandTopicNr' in matchingEdge) {
         mappedEdge.sourceTopicId = currentEdge.sourceTopicId;

@@ -1,9 +1,8 @@
 import { generateRandomString, getNodeName, generateRandPosition } from "../../utils/utils.mjs";
 
 export default class Topic {
-    constructor(data, id = undefined, position = undefined) {
+    constructor(data, id = undefined) {
         this.id = id !== undefined ? id : 'topic_' + generateRandomString(12);
-        // TODO: generate node name from report or command topic of first slash?
         let name = ''
         if(data.nodeName !== undefined){
             name = data.nodeName
@@ -20,7 +19,7 @@ export default class Topic {
             qos: data.qos !== undefined ? data.qos : '',
         }
         this.type = 'topic';
-        this.position = position !== undefined ? position : generateRandPosition();
+        this.position = data.position !== undefined ? data.position : generateRandPosition();
     }
 
     display() {

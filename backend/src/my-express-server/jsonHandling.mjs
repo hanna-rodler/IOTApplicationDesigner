@@ -1,15 +1,7 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 import Dialog from './classes/Dialog.mjs';
 import MappingLevel from './classes/import/MappingLevel.mjs';
 import ExportHandler from './classes/export/ExportHandler.mjs';
 import axios from 'axios';
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const FILE_PREFIX = path.join(__dirname, 'mqttFiles');
 
 export const exportToJson = async (req, res) => {
     try {
@@ -17,9 +9,8 @@ export const exportToJson = async (req, res) => {
         console.log('getting export for project with id ', id);
         const projectResponse = await axios.get(`http://localhost:5000/api/projects/${id}`)
         const project = projectResponse.data;
-        // const testdataLoader = new TestDataLoader('staticAndValue');
-        // const {dialog, topics, edges, mappings} = testdataLoader.getTestData();
-        const dialog = project.dialog;
+        const { _id, ...dialogWithout_id } = project.dialog;
+        const dialog = dialogWithout_id;
         const fileName = project.name;
         const topics = project.topics;
         const edges = project.edges;
@@ -33,39 +24,15 @@ export const exportToJson = async (req, res) => {
         if(topics && edges && mappings){
             const exportHandler = new ExportHandler(topics, edges, mappings);
             mqttJson.mapping.topic_level = exportHandler.renderedTopicLevels;
+            mqttJson.reactFlow = exportHandler.renderReactFlowJson(fileName);
         
             res.status(200).json({ fileName: fileName, file: mqttJson});
         } else {
             res.status(500).json({message: 'topics, edges or mappings are empty'});
         }
     } catch(error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({error: 'Failed to export project with error '.error.response});
-    }
-}
-
-export const importFromJsonBE = async(req, res) => {
-    // TODO: implement import JSON.
-
-    const fileName = 'mapfile.json';
-    let reactFlowData = {}
-    try {
-        await fs.readFile(path.join(FILE_PREFIX, fileName), 'utf8', (err, data) => {
-            if (err) {
-                console.log('error reading file: ' + err);
-                return res.status(500).json({ message: 'Failed to read file', error: err });
-            }
-            reactFlowData = parseJsonImportFile(data);
-            console.log('Successfully read file ');
-        });
-        console.log('react flow data ', reactFlowData);
-        const response = await axios.post("http://localhost:5000/api/projects/", reactFlowData);
-        console.log('Response from server: ', response.data);
-        res.status(200).json({ message: 'File read successfully', data: reactFlowData });
-    } catch (error) {
-        console.error("Error sending post request:", error);
-        // TODO: server http error code
-        res.status(500).json({message: 'Failed to save project'});
     }
 }
 
@@ -102,14 +69,18 @@ function parseJsonImportFile(file) {
     const dialog = new Dialog(jsonFile.discover_prefix, jsonFile.connection);
     // dialog can be sent to DB 1:1;
 
-    const mapping = new MappingLevel(jsonFile.mapping.topic_level, jsonFile.mapping.plugins);
-    mapping.parseTopicLevels();
-    const mappings = mapping.mappings;
-    console.log('mappings for import', mappings);
+    const mappingLevel = new MappingLevel(jsonFile.mapping.topic_level, jsonFile.reactFlow, jsonFile.mapping.plugins);
+    mappingLevel.parseTopicLevels();
     
-    const topics = mapping.renderTopics();
+    let topics = mappingLevel.renderTopics();
+    
+    const edges = mappingLevel.renderEdges();
+    const mappings = mappingLevel.renderMappings();
 
-    const edges = mapping.renderEdges();
+    let projectName = 'New Project';
+    if (jsonFile.reactFlow !== undefined && jsonFile.reactFlow.projectName !== undefined) {
+        projectName = jsonFile.reactFlow.projectName;
+    }
 
     return {
         dialog: dialog,
@@ -117,6 +88,6 @@ function parseJsonImportFile(file) {
         mappings: mappings,
         topics: topics,
         isImport: true,
-        name: 'New Project'
+        name: projectName
     }
 }

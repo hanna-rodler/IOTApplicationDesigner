@@ -1,15 +1,3 @@
-export function getFileName(discover_prefix) {
-    if(discover_prefix !== '') {
-        return discover_prefix + '.json';
-    } else {
-        const currentDateTime = new Date();
-        // Format the date and time as a string
-        const formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', '_').replaceAll(':', '-');
-
-        return formattedDateTime + '.json';
-    }
-}
-
 export function removeDuplicates(arr) {
     return [...new Set(arr)]
 }
@@ -85,5 +73,14 @@ export function makeSingleEntryAccessibleById(objectsArray){
 export function getCommandTopicNumber(commandTopicString) {
     const regex = /commandTopic(\d+)/;
     const match = commandTopicString.match(regex);
-    return match ? match[1] : null;
+    return match ? parseInt(match[1]) : null;
+}
+
+export function getTopicById(topics, id) {
+    for(let topic of topics) {
+        if(topic.id === id) {
+            return topic
+        }
+    }
+    return null;
 }

@@ -27,4 +27,14 @@ export default class Topic {
             type: this.type
         }
     }
+
+    renderForReactFlowJson() {
+        return {
+            id: this.id,
+            nodeName: this.nodeName,
+            reportTopic: this.reportTopic,
+            commandTopic: this.commandTopic,
+            position: this.position
+        }
+    }
 }

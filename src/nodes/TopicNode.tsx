@@ -108,7 +108,7 @@ function TopicNode({id, data}: NodeProps) {
 
 
     return (
-        <div className="bg-gray-fieldBg rounded-md w-48 text-xs">
+        <div className="bg-cardBg rounded-md w-48 text-sm shadow-card">
             <div>
                 <div className="flex w-48 rounded-md text-white justify-between bg-primary text-lg ">
                     <input className="bg-primary border-0 w-40 p-2 rounded-md" value={nodeName}
@@ -116,12 +116,12 @@ function TopicNode({id, data}: NodeProps) {
                     <div className="m-2" onClick={deleteNode}>X</div>
                 </div>
                 <div className="node-props m-2 pl-3">
-                    <div>
-                        <label htmlFor="Report Topic" className="font-bold">Report Topic:</label>
-                        <input className="p-1 w-36 border rounded-md" id="reportTopic" name="reportTopic"
+                    <div className="mb-2">
+                        <label htmlFor="Report Topic" className="font-bold pb-1">Report Topic:</label>
+                        <input className="topicInputField" id="reportTopic" name="reportTopic"
                         value={reportTopic} onChange={onChangeReport} onBlur={updateNode}/>
                     </div>
-                    <div className="mt-2 pb-3">
+                    <div className="mb-2">
                         <label htmlFor="Command Topic" className="font-bold">Command Topic: <button
                             onClick={addCommandTopic}><FaPlus/></button></label>
                         {commandTopics.map((topic, index) => (
@@ -141,7 +141,7 @@ function TopicNode({id, data}: NodeProps) {
                                                 }
                                             />
                                             <input
-                                                className="p-1 w-36 border rounded-md"
+                                                className="topicInputField mt-[0.3rem]"
                                                 name="commandTopic"
                                                 id={`commandTopic${idx}`}
                                                 value={item}
@@ -166,7 +166,7 @@ function TopicNode({id, data}: NodeProps) {
                                             }
                                         />
                                         <input
-                                            className="p-1 w-36 border rounded-md"
+                                            className="topicInputField mt-[0.3rem]"
                                             name="commandTopic"
                                             id={`commandTopic${index}`}
                                             value={topic}
@@ -180,14 +180,14 @@ function TopicNode({id, data}: NodeProps) {
                             </div>
                         ))}
                     </div>
-                    <div className="pb-3">
-                        <label htmlFor="SubsciptionType" className="font-bold">Subscription Type:</label>
-                        <input className="p-1 w-36 border rounded-md" id="subscriptionType" name="subscriptionType"
+                    <div className="mb-2">
+                        <label htmlFor="SubsciptionType" className="font-bold pb-1">Subscription Type:</label>
+                        <input className="topicInputField" id="subscriptionType" name="subscriptionType"
                                value={subscritpion} onChange={onChangeSubscription} onBlur={updateNode}/>
                     </div>
                     <div className="pb-3">
-                        <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                        <select className="p-1 w-40 border rounded-md" id="qos" name="qos" value={qos}
+                        <label htmlFor="qos" className="font-bold pb-1">qos:</label> <br/>
+                        <select className="topicInputField" id="qos" name="qos" value={qos}
                                 onChange={onChangeQos} onBlur={updateNode}>
                             <option disabled selected value hidden> - select an option -</option>
                             <option className="text-xl">0</option>

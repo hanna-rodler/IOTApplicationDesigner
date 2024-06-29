@@ -14,7 +14,6 @@ export default class Subscription {
         this.valueMappings = [];
         this.commandTopics = [];
         if(subscription.static !== undefined) {
-            console.log('static subscription: ', subscription.static);
             const staticMappings = Array.isArray(subscription.static) ? subscription.static : [subscription.static]
             for(let mapping of staticMappings){
                 if(Array.isArray(mapping.message_mapping)) {
@@ -25,7 +24,6 @@ export default class Subscription {
                     //     { message: 'released', mapped_message: 'off' }
                     //   ]
                     for(let msgMappingObj of mapping.message_mapping) {
-                        console.log('array msg mapping');
                         const tempMapping = {
                             mapped_topic: mapping.mapped_topic,
                             message_mapping: {
@@ -38,7 +36,6 @@ export default class Subscription {
                         this.staticMappings.push(new StaticMapping(tempMapping, this.reportTopic))
                     }
                 } else {
-                    console.log('simple msg mapping');
                     this.staticMappings.push(new StaticMapping(mapping, this.reportTopic));
                 }
                 this.commandTopics.push(mapping.mapped_topic);
@@ -46,13 +43,11 @@ export default class Subscription {
         }
         if(subscription.json !== undefined) {
             const jsonMappings = Array.isArray(subscription.json) ? subscription.json : [subscription.json]
-            // TODO: msgMappingObj wie bei static.
             for(let mapping of jsonMappings){
                 this.jsonMappings.push(new ValueJsonMapping(mapping, 'json', this.reportTopic));
                 this.commandTopics.push(mapping.mapped_topic);
             }
         }
-        // TODO: json and value mapping kann wrsl gemerged werden.
         if(subscription.value !== undefined) {
             const valueMappings = Array.isArray(subscription.value) ? subscription.value : [subscription.value];
             for(let mapping of valueMappings){
@@ -67,7 +62,7 @@ export default class Subscription {
     display() {
         console.log('Subscription');
         console.log('topic: ', this.topic);
-        // console.log('static ', this.staticMappings, ' value ', this.valueMappings, ' json ', this.jsonMappings);
+        console.log('static ', this.staticMappings, ' value ', this.valueMappings, ' json ', this.jsonMappings);
     }
 
     renderEdges() {
@@ -75,7 +70,6 @@ export default class Subscription {
         const mappings = this.getAllMappings();
         for(let mapping of mappings) {
             renderedEdges.push(createEdgeIn(this.topic.id, mapping.id));
-            // TODO: gets mapping.commandTopic but topic doesn't get commandTopic as id later.
             renderedEdges.push(createEdgeOut(mapping.id, mapping.commandTopic));
         }
         return renderedEdges;

@@ -17,4 +17,5 @@
     height: calc(100vh - 3.125rem); /* Adjust this based on the combined height of your TopBar and TabNavigation */
     /* width: 100%; */
     position: relative;
+    @apply bg-appBg
 }

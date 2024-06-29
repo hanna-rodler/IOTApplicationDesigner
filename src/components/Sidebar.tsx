@@ -24,7 +24,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`bg-sidebar sidebar fixed right-0 ${sidebarWidth} ${sidebarPadding} overflow-x-hidden transition-all duration-300`}
+      className={`sidebar fixed right-0 ${sidebarWidth} ${sidebarPadding}`}
     >
       {/* Sidebar Content */}
       <div>

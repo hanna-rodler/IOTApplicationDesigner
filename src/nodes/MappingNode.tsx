@@ -17,27 +17,14 @@ function MappingNode({id, data}: NodeProps) {
     const [qos, setQos] = useState(data.qos);
     const [retain, setRetain] = useState(data.retain);
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
-    const [suppression, setSuppression] = useState(data.suppressions);
+    const [suppressions, setSuppressions] = useState(data.suppressions);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
-
-    // function validateSuppression(supr) {
-    //     if (supr.trim() == "") {
-    //         setSuppression("None")
-    //         suppressionRef.current = "None"
-    //     } else {
-    //         setSuppression(supr)
-    //         suppressionRef.current = supr
-    //     }
-    //     console.log(suppressionRef.current)
-    //     console.log(supr.trim() == "")
-    //
-    // }
 
     const mappingRef = useRef(mapping);
     const messageRef = useRef(message);
     const qosRef = useRef(qos);
     const retainRef = useRef(retain);
-    const suppressionRef = useRef(suppression);
+    const suppressionsRef = useRef(suppressions);
 
 
     function triggerCustomEvent(eventName, data) {
@@ -71,7 +58,7 @@ function MappingNode({id, data}: NodeProps) {
                 message: messageRef.current,
                 qos: qosRef.current,
                 retain: retainRef.current,
-                suppression: suppressionRef.current
+                suppressions: suppressionsRef.current
             },
         });
     }, [id]);
@@ -93,14 +80,13 @@ function MappingNode({id, data}: NodeProps) {
         retainRef.current = event.target.value;
         setTrueRetain(!isTrueRetain);
     };
-    const onChangeSuppression = (event) => {
-        setSuppression(event.target.value)
-        suppressionRef.current = event.target.value
-        // validateSuppression(event.target.value);
+    const onChangeSuppressions = (event) => {
+        setSuppressions(event.target.value)
+        suppressionsRef.current = event.target.value
     };
 
     return (
-        <div className="w-56 border-t-4 border-primary pb-4 bg-gray-fieldBg rounded-md text-sm">
+        <div className="w-56 border-t-4 border-primary pb-4 bg-cardBg  rounded-md text-sm shadow-card">
             <Handle className="bg-accent p-1 left-1"
                     type="target"
                     position={Position.Left}
@@ -137,22 +123,26 @@ function MappingNode({id, data}: NodeProps) {
                     <div>
                         {data.nodeType === "static" &&
                             <div>
-                                <label htmlFor="Message" className="font-bold"> Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="message" name="message"
-                                       value={message}
-                                       onBlur={updateNode} onChange={onChangeMessage}
-                                       placeholder="e.g. pressed / on "/>
-                                <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
-                                <input className="nodrag p-1 w-44 border rounded-md" id="mapping" name="mapping"
-                                       value={mapping}
-                                       onBlur={updateNode} onChange={onChangeMapping}
-                                       placeholder="e.g. released / off "/>
+                                <div>
+                                    <label htmlFor="Message" className="font-bold"> Message: </label>
+                                    <input className="nodrag mappingInputField" id="message" name="message"
+                                        value={message}
+                                        onBlur={updateNode} onChange={onChangeMessage}
+                                        placeholder="e.g. pressed / on "/>
+                                </div>
+                                <div className="mt-2">
+                                    <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
+                                    <input className="nodrag mappingInputField" id="mapping" name="mapping"
+                                        value={mapping}
+                                        onBlur={updateNode} onChange={onChangeMapping}
+                                        placeholder="e.g. released / off "/>
+                                </div>
                             </div>
                         }
                         {data.nodeType !== "static" &&
                             <div>
                                 <label htmlFor="Mapping" className="font-bold"> Mapping: </label>
-                                <textarea className="nodrag h-16 p-1 w-44 text-xs border rounded-md" id="mapping"
+                                <textarea className="nodrag h-20 text-sm mappingInputField" id="mapping"
                                           name="mapping" value={mapping}
                                           onBlur={updateNode} onChange={onChangeMapping}
                                           placeholder="e.g. {% if message <= 8.0 %}on
@@ -160,23 +150,24 @@ function MappingNode({id, data}: NodeProps) {
                             </div>
                         }
                         {!isOptionsExpanded &&
-                            <button className="bg-primary text-white p-1 mt-1 rounded-md w-44" onClick={toggleOptions}>
+                            <button className="bg-primary text-white p-1 mt-2 rounded-md w-44" onClick={toggleOptions}>
                                 <div className="flex"><RiArrowDownDoubleFill className="m-1"/>Extend Options</div>
                             </button>
                         }
                         {isOptionsExpanded &&
                             <div>
                                 {data.nodeType !== "static" &&
-                                    <div>
-                                        <label htmlFor="Suppression" className="font-bold"> Suppression: </label>
-                                        <input className="nodrag p-1 w-44 border rounded-md" id="suppression"
-                                               name="suppression" value={suppression}
-                                               onBlur={updateNode} onChange={onChangeSuppression}/>
+                                    <div className='mt-2'>
+                                        <label htmlFor="Suppressions" className="font-bold"> Suppressions: </label>
+                                        <div className="text-xs">Seperate suppressions by comma. Leave field empty for suppression " ".</div>
+                                        <input className="nodrag mappingInputField" id="suppressions"
+                                               name="suppressions" value={suppressions} defaultValue={'None'} placeholder='suppr1, suppr2, ...'
+                                               onBlur={updateNode} onChange={onChangeSuppressions}/>
                                     </div>
                                 }
-                                <div>
+                                <div  className="mt-2">
                                     <label htmlFor="qos" className="font-bold">qos:</label> <br/>
-                                    <select className="p-1 w-44 border rounded-md" id="qos" name="qos" value={qos}
+                                    <select className="mappingInputField" id="qos" name="qos" value={qos}
                                             onBlur={updateNode} onChange={onChangeQos}>
                                         <option disabled selected hidden> - select an option -</option>
                                         <option className="text-xl">0</option>
@@ -186,7 +177,7 @@ function MappingNode({id, data}: NodeProps) {
                                 </div>
                                 <div className="mt-2">
                                     <label htmlFor="retain" className="font-bold">retain:</label> <br/>
-                                    <select className=" p-1 w-44 border rounded-md" id="retain" name="retain"
+                                    <select className="mappingInputField" id="retain" name="retain"
                                             value={retain}
                                             onBlur={updateNode} onChange={onChangeRetain}>
                                         <option disabled selected hidden> - select an option -</option>
