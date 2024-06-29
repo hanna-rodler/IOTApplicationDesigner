@@ -4,7 +4,7 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
     const subscriptionExists = !isObjectEmpty(subscription);
     const mappingType = mapping.nodeType;
     if(subscriptionExists) {
-        // TODO: evl. check for higher qos or type? wrsl eh nicht. FE: don't allow same reportTopic.
+        // Future Improvement what if the user creates two topics with the same reportTopic? possibility 1: check for higher qos or type and set that. possibility 2: don't allow two topics with same reportTopic in FE
         console.log('already existing subscription');
         if(mappingType in subscription) {
             // subscription already has mappingType
@@ -76,8 +76,7 @@ function transformExistingMappingTypeToArray(subscription, mappingType) {
 }
 
 function mappedTopicExists(subscription, mappingType, targetTopic) {
-    if(subscription[mappingType].mapped_topic === targetTopic.commandTopic) {
-        console.log('subscription mapping type ', subscription[mappingType], 'matches ', targetTopic.commandTopic);
+    if(mappingType === 'static' && subscription[mappingType].mapped_topic === targetTopic.commandTopic) {
         return true
     }
     return false;
