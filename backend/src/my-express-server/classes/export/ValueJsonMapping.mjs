@@ -7,6 +7,11 @@ export default class ValueJsonMapping {
         this.id = mapping.id;
         this.type = mapping.type;
         this.position = mapping.position;
+        if(mapping.data.suppressions === 'None') {
+            this.suppressions = null;    
+        } else {
+            this.suppressions = mapping.data.suppressions.split(",")
+        }
     }
 
     display(){
@@ -23,6 +28,9 @@ export default class ValueJsonMapping {
         }
         if(this.retain !== '') {
             valueJsonMapping.retain = this.retain;
+        }
+        if(this.suppressions !== null) {
+            valueJsonMapping.suppressions = this.suppressions;
         }
         return valueJsonMapping;
     }
