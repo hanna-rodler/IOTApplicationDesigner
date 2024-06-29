@@ -17,7 +17,7 @@ export function createNestedTopicLevel(name, sourceTopic, mapping, targetTopic) 
             topic_level: topicLevel,
         }
     }
-    console.log('created nested topic ', topicLevel);
+    // console.log('created nested topic ', topicLevel);
     return topicLevel;
 }
 

@@ -8,7 +8,6 @@ export default class ValueJsonMapping {
         this.type = mapping.type;
         this.position = mapping.position;
         if(mapping.data.suppressions === 'None' || mapping.data.suppressions === undefined) {
-            console.log('no suppressions for mapping ', mapping.data);
             this.suppressions = null;    
         } else if (Array.isArray(mapping.data.suppressions)) {
             this.suppressions = mapping.data.suppressions;

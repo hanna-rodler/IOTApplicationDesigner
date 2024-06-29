@@ -28,7 +28,6 @@ export default class StaticMapping {
     }
 
     renderForJson(targetTopic) {
-        console.log('render static mapping for export');
         const staticMapping = {
             mapped_topic: targetTopic.commandTopic,
             message_mapping: {
@@ -38,13 +37,11 @@ export default class StaticMapping {
         };
         if(this.qos !== '') {
             staticMapping.qos = this.qos;
-            console.log('staticMapping after ading qos ', staticMapping.qos);
         }
         if(this.retain !== '') {
             staticMapping.retain = this.retain;
         }
     
-        console.log('staticMapping ', staticMapping);
         return staticMapping;
     }
 

@@ -14,7 +14,6 @@ export default class Subscription {
         this.valueMappings = [];
         this.commandTopics = [];
         if(subscription.static !== undefined) {
-            console.log('static subscription: ', subscription.static);
             const staticMappings = Array.isArray(subscription.static) ? subscription.static : [subscription.static]
             for(let mapping of staticMappings){
                 if(Array.isArray(mapping.message_mapping)) {
@@ -63,7 +62,7 @@ export default class Subscription {
     display() {
         console.log('Subscription');
         console.log('topic: ', this.topic);
-        // console.log('static ', this.staticMappings, ' value ', this.valueMappings, ' json ', this.jsonMappings);
+        console.log('static ', this.staticMappings, ' value ', this.valueMappings, ' json ', this.jsonMappings);
     }
 
     renderEdges() {

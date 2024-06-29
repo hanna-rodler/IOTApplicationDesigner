@@ -33,9 +33,9 @@ export default class MappingLevel {
     }
 
     parseTopicLevel(topic_level, name = ''){
-        console.log('topic_level ', topic_level);
+        // console.log('topic_level ', topic_level);
         if(Array.isArray(topic_level)) {
-            console.log('\t\ttopic level is array');
+            // console.log('\t\ttopic level is array');
             // case that there is subscription & topic level 
             for(let level of topic_level){
                 if('track_name' in level && name !== '') {
@@ -57,15 +57,13 @@ export default class MappingLevel {
             }
             // in rare cases, there is a sub topic_level and subscription in the same topic_level
             if('topic_level' in topic_level && 'subscription' in topic_level) {
-                console.log('\t\tthere is a nested subscription and a topic_level on same level');
+                // console.log('\t\tthere is a nested subscription and a topic_level on same level');
                 this.parseSubscriptionAndTopicLevelOnSameLevel(topic_level);
             } else {
                 // usually there is either a sub topic_level or a subscription in a topic_level
                 if('topic_level' in topic_level){
-                    console.log('\t\tone topic_level (not array)');
                     this.parseTopicLevel(topic_level.topic_level, topic_level.track_name);
                 } else if('subscription' in topic_level) {
-                    console.log('\t\tone subscription (not array)')
                     this.parseSubscription(topic_level)
                 }
             }
@@ -73,7 +71,6 @@ export default class MappingLevel {
     }
 
     parseSubscriptionAndTopicLevelOnSameLevel(topic) {
-        console.log('same level: ', topic);
         // create own subscription and topic level, so they can be rendered seperately.
         // subscriptionPart already has full track_name. Nothing needs to be added later on so it gets name ''.
         const subscriptionPart = {
@@ -116,7 +113,7 @@ export default class MappingLevel {
 
         // json import has reactFlow Data (got exported once from ReactFlow. maybe got changed.)
         if(this.reactFlowJson !== undefined) {
-            console.log('match name and position to topic. also merge topics');
+            // match name and position to topic. also merge topics
             this.topics = this.reactFlowMatcher.matchNodeNameAndPositionToTopics(this.topics);
             this.topics = this.reactFlowMatcher.matchOrCreateMissingTopicNames(missingCommandTopicNames, this.topics);
             if(this.reactFlowMatcher.needToUpdateEdgesCommantTopicNr) {

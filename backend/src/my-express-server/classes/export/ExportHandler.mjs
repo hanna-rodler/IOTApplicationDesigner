@@ -13,7 +13,7 @@ export default class MappingLevel {
         console.log('-- created all maps ---');
         
         this.mappedEdgesWithContents = this.edgesMapper.getMappedEdgesWithContent(this.reactFlowTopics, this.reactFlowMappings);
-        console.log('mapped edges with contents', this.mappedEdgesWithContents);
+        // console.log('mapped edges with contents', this.mappedEdgesWithContents);
         console.info('Got mapped edges with content :-----')
         this.renderedTopicLevels = this.renderMappedEdgesAsTopicLevels();
     }
@@ -33,14 +33,15 @@ export default class MappingLevel {
             const mapping = edge.mapping;
             const targetTopic = edge.targetTopic;
 
-            console.log('\n--- LOOKING FOR NAME ', topicLevelName, ' ---- \n');
+            // console.log('\n--- LOOKING FOR NAME ', topicLevelName, ' ---- \n');
             const matchingTopicLevelName = findMatchingTopicLevelName(topicLevelName, topicLevelNames);
 
             if(matchingTopicLevelName !== '') {
                 // -- TOPIC LEVEL ALREADY EXISTS
-                console.log('matched ', matchingTopicLevelName, ' to ', topicLevelName);
                 // add subscription to topicLevel if new mapping type.
                 // else add mapping content to mapping type if mapping type already exists
+                
+                // console.log('matched ', matchingTopicLevelName, ' to ', topicLevelName);
                 //console.log('topic Level exists ', topicLevelName, topicLevels);
                 
                 const existingTopicLevel = getTopicLevel(matchingTopicLevelName, topicLevels);
@@ -52,12 +53,12 @@ export default class MappingLevel {
                     topicLevelNames.push(topicLevelName)
                     if ('topic_level' in existingTopicLevel){
                         if(!Array.isArray(existingTopicLevel.topic_level)){
-                            console.log('MAKE ARRAY for ', matchingTopicLevelName);
+                            // console.log('MAKE ARRAY for ', matchingTopicLevelName);
                             existingTopicLevel.topic_level = [existingTopicLevel.topic_level];
                         }
                         if(isNestedTopicLabel(topicLevelName)){
                             topicLevelName = removeMatchingTopicLevelNameFromName(matchingTopicLevelName, topicLevelName)
-                            console.log('new topic level name ', topicLevelName);
+                            // console.log('new topic level name ', topicLevelName);
                             let newTopicLevel = createNestedTopicLevel(topicLevelName, sourceTopic, mapping, targetTopic);
                             // console.log('new topic level ', newTopicLevel );
                             existingTopicLevel.topic_level.push(newTopicLevel);
@@ -65,10 +66,10 @@ export default class MappingLevel {
                             topicLevel.name = topicLevelName;
                             topicLevel.subscription = renderSubscriptionPart(sourceTopic, mapping, edge.targetTopic);
                         }
-                        console.log('existing part Topic Level ', existingTopicLevel);
+                        // console.log('existing part Topic Level ', existingTopicLevel);
                     } else {
                         // add topic_level to topic. e.g. topic_level has subscription, but not a topic_level.
-                        console.log(' topic level has subscription but not topic level');
+                        // console.log(' topic level has subscription but not topic level');
                         const subTopicLevelName = topicLevelName.replace(matchingTopicLevelName+'/', '');
                         const newTopicLevel = createNestedTopicLevel(subTopicLevelName, sourceTopic, mapping, targetTopic);
                         existingTopicLevel.topic_level = newTopicLevel;
@@ -77,16 +78,15 @@ export default class MappingLevel {
                 // console.log('merged subscription ', mergedSubscription);
             } else {
                 if(isNestedTopicLabel(topicLevelName)) {
-                    console.log('create nested topic label');
+                    // console.log('create nested topic label');
                     topicLevel = createNestedTopicLevel(topicLevelName, sourceTopic, mapping, targetTopic);
                     topicLevelNames.push(topicLevelName);
                 } else {
-                    console.log('--- new topic level and name');
-                    // const topicLevel = createTopicLevels(topicLevelName);
+                    // console.log('--- new topic level and name');
                     topicLevel.name = topicLevelName;
                     topicLevel.subscription = renderSubscriptionPart(sourceTopic, mapping, edge.targetTopic);
                     topicLevelNames.push(topicLevelName);
-                    console.log('push new topicLevel', topicLevel);
+                    // console.log('push new topicLevel', topicLevel);
                 }
                 topicLevels.push(topicLevel);
             }

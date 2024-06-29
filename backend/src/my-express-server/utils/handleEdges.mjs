@@ -90,7 +90,7 @@ function getEdgesWithContents(mappedEdges, topics, mappings) {
 
 function getMappingForEdgeWithContent(edge, mappings){
     const mapping = mappings[edge.mappingId];
-    console.log('mapping ', mapping , 'get edge mapping with content');
+    // console.log('mapping ', mapping , 'get edge mapping with content');
     const { position, ...mappingWithoutPosition } = mapping;
     return mappingWithoutPosition;
 }
@@ -102,9 +102,7 @@ function getSourceTopic(edge, topics) {
 }
 
 function getTargetTopic(edge, topics) {
-    console.log('edge ', edge)
     const targetTopic = topics[edge.targetTopicId];
-    console.log('get target topic for edge', targetTopic);
     const { id, commandTopic } = targetTopic;
     return {id, commandTopic};
 }

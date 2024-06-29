@@ -48,7 +48,6 @@ export default class ReactFlowMatcher {
             } else {
                 // create new Topic
                 const topic = new Topic({commandTopic: [commandTopic]});
-                console.log('create new topic ', topic);
                 topics.push(topic);
             }
         }
@@ -91,7 +90,7 @@ export default class ReactFlowMatcher {
                 if(edge.targetHandle === 'commandTopic0' && edge.target === updateNeeded.commandTopic || edge.target[0] === updateNeeded.commandTopic) {
                     edge.target = updateNeeded.topicId;
                     edge.targetHandle = 'commandTopic'+updateNeeded.commandTopicNr;
-                    console.log('updated edge CommandTopic Nr', edge);
+                    // console.log('updated edge CommandTopic Nr', edge);
                 }
             }
         }

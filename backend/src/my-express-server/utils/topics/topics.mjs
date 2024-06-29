@@ -12,7 +12,7 @@ export function removeMatchingTopicLevelNameFromName(matchingTopicLevelName, top
 
 export function findMatchingTopicLevelName(name, topicLevelNames) {
     const nameParts = name.split('/');
-    console.log('looking for name ', name, ' in ', topicLevelNames);
+    // console.log('looking for name ', name, ' in ', topicLevelNames);
 
     const possibleMatches = [];
 
@@ -53,7 +53,7 @@ export function findMatchingTopicLevelName(name, topicLevelNames) {
 }
 
 export function getTopicLevel(name, topicLevels) {
-    console.log('get topic levels ', topicLevels, ' with name ', name, ' length ', topicLevels.length);
+    // console.log('get topic levels ', topicLevels, ' with name ', name, ' length ', topicLevels.length);
     if(Array.isArray(topicLevels) && topicLevels.length > 1) {
         // console.log('in array');
         for (const topic of topicLevels) {

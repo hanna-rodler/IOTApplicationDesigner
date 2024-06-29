@@ -16,7 +16,6 @@ export default class TopicsMap {
     renderForReactFlowJson() {
         const topics = []
         for(const [id, topic] of this.topics) {
-            console.log(`${id}: ${topic}`);
             topics.push(topic.renderForReactFlowJson())
         }
         return topics;
