@@ -153,7 +153,7 @@ export default class MappingLevel {
                 }
             }
             // TODO: continue here. update mappings with position and name.
-            if(this.reactFlowJson.mappedEdges) {
+            if(this.reactFlowJson !== undefined && this.reactFlowJson.mappedEdges !== null) {
                 console.log('match name and position to mappings');
                 this.mappings = this.reactFlowMatcher.updateMappingsPositionByMappedEdges(this.mappings, this.edges, this.topics);
                 this.allMappingsRendered = true; // to make sure mappings get updated By ReactFlow if present;

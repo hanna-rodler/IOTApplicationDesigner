@@ -113,7 +113,10 @@ function parseJsonImportFile(file) {
     const edges = mappingLevel.renderEdges();
     const mappings = mappingLevel.renderMappings();
 
-    const projectName = jsonFile.reactFlow.projectName !== undefined ? jsonFile.reactFlow.projectName : 'New Project';    
+    let projectName = 'New Project';
+    if (jsonFile.reactFlow !== undefined && jsonFile.reactFlow.projectName !== undefined) {
+        projectName = jsonFile.reactFlow.projectName;
+    }
 
     return {
         dialog: dialog,
