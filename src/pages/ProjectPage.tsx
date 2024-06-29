@@ -20,7 +20,7 @@ import {
     getJsonProject,
     getProjectById,
     getProjects,
-    getSubcollectionItem
+    getSubcollectionItem, updateProjectScreenshot
 } from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
@@ -302,9 +302,12 @@ const ProjectPageWithoutReactFlowProvider = () => {
             const screenshot = await html2canvas(element);
             const screenshotDataUrl = screenshot.toDataURL("image/png");
 
-            localStorage.setItem(`projectScreenshot-${projectId}`, screenshotDataUrl);
-
-            navigate("/projects");
+            try {
+                await updateProjectScreenshot(projectId, screenshotDataUrl);
+                navigate("/projects");
+            } catch (error) {
+                console.error("Error updating project screenshot URL:", error);
+            }
         } else {
             console.error("Element with class 'react-flow-container' not found");
         }

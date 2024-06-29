@@ -14,7 +14,8 @@ router.post('/', async (req, res) => {
             topics: {},
             dialog: req.body.dialog,
             edges: {},
-            mappings: {}
+            mappings: {},
+            screenshot: req.body.screenshot || null
         };
         const result = await req.db.collection(PROJECTS_COLLECTION).insertOne(project);
         const insertedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: result.insertedId});
@@ -229,6 +230,38 @@ router.put('/:id/name/update', async (req, res) => {
     } catch (error) {
         console.error('Error updating project name:', error);
         res.status(500).json({ error: 'Failed to update project name' });
+    }
+});
+
+/*******************************
+ * Updates the screenshot URL
+ ******************************/
+router.put('/:id/screenshot/update', async (req, res) => {
+    try {
+        const screenshotUrl = req.body.screenshotUrl;
+        if (typeof screenshotUrl !== 'string') {
+            return res.status(400).json({ error: 'screenshotUrl must be a string' });
+        }
+
+        const result = await req.db.collection(PROJECTS_COLLECTION).updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: { screenshotUrl: screenshotUrl } }
+        );
+
+        if (result.matchedCount > 0) {
+            const updatedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            res.json(updatedProject);
+        } else {
+            const existingProject = await req.db.collection(PROJECTS_COLLECTION).findOne({ _id: new ObjectId(req.params.id) });
+            if (existingProject) {
+                res.json(existingProject);
+            } else {
+                res.status(404).json({ error: 'Project not found' });
+            }
+        }
+    } catch (error) {
+        console.error('Error updating screenshot URL:', error);
+        res.status(500).json({ error: 'Failed to update screenshot URL' });
     }
 });
 
