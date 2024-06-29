@@ -55,10 +55,10 @@ export function findMatchingTopicLevelName(name, topicLevelNames) {
 export function getTopicLevel(name, topicLevels) {
     console.log('get topic levels ', topicLevels, ' with name ', name, ' length ', topicLevels.length);
     if(Array.isArray(topicLevels) && topicLevels.length > 1) {
-        console.log('in array');
+        // console.log('in array');
         for (const topic of topicLevels) {
             if (topic.name === name) {
-                console.log(' matched topic.name = ', name, ' topic: ', topic)
+                // console.log(' matched topic.name = ', name, ' topic: ', topic)
                 return topic;
             }
             if (topic.topic_level) {
@@ -70,7 +70,7 @@ export function getTopicLevel(name, topicLevels) {
                         name = names.join("/");
                     }
                 }
-                console.log('looking in subtopic ', topic.topic_level, ' name ', name);
+                // console.log('looking in subtopic ', topic.topic_level, ' name ', name);
                 const foundInSublevel = getTopicLevel(name, topic.topic_level);
                 if (foundInSublevel) {
                     return foundInSublevel;
@@ -90,7 +90,6 @@ export function getTopicLevel(name, topicLevels) {
 
 function findLastMatchingTopicLevelByName(name, topicLevels) {
     const nameParts = name.split('/');
-    console.log(' looking for name ', name, ' in topic levels ', topicLevels)
 
     // Recursive function to traverse the topic levels
     function traverse(level, parts) {
@@ -98,8 +97,7 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
         if(Array.isArray(level)){
             for(let item of level){
                 if(item.name === parts[0]) {
-                    console.log('level = array');
-                    if(item.topic_level) {
+                    if(item.topic_level && parts.length >= 1) {
                         return traverse(item.topic_level, parts.slice(1));
                     } else {
                         // e.g.
@@ -127,6 +125,7 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
                 return;
             }
         } else {
+            // console.log(' no match ', level);
             // If the current level name does not match, return null
             return null;
         }

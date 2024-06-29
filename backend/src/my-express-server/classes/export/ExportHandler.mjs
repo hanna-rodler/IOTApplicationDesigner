@@ -49,8 +49,8 @@ export default class MappingLevel {
                     // console.log('existing full Topic Level ', existingTopicLevel);
                     mergedSubscription = renderSubscriptionPart(sourceTopic, mapping, targetTopic, existingTopicLevel.subscription);
                 } else {
+                    topicLevelNames.push(topicLevelName)
                     if ('topic_level' in existingTopicLevel){
-                        topicLevelNames.push(topicLevelName)
                         if(!Array.isArray(existingTopicLevel.topic_level)){
                             console.log('MAKE ARRAY for ', matchingTopicLevelName);
                             existingTopicLevel.topic_level = [existingTopicLevel.topic_level];
@@ -64,7 +64,6 @@ export default class MappingLevel {
                         } else {
                             topicLevel.name = topicLevelName;
                             topicLevel.subscription = renderSubscriptionPart(sourceTopic, mapping, edge.targetTopic);
-                            topicLevelNames.push(topicLevelName);
                         }
                         console.log('existing part Topic Level ', existingTopicLevel);
                     } else {
@@ -103,7 +102,7 @@ export default class MappingLevel {
             topics: this.reactFlowTopics.renderForReactFlowJson(),
             mappedEdges: renderMappedEdgesForReactFlow(this.mappedEdgesWithContents)
         }
-        console.log('mappedEdges With Contents ', this.mappedEdgesWithContents);
+        // console.log('mappedEdges with Contents ', this.mappedEdgesWithContents);
         return reactFlow;
     }
 }
@@ -118,11 +117,11 @@ function renderMappedEdgesForReactFlow(mappedEdgesWithContents) {
             position: mappedEdge.mapping.position
         }
         if(mappedEdge.mapping.nodeType === 'static') {
-            console.log('static, mappedEdge ', mappedEdge);
+            // console.log('static, mappedEdge ', mappedEdge);
             reactFlowMappedEdge.message = mappedEdge.mapping.message;
             reactFlowMappedEdge.mapped_message = mappedEdge.mapping.mapped_message;
         } else {
-            console.log('value / json', mappedEdge);
+            // console.log('value / json', mappedEdge);
             reactFlowMappedEdge.mapping = mappedEdge.mapping.mapping;
         }
         mappedEdges.push(reactFlowMappedEdge);

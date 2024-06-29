@@ -561,7 +561,6 @@ export function getJsonMappings(){
 }
 
 export function getValueMappings(){
-    // TODO: try out, wenn irgendwelche targets edges keinen matching finden oder im FE validaten
     return [
         {
             id: 'celsius_celsius',

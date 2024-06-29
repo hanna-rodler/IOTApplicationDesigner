@@ -139,12 +139,13 @@ export default class MappingLevel {
         if(this.allTopicsRendered){
             // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping in ReactFlow.
             for(let edge of this.edges) {
+                // 'commandTopic0' okay, because the edges are only matched to topics with 1 command topic. topics with multiple commandTopics  ('commandTopic1') can only happen if they are matched via reactFlowJson. - edges are handled there.
                 if(edge.targetHandle === 'commandTopic0') {
                     let commandTopic = edge.target;
                     if(typeof commandTopic === 'string'){
                         commandTopic = [commandTopic]
                     }
-                    const topic = getTopicByCommandTopic(this.topics, commandTopic);
+                    const topic = getTopicByFirstCommandTopic(this.topics, commandTopic);
                     if (topic) {
                         edge.target = topic.id;
                     } else {
@@ -153,7 +154,6 @@ export default class MappingLevel {
                 }
             }
             if(this.reactFlowJson !== undefined && this.reactFlowJson.mappedEdges !== null) {
-                console.log('match name and position to mappings');
                 this.mappings = this.reactFlowMatcher.updateMappingsPositionByMappedEdges(this.mappings, this.edges, this.topics);
                 this.allMappingsRendered = true; // to make sure mappings get updated By ReactFlow if present;
             }
@@ -165,9 +165,8 @@ export default class MappingLevel {
     }
 }
 
-function getTopicByCommandTopic(topics, commandTopic) {
+function getTopicByFirstCommandTopic(topics, commandTopic) {
     for(let topic of topics) {
-        // TODO: continue here check if any of the commandTopics includes the commandTopic.
         if(topic.data.commandTopic.includes(commandTopic[0])) {
             return topic;
         }

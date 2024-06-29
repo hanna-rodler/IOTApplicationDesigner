@@ -1,4 +1,4 @@
-import Topic from './Topics.mjs';
+import Topic from './Topic.mjs';
 
 export default class TopicsMap {
     constructor(topics) {
@@ -19,7 +19,6 @@ export default class TopicsMap {
             console.log(`${id}: ${topic}`);
             topics.push(topic.renderForReactFlowJson())
         }
-        console.log('react flow topics ', topics);
         return topics;
     }
 }

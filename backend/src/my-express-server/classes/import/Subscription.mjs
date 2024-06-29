@@ -44,7 +44,6 @@ export default class Subscription {
         }
         if(subscription.json !== undefined) {
             const jsonMappings = Array.isArray(subscription.json) ? subscription.json : [subscription.json]
-            // TODO: msgMappingObj wie bei static. + json and value mapping kann wrsl gemerged werden.
             for(let mapping of jsonMappings){
                 this.jsonMappings.push(new ValueJsonMapping(mapping, 'json', this.reportTopic));
                 this.commandTopics.push(mapping.mapped_topic);
