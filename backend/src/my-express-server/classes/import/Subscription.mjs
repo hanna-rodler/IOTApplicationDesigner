@@ -44,13 +44,12 @@ export default class Subscription {
         }
         if(subscription.json !== undefined) {
             const jsonMappings = Array.isArray(subscription.json) ? subscription.json : [subscription.json]
-            // TODO: msgMappingObj wie bei static.
+            // TODO: msgMappingObj wie bei static. + json and value mapping kann wrsl gemerged werden.
             for(let mapping of jsonMappings){
                 this.jsonMappings.push(new ValueJsonMapping(mapping, 'json', this.reportTopic));
                 this.commandTopics.push(mapping.mapped_topic);
             }
         }
-        // TODO: json and value mapping kann wrsl gemerged werden.
         if(subscription.value !== undefined) {
             const valueMappings = Array.isArray(subscription.value) ? subscription.value : [subscription.value];
             for(let mapping of valueMappings){
@@ -73,7 +72,6 @@ export default class Subscription {
         const mappings = this.getAllMappings();
         for(let mapping of mappings) {
             renderedEdges.push(createEdgeIn(this.topic.id, mapping.id));
-            // TODO: gets mapping.commandTopic but topic doesn't get commandTopic as id later.
             renderedEdges.push(createEdgeOut(mapping.id, mapping.commandTopic));
         }
         return renderedEdges;

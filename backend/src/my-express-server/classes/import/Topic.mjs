@@ -3,7 +3,6 @@ import { generateRandomString, getNodeName, generateRandPosition } from "../../u
 export default class Topic {
     constructor(data, id = undefined) {
         this.id = id !== undefined ? id : 'topic_' + generateRandomString(12);
-        // TODO: generate node name from report or command topic of first slash?
         let name = ''
         if(data.nodeName !== undefined){
             name = data.nodeName

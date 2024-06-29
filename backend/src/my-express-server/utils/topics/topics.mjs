@@ -102,7 +102,8 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
                     if(item.topic_level) {
                         return traverse(item.topic_level, parts.slice(1));
                     } else {
-                        // TODO: case return {name: 'kelvin' }
+                        // e.g.
+                        // case return {name: 'kelvin' } <- does not have topic_level but subscription
                         // topic_level: [
                         //     { name: 'celsius', topic_level: [Object] },
                         //     { name: 'kelvin' }

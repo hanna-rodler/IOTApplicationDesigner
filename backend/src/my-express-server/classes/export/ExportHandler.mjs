@@ -125,7 +125,6 @@ function renderMappedEdgesForReactFlow(mappedEdgesWithContents) {
             console.log('value / json', mappedEdge);
             reactFlowMappedEdge.mapping = mappedEdge.mapping.mapping;
         }
-        // TODO: here multiple command topics?
         mappedEdges.push(reactFlowMappedEdge);
     }
     return mappedEdges;

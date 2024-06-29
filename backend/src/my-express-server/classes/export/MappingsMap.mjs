@@ -18,7 +18,6 @@ export default class MappingsMap {
                 let newMapping = new ValueJsonMapping(mapping);
                 this.mappings.set(newMapping.id, newMapping)
             }
-            // TODO: static and value mapping;
         }
     }
 }

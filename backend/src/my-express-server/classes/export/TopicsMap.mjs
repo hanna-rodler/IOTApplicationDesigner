@@ -1,6 +1,5 @@
 import Topic from './Topics.mjs';
 
-// TODO: braucht keine eigene Klasse, oder? kein .topics dann nötig
 export default class TopicsMap {
     constructor(topics) {
         // remove last element _id (id of subcollection) and make iterable
