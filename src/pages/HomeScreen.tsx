@@ -21,12 +21,12 @@ export function HomeScreen() {
               tool empowers you to streamline configuration processes and maximize the potential of your
               connected devices. Dive into the future of IoT configuration with us today!
           </div>
-          <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center">
-            <NavLink to="/setup" className="secondaryBtn sm:mr-6 min-w-14">
+          <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center max-1515:flex-wrap gap-6 max-633:gap-y-0 max-475:gap-y-3">
+            <NavLink to="/setup" className="secondaryBtn min-w-14">
               <GoPlus className="iconBtn" />
               Start new project
             </NavLink>
-            <NavLink to="/projects" className="secondaryBtn sm:mr-6 min-w-14">
+            <NavLink to="/projects" className="secondaryBtn min-w-14">
               <GoFileDirectory className="iconBtn" />
               Open project
             </NavLink>
