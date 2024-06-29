@@ -7,10 +7,18 @@ export default class ValueJsonMapping {
         this.id = mapping.id;
         this.type = mapping.type;
         this.position = mapping.position;
-        if(mapping.data.suppressions === 'None') {
+        if(mapping.data.suppressions === 'None' || mapping.data.suppressions === undefined) {
+            console.log('no suppressions for mapping ', mapping.data);
             this.suppressions = null;    
+        } else if (Array.isArray(mapping.data.suppressions)) {
+            this.suppressions = mapping.data.suppressions;
         } else {
             this.suppressions = mapping.data.suppressions.split(",")
+        }
+        
+        const trimmedMapping = this.mapping.replace(" ", "");
+        if(!trimmedMapping.includes('{%else%}') && this.suppressions === null) {
+            this.suppressions = [''];
         }
     }
 
