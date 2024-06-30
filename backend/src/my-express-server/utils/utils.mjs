@@ -89,8 +89,8 @@ export function getCommandTopicNumber(commandTopicString) {
     return match ? parseInt(match[1]) : null;
 }
 
-export function getTopicById(topics, id) {
-    for(let topic of topics) {
+export function getTopicById(topicsArray, id) {
+    for(let topic of topicsArray) {
         if(topic.id === id) {
             return topic
         }

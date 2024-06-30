@@ -1,8 +1,7 @@
 import TopicsMap from './TopicsMap.mjs';
 import EdgesMapper from './EdgesMapper.mjs';
 import { renderSubscriptionPart } from './handleSubscription.mjs';
-import { createNestedTopicLevel, isNestedTopicLabel } from '../../utils/topics/nestedTopics.mjs';
-import { removeMatchingTopicLevelNameFromName, findMatchingTopicLevelName, getTopicLevel } from '../../utils/topics/topics.mjs'
+import { createNestedTopicLevel, isNestedTopicLabel, removeMatchingTopicLevelNameFromName, findMatchingTopicLevelName, getTopicLevel } from './utils.mjs';
 import MappingsMap from './MappingsMap.mjs'
 
 export default class MappingLevel {
