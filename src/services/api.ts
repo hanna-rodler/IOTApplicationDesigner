@@ -137,6 +137,22 @@ export const updateProjectName = async (projectId, name) => {
     }
 };
 
+/**********************************
+ * Updates the screenshot URL of a project
+ *********************************/
+export const updateProjectScreenshot = async (projectId, screenshotUrl) => {
+  try {
+    const response = await axios.put(`${API_URL}${projectId}/screenshot/update`, { screenshotUrl }, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating project screenshot URL:", error);
+    throw error;
+  }
+};
+
+
 /********************
  gets a JSON project
  ********************/

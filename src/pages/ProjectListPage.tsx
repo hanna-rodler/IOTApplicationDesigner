@@ -1,40 +1,37 @@
 import "reactflow/dist/style.css";
 import TopBar from "../components/TopBar";
 import "../index.css";
-import {NavLink, useNavigate} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import {deleteProject, getProjects} from "../services/api";
+import { deleteProject, getProjects } from "../services/api";
 import UploadBtn from "../components/UploadBtn";
 
 export function ProjectListPage() {
-    const [projects, setProjects] = useState<any[]>([]);
+    const [projects, setProjects] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProjects = async () => {
             try {
                 const projects = await getProjects();
-                projects.forEach((project) => {
-                    const screenshotUrl = localStorage.getItem(`projectScreenshot-${project._id}`);
-                    if (screenshotUrl) {
-                        project.screenshotUrl = screenshotUrl;
-                    }
-                });
                 setProjects(projects);
             } catch (error) {
                 console.error("Error fetching projects:", error);
             }
         };
         fetchProjects();
+        console.log(projects)
     }, []);
 
     const handleClick = () => {
+        console.log(projects)
         navigate(-1);
     };
 
     const handleNewClick = () => {
-        navigate("/setup")
-    }
+        console.log(projects)
+        navigate("/setup");
+    };
 
     const handleDelete = async (projectId) => {
         if (window.confirm("Are you sure you want to permanently delete this Project?")) {
@@ -81,10 +78,10 @@ export function ProjectListPage() {
                                     </NavLink>
                                     <button className="delete-node" onClick={() => handleDelete(project._id)}>X</button>
                                 </div>
-                                <div >
+                                <div>
                                     {project.screenshotUrl && (
                                         <NavLink to={`/project/${project._id}`}>
-                                            <img src={project.screenshotUrl} alt={`${project.name} screenshot`} className="mt-2 w-full h-auto rounded-md" />
+                                            <img src={project.screenshotUrl} alt={`${project} screenshot`} className="mt-2 w-full h-auto rounded-md" />
                                         </NavLink>
                                     )}
                                 </div>
