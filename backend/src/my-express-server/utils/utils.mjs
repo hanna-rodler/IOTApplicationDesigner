@@ -2,6 +2,19 @@ export function removeDuplicates(arr) {
     return [...new Set(arr)]
 }
 
+export function removeDuplicateTopicsById(topics) {
+    const seenIds = new Set();
+    const uniqueTopics = topics.filter(topic => {
+        if(seenIds.has(topic.id)) {
+            return false;
+        } else {
+            seenIds.add(topic.id);
+            return true;
+        }
+    })
+    return uniqueTopics;
+}
+
 export function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0;
 }

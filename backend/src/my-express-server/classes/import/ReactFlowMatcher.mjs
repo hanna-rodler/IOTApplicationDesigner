@@ -1,16 +1,20 @@
 import Topic from './Topic.mjs';
 import {getCommandTopicNumber, getTopicById} from '../../utils/utils.mjs';
+import {removeDuplicates, removeDuplicateTopicsById} from '../../utils/utils.mjs';
+
 
 export default class ReactFlowMatcher {
     constructor(reactFlowContent) {
         this.reactFlowContent = reactFlowContent;
-        this.needToUpdateEdgesCommantTopicNr = false;
-        this.topicsForUpdatingEdgesCommandTopicNr = [];
+        this.needToUpdateEdgesCommandTopicNr = false;
+        this.topicsForUpdatingEdgesWithCommandTopicNr = [];
     }
 
     matchNodeNameAndPositionToTopics(topics) {
+        console.info('match topics ', topics, 'with reactFlowJson topics');
         for(let topic of topics) {
             const topicToMatch = this.getTopicByReportTopic(topic.data.reportTopic);
+            console.log('topic To Match ', topicToMatch);
             if(topicToMatch !== null){
                 topic.data.nodeName = topicToMatch.nodeName;
                 topic.position = topicToMatch.position;
@@ -23,6 +27,7 @@ export default class ReactFlowMatcher {
     }
 
     matchOrCreateMissingTopicNames(missingCommandTopicNames, topics) {
+        const topicsWithoutReportTopic = [];
         for(let commandTopic of missingCommandTopicNames) {
             const matchingTopic = this.getTopicByCommandTopic(commandTopic);
             if(matchingTopic !== null) {
@@ -35,11 +40,14 @@ export default class ReactFlowMatcher {
                                 topic.data.commandTopic[0] = commandTopic;
                             } else {
                                 topic.data.commandTopic.push(commandTopic);
-                                this.needToUpdateEdgesCommantTopicNr = true;
-                                this.topicsForUpdatingEdgesCommandTopicNr.push({topicId: topic.id, commandTopic: commandTopic, commandTopicNr: topic.data.commandTopic.length-1});
+                                this.needToUpdateEdgesCommandTopicNr = true;
+                                this.topicsForUpdatingEdgesWithCommandTopicNr.push({topicId: topic.id, commandTopic: commandTopic, commandTopicNr: topic.data.commandTopic.length-1});
                             }
                         }
                     }
+                } else if (matchingTopic.commandTopic[0] !== '') {
+                    // topcis with only commandTopic but no reportTopic that are in reactFlow part of json, still need to get added to the topics.
+                    topicsWithoutReportTopic.push(matchingTopic);
                 } else {
                     // get position and nodeName and create new Topic
                     const topic = new Topic({commandTopic: [commandTopic], position: matchingTopic.position, nodeName: matchingTopic.nodeName})
@@ -51,7 +59,36 @@ export default class ReactFlowMatcher {
                 topics.push(topic);
             }
         }
+        const uniqueTopicsWithoutReportTopic = this.handleTopicsWithoutReportTopic(topicsWithoutReportTopic);
+        for(let topicWithoutReportTopic of uniqueTopicsWithoutReportTopic) {
+            topics.push(topicWithoutReportTopic);
+        }
         return topics;
+    }
+
+    handleTopicsWithoutReportTopic(topicsWithoutReportTopic) {
+        let uniqueTopics = removeDuplicateTopicsById(topicsWithoutReportTopic);
+        console.log('unique topics ', uniqueTopics);
+
+        const uniqueNewTopics = []
+        for(let topic of uniqueTopics) {
+            uniqueNewTopics.push(new Topic({commandTopic: topic.commandTopic, position: topic.position, nodeName: topic.nodeName}))
+        }
+
+        // look if any commandTopic needs to be updated later (for more than 1 commandTopic per topic )
+        for(let topic of uniqueNewTopics) {
+            if(topic.data.commandTopic.length > 1) {
+                this.needToUpdateEdgesCommandTopicNr = true;
+                for(let i=1; i < uniqueNewTopics.length; i++) {
+                    this.topicsForUpdatingEdgesWithCommandTopicNr.push(
+                        {topicId: topic.id, commandTopic: topic.data.commandTopic[i], commandTopicNr: i}
+                    )
+                }
+
+            }
+        }
+        console.log('unique new topics ', uniqueTopics);
+        return uniqueNewTopics;
     }
 
     /**
@@ -85,7 +122,7 @@ export default class ReactFlowMatcher {
     // by standard when importing, each topic only has 1 commandTopic - so edge.targetHandle = 'commandTopic0' is correct.
     // but when the topics are matched according to how they were in reactFlow, the topics can have multiple commandTopics. So edge.targetHandle = 'commandTopic0' isn't correct anymore and the commandTopicNumber of the edge.targetHandle needs to be updated.
     updateEdgeMapping(edges) {
-        for(let updateNeeded of this.topicsForUpdatingEdgesCommandTopicNr) {
+        for(let updateNeeded of this.topicsForUpdatingEdgesWithCommandTopicNr) {
             for(let edge of edges) {
                 if(edge.targetHandle === 'commandTopic0' && edge.target === updateNeeded.commandTopic || edge.target[0] === updateNeeded.commandTopic) {
                     edge.target = updateNeeded.topicId;
