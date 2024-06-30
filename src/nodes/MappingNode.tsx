@@ -185,7 +185,7 @@ function MappingNode({id, data}: NodeProps) {
                                         <option className="text-xl">false</option>
                                     </select>
                                 </div>
-                                <button className="bg-primary text-white p-1 mt-2 rounded-md w-44"
+                                <button className="bg-primary text-white p-1 mt-3 rounded-md w-44"
                                         onClick={toggleOptions}>
                                     <div className="flex"><RiArrowUpDoubleFill className="m-1"/> Reduce Options</div>
                                 </button>
@@ -200,7 +200,7 @@ function MappingNode({id, data}: NodeProps) {
                     type="source"
                     position={Position.Right}
                     id="mappingOut"
-                    style={{top: 130}}
+                    style={{top: 137}}
                     isConnectable={isConnectable}
                     className="bg-accent  right-2 p-1"
                     isValidConnection={(connection) => {

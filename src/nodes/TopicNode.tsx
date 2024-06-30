@@ -2,7 +2,7 @@ import {useCallback, useState, useRef} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FaMinus, FaPlus} from "react-icons/fa";
 
-const reportIndent = {top: 80};
+const reportIndent = {top: 85};
 
 const isConnectable = true;
 
@@ -134,7 +134,7 @@ function TopicNode({id, data}: NodeProps) {
                                                 className="bg-accent p-1 left-1"
                                                 type="target"
                                                 position={Position.Left}
-                                                style={{ top: 134 + 26 * index }}
+                                                style={{ top: 145 + 26 * index }}
                                                 id={`commandTopic${idx}`}
                                                 isValidConnection={(connection) =>
                                                     connection.sourceHandle === "mappingOut"
@@ -159,7 +159,7 @@ function TopicNode({id, data}: NodeProps) {
                                             className="bg-accent p-1 left-1"
                                             type="target"
                                             position={Position.Left}
-                                            style={{ top: 134 + 26 * index }}
+                                            style={{ top: 147 + 34 * index }}
                                             id={`commandTopic${index}`}
                                             isValidConnection={(connection) =>
                                                 connection.sourceHandle === "mappingOut"
@@ -172,7 +172,7 @@ function TopicNode({id, data}: NodeProps) {
                                             value={topic}
                                             onChange={(event) => handleCommandTopicChange(event, index)}
                                             onBlur={updateNode}                                        />
-                                        <button onClick={() => handleCommandTopicRemove(index)}>
+                                        <button className="pl-1" onClick={() => handleCommandTopicRemove(index)}>
                                             <FaMinus />
                                         </button>
                                     </div>
