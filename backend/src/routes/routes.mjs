@@ -266,6 +266,4 @@ router.put('/:id/screenshot/update', async (req, res) => {
 });
 
 
-
-
 export default router;
