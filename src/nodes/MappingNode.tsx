@@ -36,8 +36,7 @@ const isConnectable = true;
 
 function MappingNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
-    const [nodeName, setNodeName]= useState(data.nodeType.charAt(0).toUpperCase()
-            + data.nodeType.slice(1) + " Mapping")
+    const [nodeName, setNodeName]= useState(data.nodeName)
     const [description, setDescription] = useState(data.description);
     const [mapping, setMapping] = useState(data.mapping);
     const [message, setMessage] = useState(data.message);
@@ -48,8 +47,8 @@ function MappingNode({id, data}: NodeProps) {
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
     const [height, setHeight] = useState(80);
 
-    const reportIndent = {top: 110 + height};
-    const reportIndentOffset = {top: 165 + height};
+    const reportIndent = {top: 93 + height};
+    const reportIndentOffset = {top: 150 + height};
 
     const nodeNameRef = useRef(nodeName);
     const descriptionRef = useRef(description);
@@ -91,7 +90,9 @@ function MappingNode({id, data}: NodeProps) {
         triggerCustomEvent('updateNode', {
             id: id,
             data: {
+                nodeName: nodeNameRef.current,
                 nodeType: data.nodeType,
+                description: descriptionRef.current,
                 mapping: mappingRef.current,
                 message: messageRef.current,
                 qos: qosRef.current,
@@ -141,7 +142,7 @@ function MappingNode({id, data}: NodeProps) {
                     isValidConnection={(connection) => connection.targetHandle === 'reportTopic' || connection.sourceHandle === 'reportTopic'}
             />
             <div>
-                <div className="flex text-black rounded-md m-2 text-lg justify-between ">
+                <div className="flex text-black rounded-md mx-1 text-lg justify-between ">
                     <div className="mt-1">
                         {data.nodeType === "static" &&
                             <div>
@@ -168,15 +169,15 @@ function MappingNode({id, data}: NodeProps) {
                             </div>
                         }
                     </div>
-                    <input className="border-0 w-40 p-2 rounded-md" value={nodeName}
+                    <input className="border-0 w-40 pl-1 rounded-md" value={nodeName}
                            onChange={onChangeNodeName} onBlur={updateNode}></input>
-                    <div className="delete-node" onClick={deleteNode}>X</div>
+                    <div className="mr-2 mt-3" onClick={deleteNode}>X</div>
                 </div>
                 <div className="ml-5 mr-5">
                     <div>
                         <textarea
                             ref={textareaRef}
-                            className="nodrag h-20 w-44 text-sm"
+                            className="nodrag h-20 w-44 text-sm mappingInputField"
                             id="description"
                             name="description"
                             value={description}

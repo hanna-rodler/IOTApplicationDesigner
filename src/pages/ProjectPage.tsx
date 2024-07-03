@@ -247,14 +247,18 @@ const ProjectPageWithoutReactFlowProvider = () => {
             if (type === 'mapping') {
                 if (nodeType === 'value' || nodeType === 'json') {
                     newNode.data = {
+                        nodeName: nodeName + " Mapping",
                         nodeType: nodeType,
+                        description: '',
                         mapping: '',
                         qos: 0,
                         retain: false
                     }
                 } else if (nodeType === 'static') {
                     newNode.data = {
+                        nodeName: nodeName + " Mapping",
                         nodeType: 'static',
+                        description: '',
                         message: '',
                         mapping: '',
                         qos: 0,
