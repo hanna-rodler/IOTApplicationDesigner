@@ -25,3 +25,4 @@ backend/src/my-express-server/mqttFiles
 *.njsproj
 *.sln
 *.sw?
+/.env

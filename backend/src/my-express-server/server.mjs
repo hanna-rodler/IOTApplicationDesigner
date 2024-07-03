@@ -4,11 +4,17 @@ import { exportToJson, importFromJson } from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs';
 import userAuth from './../routes/auth.mjs';
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
 
 const app = express();
 const PORT = 5000;
 
-const uri = 'mongodb+srv://tobi:WWkjfLektNUm3QVM@iot-configuration.qoupblv.mongodb.net/?retryWrites=true&w=majority&appName=IoT-Configuration';
+
+const uri = process.env.API_URL;
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
