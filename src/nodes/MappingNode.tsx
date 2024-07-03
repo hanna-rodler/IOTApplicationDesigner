@@ -86,7 +86,7 @@ function MappingNode({id, data}: NodeProps) {
     };
 
     return (
-        <div className="w-56 border-t-4 border-primary pb-4 bg-cardBg  rounded-md text-sm shadow-card">
+        <div className="w-56 border-t-4 border-mapping pb-4 bg-cardBg rounded-md text-sm shadow-card">
             <Handle className="bg-accent p-1 left-1"
                     type="target"
                     position={Position.Left}
@@ -126,16 +126,16 @@ function MappingNode({id, data}: NodeProps) {
                                 <div>
                                     <label htmlFor="Message" className="font-bold"> Message: </label>
                                     <input className="nodrag mappingInputField" id="message" name="message"
-                                        value={message}
-                                        onBlur={updateNode} onChange={onChangeMessage}
-                                        placeholder="e.g. pressed / on "/>
+                                           value={message}
+                                           onBlur={updateNode} onChange={onChangeMessage}
+                                           placeholder="e.g. pressed / on "/>
                                 </div>
                                 <div className="mt-2">
                                     <label htmlFor="MappingMessage" className="font-bold"> Mapped Message: </label>
                                     <input className="nodrag mappingInputField" id="mapping" name="mapping"
-                                        value={mapping}
-                                        onBlur={updateNode} onChange={onChangeMapping}
-                                        placeholder="e.g. released / off "/>
+                                           value={mapping}
+                                           onBlur={updateNode} onChange={onChangeMapping}
+                                           placeholder="e.g. released / off "/>
                                 </div>
                             </div>
                         }
@@ -150,7 +150,7 @@ function MappingNode({id, data}: NodeProps) {
                             </div>
                         }
                         {!isOptionsExpanded &&
-                            <button className="bg-primary text-white p-1 mt-2 rounded-md w-44" onClick={toggleOptions}>
+                            <button className="bg-mapping text-white p-1 mt-2 rounded-md w-44" onClick={toggleOptions}>
                                 <div className="flex"><RiArrowDownDoubleFill className="m-1"/>Extend Options</div>
                             </button>
                         }
@@ -159,13 +159,16 @@ function MappingNode({id, data}: NodeProps) {
                                 {data.nodeType !== "static" &&
                                     <div className='mt-2'>
                                         <label htmlFor="Suppressions" className="font-bold"> Suppressions: </label>
-                                        <div className="text-xs">Seperate suppressions by comma. Leave field empty for suppression " ".</div>
+                                        <div className="text-xs">Seperate suppressions by comma. Leave field empty for
+                                            suppression " ".
+                                        </div>
                                         <input className="nodrag mappingInputField" id="suppressions"
-                                               name="suppressions" value={suppressions} defaultValue={'None'} placeholder='suppr1, suppr2, ...'
+                                               name="suppressions" value={suppressions} defaultValue={'None'}
+                                               placeholder='suppr1, suppr2, ...'
                                                onBlur={updateNode} onChange={onChangeSuppressions}/>
                                     </div>
                                 }
-                                <div  className="mt-2">
+                                <div className="mt-2">
                                     <label htmlFor="qos" className="font-bold">qos:</label> <br/>
                                     <select className="mappingInputField" id="qos" name="qos" value={qos}
                                             onBlur={updateNode} onChange={onChangeQos}>

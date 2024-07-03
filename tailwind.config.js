@@ -42,6 +42,10 @@ export default {
           fieldBg: "#F9FAF9",
           fieldBorder: "#D1D5DB",
         },
+        actuator: "#6D6FB5",
+        sensor: "#B64C72",
+        mapping:"#0088A7",
+        topic: "#038C8C",
         sidebar: "#F4F4F4",
         appBg: "#F8F9FB",
         cardBg: "#FEFEFE", // card background
