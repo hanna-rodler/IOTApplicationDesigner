@@ -4,6 +4,7 @@ export default class Topic {
         this.nodeName = topic.data.nodeName;
         this.reportTopic = topic.data.reportTopic;
         this.commandTopic = [];
+        this.nodeType = topic.data.nodeType;
         for(let commandTopic of topic.data.commandTopic) {
             this.commandTopic.push(commandTopic);
         }
@@ -32,6 +33,7 @@ export default class Topic {
         return {
             id: this.id,
             nodeName: this.nodeName,
+            nodeType: this.nodeType,
             reportTopic: this.reportTopic,
             commandTopic: this.commandTopic,
             position: this.position

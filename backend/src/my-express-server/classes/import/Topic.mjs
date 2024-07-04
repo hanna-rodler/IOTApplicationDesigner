@@ -13,6 +13,7 @@ export default class Topic {
         }
         this.data = {
             nodeName: name,
+            nodeType: data.nodeType !== undefined ? data.nodeType : 'topic',
             reportTopic: data.reportTopic !== undefined ? data.reportTopic : '',
             commandTopic: data.commandTopic !== undefined ? data.commandTopic : [''],
             subscriptionType: data.type !== undefined ? data.type : '',
@@ -26,15 +27,14 @@ export default class Topic {
         console.log('topic ', this);
     }
 
+    setNodeType(nodeType) {
+        this.data.nodeType = nodeType;
+    }
+
     getTopicWithoutPositionAndCommandTopic(){
         return {
             id: this.id,
-            data: {
-                nodeName: this.data.nodeName,
-                reportTopic: this.data.reportTopic,
-                subscriptionType: this.data.subscriptionType,
-                qos: this.data.qos
-            },
+            data: this.data,
             type: this.type
         }
     }
