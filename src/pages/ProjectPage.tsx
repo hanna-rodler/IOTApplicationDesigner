@@ -19,7 +19,8 @@ import {
     getJsonProject,
     getProjectById,
     getProjects,
-    getSubcollectionItem, updateProjectScreenshot
+    getSubcollectionItem,
+    updateProjectScreenshot
 } from "../services/api.ts";
 import {ThreeDot} from "react-loading-indicators";
 import Sidebar from "../components/Sidebar";
@@ -182,6 +183,14 @@ const ProjectPageWithoutReactFlowProvider = () => {
             setNodes(prevNodes => {
                 return prevNodes.filter(node => node.id !== event.detail.id);
             });
+
+            const filteredEdges = edges.filter(
+                (edge) => edge.source !== event.detail.id && edge.target !== event.detail.id
+            );
+
+            setEdges(filteredEdges);
+            edgesRef.current = filteredEdges
+
             saveItems();
         };
         window.addEventListener('deleteNode', handleDelete);
@@ -284,6 +293,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
     useEffect(() => {
         saveItems()
     }, [nodes, edges]);
+
     async function exportProject() {
         const exportData = await getJsonProject(projectId);
         downloadJsonFile(exportData.file, exportData.fileName);

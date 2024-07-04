@@ -24,7 +24,7 @@ async function connectToDatabase() {
     if (!client) {
         client = new MongoClient(uri);
         await client.connect();
-        db = client.db("test");
+        db = client.db("WebConfigurator");
         console.log("DB Connection Success");
     }
     return db;
