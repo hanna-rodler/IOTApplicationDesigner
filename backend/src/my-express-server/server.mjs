@@ -4,12 +4,16 @@ import { exportToJson, importFromJson } from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join} from 'path';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const path = join(__dirname, './../../../.env');
+dotenv.config({path: path});
 
 const app = express();
 const PORT = 5000;
-
 
 const uri = process.env.API_URL;
 

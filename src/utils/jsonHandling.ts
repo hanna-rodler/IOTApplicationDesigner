@@ -1,30 +1,5 @@
 import { JSONPrefix, FirstDialogue } from "../types/jsonTypes";
 
-export async function writeMqttFile(
-  formData: FirstDialogue,
-  isPrefix: boolean = false
-) {
-  const data = convertToValidJson(formData, isPrefix);
-  const stringifiedData: string = JSON.stringify(data);
-  if (data != undefined) {
-    const response = await fetch("http://localhost:5000/write-mqtt-file", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: stringifiedData,
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to write JSON data to file");
-    }
-
-    return await response.json();
-  } else {
-    throw new Error("Data is undefined");
-  }
-}
-
 export function convertToValidJson(
   formData: FirstDialogue,
   isPrefix: boolean

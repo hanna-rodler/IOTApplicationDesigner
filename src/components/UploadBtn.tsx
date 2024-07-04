@@ -6,7 +6,7 @@ import '../index.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = 'http://localhost:5000/'
+const API_URL = 'http://localhost:5000/api/'
 
 const UploadBtn: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
@@ -20,7 +20,7 @@ const UploadBtn: React.FC = () => {
         reader.onload = async () => {
             const fileContent = reader.result;
             try {
-                const response = await axios.post(API_URL +'api/import', { fileContent });
+                const response = await axios.post(API_URL +'import', { fileContent });
                 const projectId = response.data.id;
 
                 // redirect to project page
