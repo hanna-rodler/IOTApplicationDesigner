@@ -1,17 +1,43 @@
-import {useCallback, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {Handle, NodeProps, Position, useReactFlow} from 'reactflow';
 import {FiBox} from "react-icons/fi";
 import {FaCode} from "react-icons/fa6";
 import {LuFileJson2} from "react-icons/lu";
 import {RiArrowDownDoubleFill, RiArrowUpDoubleFill} from "react-icons/ri";
 
+const useResizeObserver = (callback) => {
+    const ref = useRef(null);
 
-const reportIndent = {top: 80};
+    useEffect(() => {
+        const observeResize = () => {
+            if (ref.current) {
+                callback(ref.current);
+            }
+        };
+
+        const observer = new ResizeObserver(observeResize);
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, [ref, callback]);
+
+    return ref;
+};
+
 
 const isConnectable = true;
 
 function MappingNode({id, data}: NodeProps) {
     const {deleteElements} = useReactFlow();
+    const [nodeName, setNodeName]= useState(data.nodeName)
+    const [description, setDescription] = useState(data.description);
     const [mapping, setMapping] = useState(data.mapping);
     const [message, setMessage] = useState(data.message);
     const [qos, setQos] = useState(data.qos);
@@ -19,12 +45,23 @@ function MappingNode({id, data}: NodeProps) {
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
     const [suppressions, setSuppressions] = useState(data.suppressions);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
+    const [height, setHeight] = useState(80);
 
+    const reportIndent = {top: 93 + height};
+    const reportIndentOffset = {top: 150 + height};
+
+    const nodeNameRef = useRef(nodeName);
+    const descriptionRef = useRef(description);
     const mappingRef = useRef(mapping);
     const messageRef = useRef(message);
     const qosRef = useRef(qos);
     const retainRef = useRef(retain);
     const suppressionsRef = useRef(suppressions);
+
+    const updateHeight = (element) => {
+        setHeight(element.offsetHeight);
+    };
+    const textareaRef = useResizeObserver(updateHeight);
 
 
     function triggerCustomEvent(eventName, data) {
@@ -52,7 +89,9 @@ function MappingNode({id, data}: NodeProps) {
         triggerCustomEvent('updateNode', {
             id: id,
             data: {
+                nodeName: nodeNameRef.current,
                 nodeType: data.nodeType,
+                description: descriptionRef.current,
                 mapping: mappingRef.current,
                 message: messageRef.current,
                 qos: qosRef.current,
@@ -62,6 +101,14 @@ function MappingNode({id, data}: NodeProps) {
         });
     }, [id]);
 
+    const onChangeNodeName = (event) => {
+        setNodeName(event.target.value);
+        nodeNameRef.current = event.target.value;
+    };
+    const onChangeDescription = (event) => {
+        setDescription(event.target.value);
+        descriptionRef.current = event.target.value;
+    };
     const onChangeMapping = (event) => {
         setMapping(event.target.value);
         mappingRef.current = event.target.value;
@@ -94,31 +141,49 @@ function MappingNode({id, data}: NodeProps) {
                     isValidConnection={(connection) => connection.targetHandle === 'reportTopic' || connection.sourceHandle === 'reportTopic'}
             />
             <div>
-                <div className="flex text-black rounded-md m-2 text-lg justify-between ">
+                <div className="flex text-black rounded-md mx-1 text-lg justify-between ">
                     <div className="mt-1">
                         {data.nodeType === "static" &&
-                            <FiBox/>
+                            <div>
+                                <div className="flex justify-center">
+                                    <FiBox/>
+                                </div>
+                                <p className="text-xs m-0 p-0 uppercase">Static</p>
+                            </div>
                         }
                         {data.nodeType === "value" &&
-                            <FaCode/>
+                            <div>
+                                <div className="flex justify-center">
+                                    <FaCode/>
+                                </div>
+                                <p className="text-xs m-0 p-0 uppercase">Value</p>
+                            </div>
                         }
                         {data.nodeType === "json" &&
-                            <LuFileJson2/>
+                            <div>
+                                <div className="flex justify-center">
+                                    <LuFileJson2/>
+                                </div>
+                                <p className="text-xs m-0 p-0 uppercase">JSON</p>
+                            </div>
                         }
                     </div>
-                    {data.nodeType !== "json" &&
-                        <div>{data.nodeType.charAt(0).toUpperCase()
-                            + data.nodeType.slice(1)} Mapping
-                        </div>
-                    }
-                    {data.nodeType === "json" &&
-                        <div>
-                            {data.nodeType.toUpperCase()} Mapping
-                        </div>
-                    }
-                    <div className="delete-node" onClick={deleteNode}>X</div>
+                    <input className="border-0 w-40 pl-1 rounded-md" value={nodeName}
+                           onChange={onChangeNodeName} onBlur={updateNode}></input>
+                    <div className="mr-2 mt-3" onClick={deleteNode}>X</div>
                 </div>
                 <div className="ml-5 mr-5">
+                    <div>
+                        <textarea
+                            ref={textareaRef}
+                            className="nodrag h-20 w-44 text-sm mappingInputField"
+                            id="description"
+                            name="description"
+                            value={description}
+                            onBlur={updateNode}
+                            onChange={onChangeDescription}
+                        />
+                    </div>
                     <div>
                         {data.nodeType === "static" &&
                             <div>
@@ -202,7 +267,7 @@ function MappingNode({id, data}: NodeProps) {
                     type="source"
                     position={Position.Right}
                     id="mappingOut"
-                    style={{top: 137}}
+                    style={reportIndentOffset}
                     isConnectable={isConnectable}
                     className="bg-accent  right-2 p-1"
                     isValidConnection={(connection) => {

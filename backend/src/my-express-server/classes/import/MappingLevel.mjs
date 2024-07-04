@@ -111,9 +111,10 @@ export default class MappingLevel {
         // additionally create the topics that wouldn't have a matching topic in the edges.
         const missingCommandTopicNames = getMissingCommandTopicNames(this.allCommandTopics, this.topics);
 
-        // json import has reactFlow Data (got exported once from ReactFlow. maybe got changed.)
         if(this.reactFlowJson !== undefined) {
-            // match name and position to topic. also merge topics
+            // case: json import has reactFlow Data (got exported once from ReactFlow. maybe got changed.)
+
+            // match name and position to topic. also merge topics if there are currently 
             this.topics = this.reactFlowMatcher.matchNodeNameAndPositionToTopics(this.topics);
             this.topics = this.reactFlowMatcher.matchOrCreateMissingTopicNames(missingCommandTopicNames, this.topics);
             if(this.reactFlowMatcher.needToUpdateEdgesCommandTopicNr) {
