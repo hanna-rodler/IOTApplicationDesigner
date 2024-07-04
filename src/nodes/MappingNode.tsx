@@ -45,10 +45,10 @@ function MappingNode({id, data}: NodeProps) {
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
     const [suppressions, setSuppressions] = useState(data.suppressions);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
-    const [height, setHeight] = useState(80);
+    const [height, setHeight] = useState(50);
 
-    const reportIndent = {top: 93 + height};
-    const reportIndentOffset = {top: 150 + height};
+    const reportIndent = {top: 113 + height};
+    const reportIndentOffset = {top: 170 + height};
 
     const nodeNameRef = useRef(nodeName);
     const descriptionRef = useRef(description);
@@ -174,9 +174,10 @@ function MappingNode({id, data}: NodeProps) {
                 </div>
                 <div className="ml-5 mr-5">
                     <div>
+                        <label htmlFor="Description" className="font-bold">Description</label>
                         <textarea
                             ref={textareaRef}
-                            className="nodrag h-20 w-44 text-sm mappingInputField"
+                            className="nodrag h-12 text-sm mappingInputField"
                             id="description"
                             name="description"
                             value={description}
@@ -269,7 +270,7 @@ function MappingNode({id, data}: NodeProps) {
                     id="mappingOut"
                     style={reportIndentOffset}
                     isConnectable={isConnectable}
-                    className="bg-accent  right-2 p-1"
+                    className="bg-accent right-2 p-1"
                     isValidConnection={(connection) => {
                         const regex = /^commandTopic\d*$/;
                         return regex.test(connection.targetHandle);
@@ -282,7 +283,7 @@ function MappingNode({id, data}: NodeProps) {
                     id="mappingOut"
                     style={reportIndent}
                     isConnectable={isConnectable}
-                    className="bg-accent  right-2 p-1"
+                    className="bg-accent right-2 p-1"
                     isValidConnection={(connection) => {
                         const regex = /^commandTopic\d*$/;
                         return regex.test(connection.targetHandle);
