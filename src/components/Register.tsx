@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {getProjects, registerUser} from "../services/api.ts";
 
-const Register: React.FC = () => {
+const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleRegister = async (e: React.FormEvent) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/auth/register', { username, password });
-            setMessage(response.data.message);
-        } catch (error: any) {
-            if (error.response && error.response.data) {
-                setMessage(error.response.data.message);
-            } else {
-                setMessage('Server error');
-            }
+            const userData = {
+                username: username,
+                password: password,
+            };
+            const user = await registerUser(userData);
+            setMessage(user.data);
+        } catch (error) {
+            setMessage(error.response.data);
         }
     };
 
     return (
         <div>
             <h2>Register</h2>
-            <form onSubmit={handleRegister}>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Username:</label>
+                    <label>Username</label>
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Password:</label>
+                    <label>Password</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <button type="submit">Register</button>

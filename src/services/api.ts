@@ -166,3 +166,19 @@ export const getJsonProject = async (projectId) => {
     throw error;
   }
 };
+
+/*********************
+ register new user
+ ********************/
+export const registerUser = async (userData) => {
+  console.log("Register User called...")
+  console.log(`${API_BASE_URL}users/register`)
+  console.log(userData)
+  try {
+    const response = await axios.post(`${API_BASE_URL}users/register`, userData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating new user:", error);
+    throw error;
+  }
+};

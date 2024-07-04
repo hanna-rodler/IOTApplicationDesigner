@@ -1,17 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import { exportToJson, importFromJson } from './jsonHandling.mjs';
-import mappingsRouter from './../routes/routes.mjs';
+import mappingsRouter from '../routes/routes.mjs';
+import userRouter from '../routes/userRoutes.mjs';  // Import the new user routes
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-
-
 const app = express();
 const PORT = 5000;
-
 
 const uri = process.env.API_URL;
 
@@ -43,6 +41,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/api/projects', mappingsRouter);
+app.use('/api/users', userRouter);  // Use the new user routes
 
 app.get('/api/export/:id', exportToJson);
 app.post('/api/import', importFromJson);

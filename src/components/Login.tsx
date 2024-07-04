@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login: React.FC = () => {
+const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/auth/login', { username, password });
+            const response = await axios.post('/api/users/login', { username, password });
             localStorage.setItem('token', response.data.token);
             setMessage('Login successful');
         } catch (error) {
-            setMessage('Invalid username or password');
+            setMessage(error.response.data);
         }
     };
 
     return (
         <div>
             <h2>Login</h2>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Username:</label>
+                    <label>Username</label>
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Password:</label>
+                    <label>Password</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <button type="submit">Login</button>

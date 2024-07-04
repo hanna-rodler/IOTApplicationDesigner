@@ -1,5 +1,7 @@
 import {Router} from 'express';
 import {ObjectId} from "mongodb";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 const PROJECTS_COLLECTION = "projects";
@@ -264,6 +266,5 @@ router.put('/:id/screenshot/update', async (req, res) => {
         res.status(500).json({ error: 'Failed to update screenshot URL' });
     }
 });
-
 
 export default router;
