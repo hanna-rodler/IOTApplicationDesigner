@@ -1,34 +1,66 @@
 # IoT Configurator
 
-## run project
+## Project Overview
 
-`npm i`
+This project integrates a React frontend with an Express backend. The React application functions as the client-side, offering the user interface, while the Express application acts as the server-side, managing API requests and other backend operations.
 
-`npm run dev`
+## Prerequisites
 
-## Libraries:
+- Node.js (v14 or higher)
+- npm or yarn
 
-- Icon Library: [react-icons](https://react-icons.github.io/react-icons/)
-- node-based editor: [React Flow](https://reactflow.dev/)
+## Installation
 
-## Expanding the ESLint configuration
+1. Download the project or clone the repository.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+2. Navigate to the `IOTApplicationDesigner` folder.
 
-- Configure the top-level `parserOptions` property like this:
+3. Open a terminal and execute the following command:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
+   ```sh
+   npm install
+   ```
+   ```sh
+   yarn install
+   ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Environment Variables
+
+All necessary environment variables are located in the `.env` file and can be modified there. Put the `.env` file on the root level of the project.
+
+### API Endpoints
+
+The API endpoints are defined in the `src/services/api.ts` file. Below is a brief description of the implemented endpoints:
+
+- `GET /api/project`: Retrieves all projects from the `projects` database collection.
+- `POST /api/project`: Creates a new project and saves it in the `projects` database collection.
+- `GET /api/project/{projectId}`: Retrieves the project with the specified ID from the database.
+- `DELETE /api/project/{projectId}`: Deletes the project with the specified ID from the database.
+- `POST /api/project/{projectId}/{subcollection}`: Adds the request data to the specified subcollection of the project.
+- `GET /api/project/{projectId}/{subcollection}`: Retrieves data from the specified subcollection of the project.
+- `UPDATE /api/project/{projectId}/{subcollection}`: Updates the specified subcollection of the project with the request data.
+- `PUT /api/project/{projectId}/name/update`: Updates the name of the project.
+- `PUT /api/project/{projectId}/screenshot/update`: Updates the project's screenshot used in the project browser.
+- `GET /api/export/{projectId}`: Generates a JSON file from the specified project.
+
+## Start the Application
+
+1. Run the following command to start the frontend:
+
+   ```sh
+   npm run dev
+   ```
+
+   ```sh
+   yarn dev
+   ```
+
+2. Open a second terminal to start the backend and run:
+
+   ```sh
+   npm run start:server
+   ```
+
+   ```sh
+   yarn start:server
+   ```

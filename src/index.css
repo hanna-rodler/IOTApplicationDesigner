@@ -10,6 +10,13 @@ html, body, #root {
   box-sizing: border-box;
 }
 
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
 body {
   @apply text-base;
 }
@@ -18,17 +25,43 @@ h1 {
   @apply mb-7 font-semibold xl:text-5xl text-4xl;
 }
 
+h5 {
+  @apply text-2xl mb-3 pb-0.5;
+  border-bottom: 2px solid #C0C0C0;
+}
+
 .primaryBtn {
   border: 1px solid var(--primary);
   padding: 0.5rem;
   @apply rounded-btn bg-primary text-white;
 }
 
+.inputField {
+  @apply p-1 border border-gray-fieldBorder rounded-md bg-gray-fieldBg
+}
+
+.topicInputField {
+  @apply inputField w-36
+}
+
+.mappingInputField {
+  @apply inputField w-44
+}
+
+.fileBtn {
+  @apply flex rounded-btn border-2 p-4 justify-center cursor-pointer border-secondary self-center;
+}
+
 .secondaryBtn {
-  border: 2px solid var(--primary);
-  padding: 0.5rem 0.7rem;
-  display: flex;
-  @apply rounded-btn bg-secondary text-white;
+  @apply  fileBtn text-white border-solid bg-secondary;
+}
+
+.uploadBtn {
+  @apply fileBtn text-black border-dashed  ;
+}
+
+.navBarBtn {
+  @apply cursor-pointer self-center w-[33px] h-[33px]
 }
 
 .secondaryBtn:hover, 
@@ -38,95 +71,7 @@ h1 {
 }
 
 .iconBtn {
-  @apply flex self-center mr-2
-}
-
-.react-flow__devtools {
-  --border-radius: 4px;
-  --highlight-color: rgba(238, 58, 115, 1);
-  --font: monospace, sans-serif;
-
-  border-radius: var(--border-radius);
-  font-size: 11px;
-  font-family: var(--font);
-}
-
-.react-flow__devtools button {
-  background: white;
-  border: none;
-  padding: 5px 15px;
-  color: #222;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: var(--font);
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
-}
-
-.react-flow__devtools button:hover {
-  background: var(--highlight-color);
-  opacity: 0.8;
-  color: white;
-}
-
-.react-flow__devtools button.active {
-  background: var(--highlight-color);
-  color: white;
-}
-
-.react-flow__devtools button:first-child {
-  border-radius: var(--border-radius) 0 0 var(--border-radius);
-}
-
-.react-flow__devtools button:last-child {
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
-  border-right: none;
-}
-
-.react-flow__devtools-changelogger {
-  pointer-events: none;
-  position: relative;
-  top: 50px;
-  left: 20px;
-  font-family: var(--font);
-}
-
-.react-flow__devtools-title {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.react-flow__devtools-nodeinspector {
-  pointer-events: none;
-  font-family: monospace, sans-serif;
-  font-size: 10px;
-}
-
-.react-flow__devtools-nodeinfo {
-  top: 5px;
-}
-
-.react-flow-container {
-  width: 100vw;
-  height: 100vh;
-}
-
-.dndflow {
-  flex-direction: column;
-  display: flex;
-  flex-grow: 1;
-  height: 100%;
-}
-
-.sidebar {
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
-}
-
-.dndflow aside .description {
-  margin-bottom: 10px;
+  @apply flex self-center mr-2 text-2xl;
 }
 
 .nodeBtn {
@@ -138,6 +83,36 @@ h1 {
   align-items: center;
   cursor: grab;
   color: white;
-  @apply bg-secondary rounded-btn;
+  @apply rounded-btn text-base;
 }
 
+.sidebar {
+  height: calc(100vh - 3.125rem);
+  top: 3.125rem;
+  @apply border-l border-gray-fieldBorder bg-sidebar fixed right-0 overflow-x-hidden transition-all duration-300;
+}
+
+@media screen and (min-width: 768px) {
+  .project-page-container {
+    flex-direction: row;
+  }
+}
+
+.react-tooltip {
+  @apply z-20
+}
+
+.customTooltip {
+  font-size: 0.85rem !important;
+  font-style: normal !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 0.15rem;
+  stroke: #221300;
+}
+
+.react-flow__edge .react-flow__edge-path {
+  stroke-width: 0.1rem;
+  stroke: #F28705;
+}

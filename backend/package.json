@@ -1,0 +1,28 @@
+{
+  "name": "my-express-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/my-express-server/server.mjs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "start:server": "node src/my-express-server/server.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1",
+    "undici-types": "^6.18.2"
+  },
+  "devDependencies": {
+    "mongodb": "^6.7.0"
+  }
+}
