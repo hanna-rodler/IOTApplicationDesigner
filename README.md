@@ -1,6 +1,7 @@
 # IoT Configurator
 
 ## Project Overview
+
 This project integrates a React frontend with an Express backend. The React application functions as the client-side, offering the user interface, while the Express application acts as the server-side, managing API requests and other backend operations.
 
 ## Prerequisites
@@ -20,9 +21,15 @@ This project integrates a React frontend with an Express backend. The React appl
    npm i
    ```
 
+4. Additionally navigate to the backend and install the node modules there too:
+   ```sh
+   cd backend
+   npm i
+   ```
+
 ### Environment Variables
 
-All necessary environment variables are located in the `.env` file and can be modified there.
+All necessary environment variables are located in the `.env` file and can be modified there. Put the `.env` file on the root level of the project.
 
 ### API Endpoints
 
@@ -41,13 +48,13 @@ The API endpoints are defined in the `src/services/api.ts` file. Below is a brie
 
 ## Start the Application
 
-1. Run the following command:
+1. Run the following command to start the frontend:
 
    ```sh
    npm run dev
    ```
 
-2. Open a second terminal and run:
+2. Open a second terminal to start the backend and run:
 
    ```sh
    npm run start:server
