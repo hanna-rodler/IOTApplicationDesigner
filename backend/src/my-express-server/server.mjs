@@ -41,7 +41,6 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/api/projects', mappingsRouter);
-app.use('/api/auth', userAuth);
 
 app.get('/api/export/:id', exportToJson);
 app.post('/api/import', importFromJson);
