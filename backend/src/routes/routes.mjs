@@ -21,7 +21,6 @@ router.post('/', async (req, res) => {
         const insertedProject = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: result.insertedId});
         res.status(200).json(insertedProject);
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to create project'});
     }
 });
@@ -34,7 +33,6 @@ router.get('/', async (req, res) => {
         const projects = await req.db.collection(PROJECTS_COLLECTION).find().toArray();
         res.json(projects);
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to get projects'});
     }
 });
@@ -47,7 +45,6 @@ router.get('/:id', async (req, res) => {
         const project = await req.db.collection(PROJECTS_COLLECTION).findOne({_id: new ObjectId(req.params.id)});
         res.json(project);
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to get project'});
     }
 });
@@ -69,7 +66,6 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({error: 'Project not found or not updated'});
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to update project'});
     }
 });
@@ -82,7 +78,6 @@ router.delete('/:id', async (req, res) => {
         const result = await req.db.collection(PROJECTS_COLLECTION).deleteOne({_id: new ObjectId(req.params.id)});
         res.json(result);
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to delete project'});
     }
 });
@@ -112,7 +107,6 @@ router.post('/:id/:subcollection', async (req, res) => {
             res.status(404).json({error: 'Project not found or item not added'});
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to add item to subcollection'});
     }
 });
@@ -177,7 +171,6 @@ router.delete('/:id/:subcollection', async (req, res) => {
             res.status(404).json({error: 'Project not found or item not deleted'});
         }
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to delete item from subcollection'});
     }
 });
@@ -195,7 +188,6 @@ router.get('/:id/:subcollection', async (req, res) => {
 
         res.json(project[subcollection]);
     } catch (error) {
-        console.log(error);
         res.status(500).json({error: 'Failed to get project'});
     }
 })

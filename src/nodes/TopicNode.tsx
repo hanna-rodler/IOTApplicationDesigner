@@ -101,8 +101,6 @@ function TopicNode({id, data}: NodeProps) {
         const updatedCommandTopics = [...commandTopics];
         updatedCommandTopics.splice(index, 1)
         commandTopicRef.current =  updatedCommandTopics;
-        console.log("HandleRemove Ref: ", commandTopicRef.current)
-
         updateNode();
     };
 

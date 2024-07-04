@@ -4,7 +4,6 @@ import "../index.css";
 import { GoPlus, GoFileDirectory } from "react-icons/go";
 import UploadBtn from '../components/UploadBtn';
 import {NavLink} from "react-router-dom";
-import React from "react";
 
 export function HomeScreen() {
   return (

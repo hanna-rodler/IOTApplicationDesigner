@@ -19,10 +19,8 @@ const UploadBtn: React.FC = () => {
         const reader = new FileReader();
         reader.onload = async () => {
             const fileContent = reader.result;
-            console.log(' file content received');
             try {
                 const response = await axios.post(API_URL +'api/import', { fileContent });
-                console.log('Upload response from server:', response.data);
                 const projectId = response.data.id;
 
                 // redirect to project page
