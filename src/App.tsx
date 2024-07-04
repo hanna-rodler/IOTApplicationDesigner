@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import {Fragment} from "react";
 import "reactflow/dist/style.css";
 import "./styles/text-updater-node.css";
 import {BrowserRouter, Route, Routes} from "react-router-dom";

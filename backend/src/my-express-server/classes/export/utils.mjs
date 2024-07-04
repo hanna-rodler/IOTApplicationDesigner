@@ -36,7 +36,6 @@ export function removeMatchingTopicLevelNameFromName(matchingTopicLevelName, top
 
 export function findMatchingTopicLevelName(name, topicLevelNames) {
     const nameParts = name.split('/');
-    // console.log('looking for name ', name, ' in ', topicLevelNames);
 
     const possibleMatches = [];
 
@@ -77,12 +76,9 @@ export function findMatchingTopicLevelName(name, topicLevelNames) {
 }
 
 export function getTopicLevel(name, topicLevels) {
-    // console.log('get topic levels ', topicLevels, ' with name ', name, ' length ', topicLevels.length);
     if(Array.isArray(topicLevels) && topicLevels.length > 1) {
-        // console.log('in array');
         for (const topic of topicLevels) {
             if (topic.name === name) {
-                // console.log(' matched topic.name = ', name, ' topic: ', topic)
                 return topic;
             }
             if (topic.topic_level) {
@@ -94,7 +90,6 @@ export function getTopicLevel(name, topicLevels) {
                         name = names.join("/");
                     }
                 }
-                // console.log('looking in subtopic ', topic.topic_level, ' name ', name);
                 const foundInSublevel = getTopicLevel(name, topic.topic_level);
                 if (foundInSublevel) {
                     return foundInSublevel;
@@ -136,7 +131,6 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
         } else if (level.name === parts[0]) {
             // If no more parts to match, return the current level
             if (parts.length === 1) {
-                // console.log('⭐');
                 return level;
             }
 
@@ -148,7 +142,6 @@ function findLastMatchingTopicLevelByName(name, topicLevels) {
                 return;
             }
         } else {
-            // console.log(' no match ', level);
             // If the current level name does not match, return null
             return null;
         }

@@ -33,9 +33,7 @@ export default class MappingLevel {
     }
 
     parseTopicLevel(topic_level, name = ''){
-        // console.log('topic_level ', topic_level);
         if(Array.isArray(topic_level)) {
-            // console.log('\t\ttopic level is array');
             // case that there is subscription & topic level 
             for(let level of topic_level){
                 if('track_name' in level && name !== '') {
@@ -57,7 +55,6 @@ export default class MappingLevel {
             }
             // in rare cases, there is a sub topic_level and subscription in the same topic_level
             if('topic_level' in topic_level && 'subscription' in topic_level) {
-                // console.log('\t\tthere is a nested subscription and a topic_level on same level');
                 this.parseSubscriptionAndTopicLevelOnSameLevel(topic_level);
             } else {
                 // usually there is either a sub topic_level or a subscription in a topic_level
@@ -123,7 +120,6 @@ export default class MappingLevel {
                 console.info('Not needed to update edges.');
             }
 
-            // console.log('matched to reactFlow ', this.topics);
         } else {
             console.info('render without reactFlowJson. createMissingTopics');
             const missingTopics = createMissingTopics(missingCommandTopicNames, this.topics);
@@ -140,7 +136,6 @@ export default class MappingLevel {
             // update id because so far edges just have the command Topics as target, but they need the topic id for correct mapping in ReactFlow.
             for(let edge of this.edges) {
                 // 'commandTopic0' okay, because the edges are only matched to topics with 1 command topic. topics with multiple commandTopics  ('commandTopic1') can only happen if they are matched via reactFlowJson. - edges are handled there.
-                // console.log('--> edge ', edge);
                 if(edge.targetHandle === 'commandTopic0') {
                     let commandTopic = edge.target;
                     if(typeof commandTopic === 'string'){
