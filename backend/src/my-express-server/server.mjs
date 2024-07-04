@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import { exportToJson, importFromJson } from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs';
-import userAuth from './../routes/auth.mjs';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 
@@ -44,7 +43,6 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/api/projects', mappingsRouter);
-app.use('/api/auth', userAuth);
 
 app.get('/api/export/:id', exportToJson);
 app.post('/api/import', importFromJson);
