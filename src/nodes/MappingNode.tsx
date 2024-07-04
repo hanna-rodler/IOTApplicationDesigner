@@ -45,7 +45,7 @@ function MappingNode({id, data}: NodeProps) {
     const [isTrueRetain, setTrueRetain] = useState(data.retain);
     const [suppressions, setSuppressions] = useState(data.suppressions);
     const [isOptionsExpanded, setIsOptionsExpanded] = useState(false);
-    const [height, setHeight] = useState(50);
+    const [height, setHeight] = useState(34);
 
     const reportIndent = {top: 113 + height};
     const reportIndentOffset = {top: 170 + height};
@@ -177,7 +177,7 @@ function MappingNode({id, data}: NodeProps) {
                         <label htmlFor="Description" className="font-bold">Description</label>
                         <textarea
                             ref={textareaRef}
-                            className="nodrag h-12 text-sm mappingInputField"
+                            className="nodrag h-8 text-sm mappingInputField"
                             id="description"
                             name="description"
                             value={description}
