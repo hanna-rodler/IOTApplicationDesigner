@@ -18,13 +18,10 @@ This project integrates a React frontend with an Express backend. The React appl
 3. Open a terminal and execute the following command:
 
    ```sh
-   npm i
+   npm install
    ```
-
-4. Additionally navigate to the backend and install the node modules there too:
    ```sh
-   cd backend
-   npm i
+   yarn install
    ```
 
 ### Environment Variables
@@ -54,8 +51,16 @@ The API endpoints are defined in the `src/services/api.ts` file. Below is a brie
    npm run dev
    ```
 
+   ```sh
+   yarn dev
+   ```
+
 2. Open a second terminal to start the backend and run:
 
    ```sh
    npm run start:server
+   ```
+
+   ```sh
+   yarn start:server
    ```
