@@ -5,12 +5,10 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
     const mappingType = mapping.nodeType;
     if(subscriptionExists) {
         // Future Improvement what if the user creates two topics with the same reportTopic? possibility 1: check for higher qos or type and set that. possibility 2: don't allow two topics with same reportTopic in FE
-        // console.log('already existing subscription');
         if(mappingType in subscription) {
             // subscription already has mappingType
             if(mappedTopicExists(subscription, mappingType, targetTopic)) {
                 // subscription already has mappingType and mapped_topic
-                // console.log('add to mapped_topic - transform message mapping to array');
                 const newMessageMapping = {
                     message: mapping.message,
                     mapped_message: mapping.mapped_message
@@ -31,10 +29,8 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
                 }                
             } else {
                 // subscription has mappingType but not the mapped_topic yet
-                // console.log('mapped_topic does not match command topic')
                 const mappingTypeValue = transformExistingMappingTypeToArray(subscription, mappingType);
                 mappingTypeValue.push(mapping.renderForJson(targetTopic));
-                // console.log('added ', mappingTypeValue);
                 subscription[mappingType] = mappingTypeValue;
                 return subscription;
             }
@@ -45,8 +41,7 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
             subscription[mappingType] = mapping.renderForJson(targetTopic);
         }
     } else {
-        console.info('subscription is empty');
-        // console.log(' source topic ', sourceTopic);
+        // case: subscription is emtpy
         // initialize subscription
         if(sourceTopic.qos !== ''){
             subscription.qos = sourceTopic.qos;
@@ -57,7 +52,6 @@ export function renderSubscriptionPart(sourceTopic, mapping, targetTopic, subscr
         subscription[mappingType] = mapping.renderForJson(targetTopic);
     }
 
-    //console.log('subscription ', subscription);
     return subscription;
 }
 

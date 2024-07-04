@@ -8,7 +8,6 @@ export function createNestedTopicLevel(name, sourceTopic, mapping, targetTopic) 
     topicLevel.name = names[names.length-1];
     names.pop();
     topicLevel.subscription = renderSubscriptionPart(sourceTopic, mapping, targetTopic)
-    // console.log('not exists - last topic level ', topicLevel);
     // topic_level [] or {} if topic_level is object
     
     for(let i = names.length-1; i >= 0; i--){
@@ -17,7 +16,6 @@ export function createNestedTopicLevel(name, sourceTopic, mapping, targetTopic) 
             topic_level: topicLevel,
         }
     }
-    // console.log('created nested topic ', topicLevel);
     return topicLevel;
 }
 
@@ -105,7 +103,6 @@ export function getTopicLevel(name, topicLevels) {
         }
         return null; 
     } else {
-        console.log('not iterable');
         let nonIterableTopicLevels = topicLevels;
         if(Array.isArray(topicLevels)) {
             nonIterableTopicLevels = topicLevels[0];

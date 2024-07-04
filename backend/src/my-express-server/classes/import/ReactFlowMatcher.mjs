@@ -11,10 +11,8 @@ export default class ReactFlowMatcher {
     }
 
     matchNodeNameAndPositionToTopics(topics) {
-        console.info('match topics ', topics, 'with reactFlowJson topics');
         for(let topic of topics) {
             const topicToMatch = this.getTopicByReportTopic(topic.data.reportTopic);
-            console.log('topic To Match ', topicToMatch);
             if(topicToMatch !== null){
                 topic.data.nodeType = topicToMatch.nodeType;
                 topic.data.nodeName = topicToMatch.nodeName;
@@ -48,7 +46,6 @@ export default class ReactFlowMatcher {
                     }
                 } else if (matchingTopic.commandTopic[0] !== '') {
                     // topcis with only commandTopic but no reportTopic that are in reactFlow part of json, still need to get added to the topics.
-                    console.log('matching topic without report topic');
                     topicsWithoutReportTopic.push(matchingTopic);
                 } else {
                     // get position and nodeName and create new Topic
@@ -71,7 +68,6 @@ export default class ReactFlowMatcher {
 
     handleTopicsWithoutReportTopic(topicsWithoutReportTopic) {
         let uniqueTopics = removeDuplicateTopicsById(topicsWithoutReportTopic);
-        console.log('unique topics ', uniqueTopics);
 
         const uniqueNewTopics = []
         for(let topic of uniqueTopics) {
@@ -90,7 +86,6 @@ export default class ReactFlowMatcher {
 
             }
         }
-        console.log('unique new topics ', uniqueTopics);
         return uniqueNewTopics;
     }
 
@@ -130,7 +125,6 @@ export default class ReactFlowMatcher {
                 if(edge.targetHandle === 'commandTopic0' && edge.target === updateNeeded.commandTopic || edge.target[0] === updateNeeded.commandTopic) {
                     edge.target = updateNeeded.topicId;
                     edge.targetHandle = 'commandTopic'+updateNeeded.commandTopicNr;
-                    // console.log('updated edge CommandTopic Nr', edge);
                 }
             }
         }
