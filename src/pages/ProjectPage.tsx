@@ -9,7 +9,6 @@ import ReactFlow, {
     useReactFlow
 } from "reactflow";
 import {useNavigate, useParams} from 'react-router-dom';
-import EdgeInput from "../edges/EdgeInput.tsx";
 import TopBar from "../components/TopBar";
 import TopicNode from "../nodes/TopicNode.tsx";
 import "../styles/project-page.css";
@@ -31,10 +30,6 @@ import html2canvas from "html2canvas";
 const nodeTypes: NodeTypes = {
     mapping: MappingNode,
     topic: TopicNode
-};
-
-const edgeTypes = {
-    'edge-input': EdgeInput,
 };
 
 const ProjectPageWithoutReactFlowProvider = () => {
@@ -65,7 +60,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
         const fetchProject = async () => {
             try {
                 const project = await getProjectById(projectId);
-                console.log('project ', project)
                 setSelectedProject(project);
             } catch (error) {
                 console.error(`Error fetching project with ID ${projectId}:`, error);
@@ -285,9 +279,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
         saveItems()
     }, [nodes, edges]);
     async function exportProject() {
-        console.log('export ', projectId);
         const exportData = await getJsonProject(projectId);
-        console.log('export content ', exportData);
         downloadJsonFile(exportData.file, exportData.fileName);
     }
 
@@ -349,7 +341,6 @@ const ProjectPageWithoutReactFlowProvider = () => {
                     edges={edges}
                     onEdgesChange={onEdgesChange}
                     nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
                     onConnect={onConnect}
                     onDragOver={onDragOver}
                     onDrop={onDrop}

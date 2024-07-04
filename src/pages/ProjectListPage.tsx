@@ -20,16 +20,13 @@ export function ProjectListPage() {
             }
         };
         fetchProjects();
-        console.log(projects)
     }, []);
 
     const handleClick = () => {
-        console.log(projects)
         navigate(-1);
     };
 
     const handleNewClick = () => {
-        console.log(projects)
         navigate("/setup");
     };
 

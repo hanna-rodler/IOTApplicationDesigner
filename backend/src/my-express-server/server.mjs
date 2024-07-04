@@ -2,13 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { exportToJson, importFromJson } from './jsonHandling.mjs';
 import mappingsRouter from './../routes/routes.mjs';
-import userAuth from './../routes/auth.mjs';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-
 
 const app = express();
 const PORT = 5000;

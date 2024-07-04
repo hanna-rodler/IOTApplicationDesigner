@@ -6,7 +6,6 @@ import axios from 'axios';
 export const exportToJson = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log('getting export for project with id ', id);
         const projectResponse = await axios.get(`http://localhost:5000/api/projects/${id}`)
         const project = projectResponse.data;
         const { _id, ...dialogWithout_id } = project.dialog;
@@ -15,7 +14,6 @@ export const exportToJson = async (req, res) => {
         const topics = project.topics;
         const edges = project.edges;
         const mappings = project.mappings;
-        // console.log('found project ', fileName, ': ', project);
 
 
         let mqttJson = dialog;
@@ -43,18 +41,11 @@ export const importFromJson = async (req, res) => {
 
         // Example: Send the parsed data to another API
         const createdProjectResponse = await axios.post("http://localhost:5000/api/projects/", reactFlowData);
-        console.log('createdProjectResponse from server: ', createdProjectResponse.status);
         const projectId = createdProjectResponse.data._id;
-        console.log('projectId', projectId);
-        const addMappingsRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/mappings", reactFlowData.mappings);
-        console.log('mappings response ', addMappingsRes.status)
-        const addEdgesRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/edges", reactFlowData.edges);
-        console.log('mappings response ', addEdgesRes.status)
-        const addTopicsRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/topics", reactFlowData.topics);
-        console.log('mappings response ', addTopicsRes.status)
-        const addDialogRes = await axios.post("http://localhost:5000/api/projects/"+projectId+"/dialog", reactFlowData.dialog);
-        console.log('mappings response ', addDialogRes.status)
-
+        await axios.post("http://localhost:5000/api/projects/"+projectId+"/mappings", reactFlowData.mappings);
+        await axios.post("http://localhost:5000/api/projects/"+projectId+"/edges", reactFlowData.edges);
+        await axios.post("http://localhost:5000/api/projects/"+projectId+"/topics", reactFlowData.topics);
+        await axios.post("http://localhost:5000/api/projects/"+projectId+"/dialog", reactFlowData.dialog);
         // Respond to the client
         res.status(200).json({ message: 'File read successfully', id: projectId});
     } catch (error) {

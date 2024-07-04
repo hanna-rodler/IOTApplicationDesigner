@@ -103,11 +103,8 @@ const DialogForm = () => {
             };
 
             if (projectId) {
-                const updateNameResponse = await updateProjectName(projectId, projectName);
-                console.log("Project name updated:", updateNameResponse);
-
-                const updateDialogResponse = await updateSubcollectionItem(projectId, "dialog", convertedData);
-                console.log("Dialog subcollection updated:", updateDialogResponse);
+                await updateProjectName(projectId, projectName);
+                await updateSubcollectionItem(projectId, "dialog", convertedData);
 
                 navigate('/project/' + projectId);
             } else {

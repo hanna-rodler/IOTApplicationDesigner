@@ -3,10 +3,7 @@ import TopBar from "../components/TopBar";
 import "../index.css";
 import { GoPlus, GoFileDirectory } from "react-icons/go";
 import UploadBtn from '../components/UploadBtn';
-import {Link, NavLink, Route} from "react-router-dom";
-import Register from "../components/Register.tsx";
-import Login from "../components/Login.tsx";
-import React from "react";
+import {NavLink} from "react-router-dom";
 
 export function HomeScreen() {
   return (
@@ -25,8 +22,6 @@ export function HomeScreen() {
               connected devices. Dive into the future of IoT configuration with us today!
           </div>
           <div className="lg:mt-14 mt-12 flex lg:justify-start justify-center max-1515:flex-wrap gap-6 max-633:gap-y-0 max-475:gap-y-3">
-              <Register/>
-              <Login/>
             <NavLink to="/setup" className="secondaryBtn min-w-14">
               <GoPlus className="iconBtn" />
               Start new project
