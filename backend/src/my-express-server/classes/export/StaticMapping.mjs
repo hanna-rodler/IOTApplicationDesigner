@@ -3,11 +3,13 @@ export default class StaticMapping {
     constructor(mapping) {
         this.type = 'mapping';
         // export case
-        this.nodeType = mapping.data.nodeType,
-        this.message = mapping.data.message,
-        this.mapped_message = mapping.data.mapping,
-        this.qos = mapping.data.qos,
-        this.retain = mapping.data.retain,
+        this.nodeType = mapping.data.nodeType;
+        this.nodeName = mapping.data.nodeName;
+        this.description = mapping.data.description;
+        this.message = mapping.data.message;
+        this.mapped_message = mapping.data.mapping;
+        this.qos = mapping.data.qos;
+        this.retain = mapping.data.retain;
         this.id = mapping.id;
         this.position = mapping.position;
     }
@@ -15,17 +17,6 @@ export default class StaticMapping {
     display(){
         console.log('static Mapping', this);
     } 
-
-    getMappingWithoutPosition() {
-        return {
-            id: this.id,
-            nodeType: this.nodeType,
-            message: this.data.message,
-            mapped_message: this.data.mapped_message,
-            qos: this.data.qos,
-            retain: this.data.retain,
-        }
-    }
 
     renderForJson(targetTopic) {
         const staticMapping = {

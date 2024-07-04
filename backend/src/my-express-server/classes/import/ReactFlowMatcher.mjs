@@ -152,12 +152,14 @@ export default class ReactFlowMatcher {
             if(sourceTopic !== null && targetTopic !== null && commandTopicNr !== null) {
                 const mappedEdge = this.findMatchingMappedEdge(sourceTopic, targetTopic, commandTopicNr, mapping);
                 if(mappedEdge !== null) {
+                    mapping.data.nodeName = mappedEdge.nodeName;
+                    mapping.data.description = mappedEdge.description;
                     mapping.position = mappedEdge.position;
                 } else {
                     console.log('no matching mappedEdge for mapping ', mapping);
                 }
             } else {
-                console.log('no matching mappedEdge for mapping ', mapping);
+                console.log('no matching mappedEdge for mapping ', mapping, ' because sourceTopic, targetTopic or commandTopicNr are null');
             }
         }
 

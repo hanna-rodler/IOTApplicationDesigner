@@ -1,9 +1,11 @@
 export default class ValueJsonMapping {
     constructor(mapping) {
-        this.nodeType = mapping.data.nodeType,
-        this.mapping = mapping.data.mapping,
-        this.qos = mapping.data.qos,
+        this.nodeType = mapping.data.nodeType;
+        this.mapping = mapping.data.mapping;
+        this.qos = mapping.data.qos;
         this.retain = mapping.data.retain;
+        this.nodeName = mapping.data.nodeName;
+        this.description = mapping.data.description;
         this.id = mapping.id;
         this.type = mapping.type;
         this.position = mapping.position;

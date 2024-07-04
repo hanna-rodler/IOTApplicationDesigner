@@ -4,7 +4,7 @@ import { renderSubscriptionPart } from './handleSubscription.mjs';
 import { createNestedTopicLevel, isNestedTopicLabel, removeMatchingTopicLevelNameFromName, findMatchingTopicLevelName, getTopicLevel } from './utils.mjs';
 import MappingsMap from './MappingsMap.mjs'
 
-export default class MappingLevel {
+export default class ExportHandler {
     constructor(reactFlowTopics, reactFlowEdges, reactFlowMappings) {
         this.reactFlowTopics = new TopicsMap(reactFlowTopics, 'topics');
         this.edgesMapper = new EdgesMapper(reactFlowEdges);
@@ -111,6 +111,8 @@ function renderMappedEdgesForReactFlow(mappedEdgesWithContents) {
     for(let mappedEdge of mappedEdgesWithContents) {
         let reactFlowMappedEdge = {
             nodeType: mappedEdge.mapping.nodeType,
+            nodeName: mappedEdge.mapping.nodeName,
+            description: mappedEdge.mapping.description,
             sourceReportTopic: mappedEdge.sourceTopic.reportTopic,
             targetCommandTopic: mappedEdge.targetTopic.commandTopic,
             position: mappedEdge.mapping.position
