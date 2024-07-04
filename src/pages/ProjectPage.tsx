@@ -243,6 +243,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
                     newNode.data = {
                         nodeType: nodeType,
                         mapping: '',
+                        suppressions: 'None',
                         qos: 0,
                         retain: false
                     }
@@ -258,6 +259,7 @@ const ProjectPageWithoutReactFlowProvider = () => {
             } else if (type === 'topic') {
                 newNode.data = {
                     nodeName: nodeName,
+                    nodeType: nodeType,
                     commandTopic: [''],
                     reportTopic: '',
                     subscriptionTopic: '',

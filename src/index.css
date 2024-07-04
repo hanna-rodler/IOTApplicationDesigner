@@ -83,7 +83,7 @@ h5 {
   align-items: center;
   cursor: grab;
   color: white;
-  @apply bg-secondary rounded-btn text-base;
+  @apply rounded-btn text-base;
 }
 
 .sidebar {

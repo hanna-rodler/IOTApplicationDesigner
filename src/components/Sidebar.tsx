@@ -33,30 +33,44 @@ const Sidebar = () => {
         </div>
         <h5>Topics</h5>
         <div
-          className="nodeBtn"
-          onDragStart={(event) => onDragStart(event, "topic", "New Topic")}
+          className="nodeBtn bg-topic"
+          onDragStart={(event) => onDragStart(event, "topic", "New Topic", "topic")}
           draggable
         >
           New Topic
         </div>
+        <div
+            className="nodeBtn bg-actuator"
+            onDragStart={(event) => onDragStart(event, "topic", "New Actuator", "actuator")}
+            draggable
+        >
+          New Actuator
+        </div>
+        <div
+            className="nodeBtn bg-sensor"
+            onDragStart={(event) => onDragStart(event, "topic", "New Sensor", "sensor")}
+            draggable
+        >
+          New Sensor
+        </div>
 
         <h5 className="pt-3">Mappings</h5>
         <div
-          className="nodeBtn"
+          className="nodeBtn bg-mapping"
           onDragStart={(event) => onDragStart(event, "mapping", "Static", "static")}
           draggable
         >
           Static Mapping
         </div>
         <div
-          className="nodeBtn"
+          className="nodeBtn bg-mapping"
           onDragStart={(event) => onDragStart(event, "mapping", "Value", "value")}
           draggable
         >
           Value Mapping
         </div>
         <div
-          className="nodeBtn"
+          className="nodeBtn bg-mapping"
           onDragStart={(event) => onDragStart(event, "mapping", "JSON", "json")}
           draggable
         >

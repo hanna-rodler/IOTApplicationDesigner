@@ -1,6 +1,6 @@
 import Topic from './Topic.mjs';
 import {getCommandTopicNumber, getTopicById} from '../../utils/utils.mjs';
-import {removeDuplicates, removeDuplicateTopicsById} from '../../utils/utils.mjs';
+import { removeDuplicateTopicsById} from '../../utils/utils.mjs';
 
 
 export default class ReactFlowMatcher {
@@ -16,6 +16,7 @@ export default class ReactFlowMatcher {
             const topicToMatch = this.getTopicByReportTopic(topic.data.reportTopic);
             console.log('topic To Match ', topicToMatch);
             if(topicToMatch !== null){
+                topic.data.nodeType = topicToMatch.nodeType;
                 topic.data.nodeName = topicToMatch.nodeName;
                 topic.position = topicToMatch.position;
             }
@@ -47,10 +48,12 @@ export default class ReactFlowMatcher {
                     }
                 } else if (matchingTopic.commandTopic[0] !== '') {
                     // topcis with only commandTopic but no reportTopic that are in reactFlow part of json, still need to get added to the topics.
+                    console.log('matching topic without report topic');
                     topicsWithoutReportTopic.push(matchingTopic);
                 } else {
                     // get position and nodeName and create new Topic
-                    const topic = new Topic({commandTopic: [commandTopic], position: matchingTopic.position, nodeName: matchingTopic.nodeName})
+                console.log('create new topic from reactFlowJson');
+                    const topic = new Topic({commandTopic: [commandTopic], position: matchingTopic.position, nodeName: matchingTopic.nodeName, nodeType: matchingTopic.nodeType})
                     topics.push(topic);
                 }
             } else {
@@ -72,7 +75,7 @@ export default class ReactFlowMatcher {
 
         const uniqueNewTopics = []
         for(let topic of uniqueTopics) {
-            uniqueNewTopics.push(new Topic({commandTopic: topic.commandTopic, position: topic.position, nodeName: topic.nodeName}))
+            uniqueNewTopics.push(new Topic({commandTopic: topic.commandTopic, position: topic.position, nodeName: topic.nodeName, nodeType: topic.nodeType}))
         }
 
         // look if any commandTopic needs to be updated later (for more than 1 commandTopic per topic )
