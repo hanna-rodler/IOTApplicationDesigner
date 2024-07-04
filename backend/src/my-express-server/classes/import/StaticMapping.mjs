@@ -5,6 +5,7 @@ export default class StaticMapping {
         this.type = 'mapping';
         this.data = {
             nodeType: 'static',
+            nodeName: 'Static Mapping',
             message: mapping.message_mapping.message,
             mapping: mapping.message_mapping.mapped_message,
             qos: mapping.qos !== undefined ? mapping.qos : '',
@@ -23,13 +24,7 @@ export default class StaticMapping {
     getMappingForImport() {
         return {
             id: this.id,
-            data: {
-                nodeType: this.data.nodeType,
-                message: this.data.message,
-                mapping: this.data.mapping,
-                qos: this.data.qos,
-                retain: this.data.retain,
-            },
+            data: this.data,
             type: this.type,
             position: this.position
         };

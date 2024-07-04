@@ -4,6 +4,7 @@ export default class ValueJsonMapping {
     constructor(mapping, nodeType, reportTopic, id = undefined) {
         this.data = {
             nodeType: nodeType,
+            nodeName: nodeType.charAt(0).toUpperCase() + nodeType.slice(1) + ' Mapping',
             mapping: mapping.mapping_template,
             qos: mapping.qos !== undefined ? mapping.qos : '',
             retain: mapping.retain !== undefined ? mapping.retain : '',
