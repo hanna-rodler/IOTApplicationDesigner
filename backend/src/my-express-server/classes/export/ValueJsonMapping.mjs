@@ -14,11 +14,6 @@ export default class ValueJsonMapping {
         } else {
             this.suppressions = mapping.data.suppressions.split(",")
         }
-        
-        const trimmedMapping = this.mapping.replace(" ", "");
-        if(!trimmedMapping.includes('{%else%}') && this.suppressions === null) {
-            this.suppressions = [''];
-        }
     }
 
     display(){
