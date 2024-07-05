@@ -20,6 +20,27 @@ This project integrates a React frontend with an Express backend. The React appl
    ```sh
    npm install
    ```
+
+   or
+
+   ```sh
+   yarn install
+   ```
+
+4. Navigate to the backend and install the node modules there too:
+
+   ```sh
+   cd backend
+   ```
+
+   and
+
+   ```sh
+   npm install
+   ```
+
+   or
+
    ```sh
    yarn install
    ```
