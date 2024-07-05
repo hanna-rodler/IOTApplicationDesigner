@@ -59,7 +59,7 @@ const UploadBtn: React.FC = () => {
                 >
                 <input {...getInputProps()} />
                 <MdOutlineFileUpload className="iconBtn" />
-                <span className="min-w-64">{isDragActive ? 'drop the .json file here ...' : 'Drag & drop .json files here, or click to select files'} {error && <span className="text-red-500 mt-2"><br/>{error}</span>}</span>
+                <span className="min-w-64">{isDragActive ? 'Drop the .json file here to import it to the Configurator' : 'Drag & drop the .json file here, or click to select file'} {error && <span className="text-red-500 mt-2"><br/>{error}</span>}</span>
             
             </div>
     </div>

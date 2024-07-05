@@ -76,7 +76,7 @@ The API endpoints are defined in the `src/services/api.ts` file. Below is a brie
    yarn dev
    ```
 
-2. Open a second terminal navigate to the backend and run:
+2. Open a second terminal (and in the current or in the backend folder) run:
 
    ```sh
    npm run start:server
