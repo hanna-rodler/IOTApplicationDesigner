@@ -68,8 +68,8 @@ export function ProjectListPage() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-3">
                         {projects.map((project) => (
-                            <div key={project._id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                                <div className="flex justify-between items-center pt-6 pb-6 pr-8 pl-8">
+                            <div key={project._id} className="bg-appBg rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                                <div className="flex justify-between items-center pt-6 pb-6 pr-8 pl-8 bg-white">
                                     <NavLink to={`/project/${project._id}`} className="">
                                         <h4 className="text-xl font-semibold text-gray-800 hover:text-secondary transition-colors duration-300">{project.name}</h4>
                                     </NavLink>
