@@ -2,7 +2,19 @@
 
 ## Project Overview
 
-This project integrates a React frontend with an Express backend. The React application functions as the client-side, offering the user interface, while the Express application acts as the server-side, managing API requests and other backend operations.
+Node based Editor for MQTT IoT configuration. Made by Rodler Hanna, Kothbauer Tobias and Veronika Leitner as a semester project for Volker Christian. The application is able to import and export predefined MQTT .json files. For example screen shots see the folder "examples".
+
+## Background
+The increasing complexity of IoT scenarios demands a more efficient and userfriendly approach to configure application logic. This project aims to develop a
+client-side graphical web application known as the IoT Configurator, designed to
+simplify the configuration process for IoT scenarios. By utilizing a node-based editor, users are able to drag and drop topics as well as static, value, and JSON
+Mappings onto a canvas and connect them via wires, eliminating the need to manually write long and complex JSON files by hand.
+
+The generated JSON configurations conform to a specific JSON schema definition and can be directly imported into Volker Christian’s SNode.C Framework, a
+lightweight and highly extensible MQTT-Integration System. This integration ensures that the application logic, written in JSON format, can be correctly mapped
+by the MQTT integrator to enable communication between incoming and outgoing messages and topics within the IoT scenario. The IoT Configurator enhances
+user experience, addressing the error-prone and laborious aspects of manual JSON
+writing or editing.
 
 ## Prerequisites
 
